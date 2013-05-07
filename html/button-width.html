@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>按钮宽度测试</title>
+<style type="text/css">
+html, body, input, button { margin:0; padding:0; border:0 none; }
+input, button, a { float:left; margin-right:10px; -moz-box-sizing:content-box; -webkit-box-sizing:content-box; box-sizing:content-box; font-size:16px; height:48px; line-height:48px; padding:0; background:#416FAD; color:#fff; padding:0 10px; overflow:visible; font-family:arial; }
+.btn_group { margin:10px 20px; overflow:hidden; _zoom:1; }
+input, button { -moz-padding-start:7px; -moz-padding-end:7px; }
+/**/
+.mod { width:200px; padding:10px; }
+.mod .hd h3 { font-size:14px; color:#333; }
+.mod .bd { line-height:1.6; color:#999; }
+.music .hd h3 { background:orange;}
+.music .bd { color:#fff; }
+</style>
+</head>
+
+<body>
+<div class="music mod">
+    <div class="hd">
+        <h3>标题</h3>
+    </div>
+    <div class="bd">内容</div>
+</div>
+<div class="entertainment mod">
+    <div class="hd">
+        <h3>标题</h3>
+    </div>
+    <div class="bd">内容</div>
+</div>
+<h1>按钮在不同浏览器下宽度及高度测试</h1>
+<div class="result">
+    <h2>测试结果：</h2>
+    <ul>
+        <li></li>
+    </ul>
+</div>
+<div class="btn_group">
+    <input type="submit" value="保存" title="保存" />
+    <a href="#" title="取消">取消</a></div>
+<div class="btn_group">
+    <input type="submit" value="保存保" title="保存保" />
+    <a href="#" title="取消取">取消取</a></div>
+<div class="btn_group">
+    <input type="submit" value="保存保存保存保存" title="保存保存" />
+    <a href="#" title="取消取消">取消取消</a></div>
+</body>
+</html>

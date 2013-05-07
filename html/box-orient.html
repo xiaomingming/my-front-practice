@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>box-orient</title>
+<style type="text/css">
+* { margin:0; padding:0; }
+/*基类样式*/
+h1 { font-size:18px; color:green; line-height:2; }
+.box { display:-webkit-box; display:-moz-box; width:960px; border:2px solid orange; }
+.box>div { width:300px; height:60px; margin:10px; background:#666; color:#fff; text-align:center; }
+.box>div h1 { line-height:60px; color:#fff; }
+/*扩展类样式*/
+#wrap1 { -webkit-box-orient: vertical; }
+#wrap2 { -webkit-box-orient:vertical; }
+#wrap3 { -webkit-box-orient: inline-axis; }
+#wrap4 { -webkit-box-orient:block-axis; }
+</style>
+</head>
+
+<body>
+<h1>box-orient:vertical</h1>
+<div id="wrap1" class="box" style="-webkit-orient:vertical;">
+    <div class="box1">
+        <h1>box1</h1>
+    </div>
+    <div class="box2">
+        <h1>box2</h1>
+    </div>
+    <div class="box3">
+        <h1>box3</h1>
+    </div>
+</div>
+<h1>box-orient:horizontal</h1>
+<div id="wrap2" class="box">
+    <div class="box1">
+        <h1>box1</h1>
+    </div>
+    <div class="box2">
+        <h1>box2</h1>
+    </div>
+    <div class="box3">
+        <h1>box3</h1>
+    </div>
+</div>
+<h1>box-orient:inline-axis</h1>
+<div id="wrap3" class="box">
+    <div class="box1">
+        <h1>box1</h1>
+    </div>
+    <div class="box2">
+        <h1>box2</h1>
+    </div>
+    <div class="box3">
+        <h1>box3</h1>
+    </div>
+</div>
+<h1>box-orient:block-axis</h1>
+<div id="wrap4" class="box">
+    <div class="box1">
+        <h1>box1</h1>
+    </div>
+    <div class="box2">
+        <h1>box2</h1>
+    </div>
+    <div class="box3">
+        <h1>box3</h1>
+    </div>
+</div>
+</body>
+</html>

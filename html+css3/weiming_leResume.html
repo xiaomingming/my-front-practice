@@ -2,15 +2,18 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>my resume</title>
+<title>乐伟明的前端简历</title>
+<!--[if lt IE 9]>
+    <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
 <link rel="stylesheet" type="text/css" href="http://metroui.org.ua/css/modern.css" />
 <style type="text/css">
 *{ margin: 0; padding: 0; }
 body { font: 12px/1.5 arial; color: #333; }
 ul,ol { list-style: none; }
 .wrapper { width: 960px; margin: 0 auto; }
-#my-header {  position: fixed; top: 0; left: 0; right: 0; z-index: 2; height: 39px; line-height: 39px; background: #eee;  text-align: center; border-bottom: 1px solid #ddd;  }
-#my-header h1 { line-height: 40px; font-size: 24px; }
+#my-header {  position: fixed; top: 0; left: 0; right: 0; z-index: 2;   }
+#my-header h1 { height: 39px; line-height: 39px; font-size: 24px; overflow: hidden; background: #eee;  text-align: center; border-bottom: 1px solid #ddd;}
 #module-list { margin-top: 40px; }
 #module-list>ul { margin: 0 0 10px; list-style: none; }
 #module-list>ul:after { display: block; content: '.'; clear: both; visibility: hidden; height: 0; }
@@ -90,19 +93,19 @@ ul,ol { list-style: none; }
   color: #666;
   font-weight: bold;
 }
-#module-list>ul:nth-child(3) ol, #module-list>ul:nth-child(3) ul {
+#module-list>ul>li.experience ol, #module-list>ul>li.experience ul {
   list-style: none;
 }
-#module-list>ul>li.experience>ul>li:nth-child(1)>ol>li { margin-bottom: 10px; }
-#module-list>ul>li.experience>ul>li:nth-child(1) { float: left; width: 620px; padding: 10px;  background: #7fcbe5; }
-#module-list>ul>li.experience>ul>li:nth-child(2),#module-list>ul>li.experience>ul>li:nth-child(3) { 
+#module-list>ul>li.experience>ul>li.first-child>ol>li { margin-bottom: 10px; }
+#module-list>ul>li.experience>ul>li.first-child { float: left; width: 620px; padding: 10px;  background: #7fcbe5; }
+#module-list>ul>li.experience>ul>li.second-child,#module-list>ul>li.experience>ul>li.third-child { 
   float: right;
   width: 270px;
   padding: 10px;
   background: #43b51f;
   color: #fff;
 }
-#module-list>ul>li.experience>ul>li:nth-child(3) {
+#module-list>ul>li.experience>ul>li.third-child {
   margin-top: 10px;
 }
 #module-list>ul>li.myself-introduce { border-radius: 2px; background: #da532c; color: #fff; }
@@ -168,19 +171,19 @@ ul,ol { list-style: none; }
             <li class="experience">
               <h2><i class="icon-cube"></i>工作经验</h2>
               <ul>
-                <li>
+                <li class="first-child">
                   <ol>
                     <li><time>2013年3月至今</time>,<span class="description">在好耶playdata从事前端开发，负责前端选型，使用bootstrap框架，juqery库构建界面及交互，seaj管理前端js依赖，并与UE及UI探讨并确定界面及交互细节；</span></li>
                     <li><time>2012年4月至2013年2月</time>,<span class="description">在好耶<a href="http://mediamax.allyes.com/">mediamax</a>项目从事前端开发工作，包括频道管理，广告位管理，买卖关系管理，首页等。负责界面html+css总体搭建，js组件选择，与后端进行数据格式约定，平台维护，前端优化方案，以及前端规范的订制；</span></li>
                      <li><time>2011年10月至2012年3月</time>,<span class="description">在好耶<a href="http://www.allyesapp.com">A3</a>项目从事前端开发，包括前端html+css，js规范制定，与后端约定数据接口，UI界面制作及交互讨论，界面维护，学习并遵循scrum敏捷软件开发流程；</span></li>
                   </ol>
                 </li>
-                <li>
+                <li class="second-child">
                   <ol>
                     <li><time>2011/7--2011/9</time>,<span class="description">在深圳米墙贸易有限公司西安分公司从事前端开发，负责houseable.com和ndscardzone.com两个垂直站点页面的前端制作，后期bug维护，与后端人员进行前后端的交互。</span></li>
                   </ol>
                 </li>
-                <li>
+                <li class="third-child">
                   <ol>
                     <li><time>2010/7--2010/12</time>,<span class="description">在东莞万博网络科技有限公司从事前端开发，xhtm+css布局及页面重构工作； 了解php smarty模板，与后台php开发人员进行合作。</span></li>
                   </ol>

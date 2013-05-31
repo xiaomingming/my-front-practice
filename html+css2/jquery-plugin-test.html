@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>编写内部的方法</title>
+		<script type="text/javascript" src="../js/common/jquery.js"></script>
+		<script type="text/javascript" src="../js/utils/jquery-plugin-alert.js"></script>
+		<script type="text/javascript" src="../js/utils/jquery-plugin-more-method.js"></script>
+		<script type="text/javascript">
+		$(function(){
+			$('#btn1').on('click',function(){
+				$.alert();
+			});
+			$('#btn2').on('click',function(){
+				$.ah();
+				$.showInfo('xiaomingming');
+			});
+		});
+		</script>
+	</head>
+	<body>
+		<button id="btn1" type="button">click me</button>
+		<br>
+		<button id="btn2" type="button">click me</button>
+	</body>
+</html>

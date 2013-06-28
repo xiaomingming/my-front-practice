@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>js 继承技巧</title>
+<script>
+//第一种方法，使用原型属性
+/*
+*定义继承构造函数
+*@param:子类，父类
+*/
+function extend(Child,Parent){
+	// 创建一个空函数
+	// 为了防止原型链被更改
+	var F=function(){};
+	F.prototype=Parent.prototype;
+	Child.prototype=new F();
+	Child.prototype.constructor=Child;
+}
+function P1(name,age){
+	this.name=name;
+	this.age=age;
+}
+P1.prototype.skills='说话';
+function S1(work){
+	this.work=work;
+}
+
+extend(S1,P1);
+var s=new S1('IT');
+console.log(s.work);//
+console.log(s.skills);
+</script>
+</head>
+	<body>
+
+	</body>
+</html>

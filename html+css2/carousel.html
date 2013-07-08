@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>carousel</title>
+<style type="text/css">
+* { margin:0; padding: 0; }
+body { font:12px/1.5 arial; }
+ul { list-style: none; }
+.carousel { position: relative; width: 960px; height: 480px; border: 2px solid orange; margin: 0 auto; }
+.carousel .play { position: absolute; right: 120px; bottom: 23px; z-index: 2; }
+.carousel .play a { padding: 4px 8px; margin-right: 6px; text-decoration: none; border: 1px solid orange; border-radius: 3px; }
+.carousel .play a.current { background: orange; color: #fff; }
+.carousel .pagination { position: absolute;  right: 10px; bottom: 20px; z-index: 2; }
+.carousel .pagination a { display: inline-block; padding: 0 10px; height: 24px; border: 1px solid orange; border-radius: 4px; background: #eee; color: #999; text-decoration: none; line-height: 24px; }
+.carousel .pagination a:hover { text-decoration: none; }
+.carousel .pic { width: 960px; }
+.carousel .pic ul { font-size: 30px; height: 480px; overflow: hidden; *zoom:1; }
+.carousel .pic ul li {  float: left; width: 960px; text-align: center; overflow: hidden; }
+.carousel .pic ul li a { display: block; height: 480px; line-height: 480px; background: #efefef; }
+</style>
+</head>
+	<body>
+	<h1>a simple carousel</h1>
+	<div id="carousel" class="carousel">
+		<div class="pagination">
+			<a href="#" class="prev">prev</a>
+			<a href="#" class="next">next</a>
+		</div>
+		<div class="play">
+			<!-- 此处需要动态插入一段数字代码 -->
+		</div>
+		<div class="pic">
+			<ul>
+				<li><a href="#">1</a></li>
+				<li><a href="#">2</a></li>
+				<li><a href="#">3</a></li>
+				<li><a href="#">4</a></li>
+				<li><a href="#">5</a></li>
+				<li><a href="#">6</a></li>
+			</ul>
+		</div>
+	</div>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js "></script>
+	<script type="text/javascript">
+		$(function(){
+			var containner=$('#carousel');
+			var pagination=containner.find('.pagination');
+			var play=containner.find('.play');
+			var picList=containner.find('.pic ul li');
+			var prev=pagination.find('.prev');
+			var next=pagination.find('.next');
+			var pageNum=0;
+			var defaultAnimateDelay={
+				show:800,
+				hide:100
+			};
+			// 创建播放的数字列表，根据已创建的图片个数来创建
+			(function(picListLength){
+				var playHtml='';
+				for(var i=0; i<picListLength; i++){
+					playHtml+='<a href="#" data-number="'+i+'">'+(i+1)+'</a>';
+				}
+				play.html(playHtml);
+			})(picList.length);
+
+			function Carousel(pageNumber){
+				picList.eq(pageNumber).stop(false,true)
+				.animate({
+					opacity:'show'
+				},defaultAnimateDelay.show).siblings()
+				.stop(false,true)
+				.animate({
+					opacity:'hide'
+				},defaultAnimateDelay.hide);
+
+				play.find('a')
+				.eq(pageNumber)
+				.addClass('current')
+				.siblings('').removeClass('current');
+			}
+
+			// 向前
+			prev.on('click',function(e){
+				e.preventDefault();
+				// 若是第一张，则跳到第三张图片
+				if(pageNum===0){
+					pageNum=(picList.length-1);
+				}else {
+					pageNum--;
+				}
+				Carousel(pageNum);
+			});
+			// 向后
+			next.on('click',function(e){
+				e.preventDefault();
+				// 若是第三张，则跳到第一张图片
+				if(pageNum===(picList.length-1)){
+					pageNum=0;
+				}else{
+					pageNum++;
+				}
+				Carousel(pageNum);
+			});
+
+			// 点击某个数字进行轮播，此处使用委托
+			play.on('click','a',function(e){
+				e.preventDefault();
+				pageNum=Number($(this).attr('data-number'));
+				Carousel(pageNum);
+			});
+
+		});
+	</script>
+	</body>
+</html>

@@ -30,9 +30,23 @@ extend(S1,P1);
 var s=new S1('IT');
 console.log(s.work);//
 console.log(s.skills);
+function extend(Child,Parent){
+	var c=Child.prototype;
+	var p=Parent.prototype;
+	for(var i in p){
+		c[i]=p[i];
+	}
+};
 </script>
 </head>
 	<body>
-
+	<div class="nav">
+		<ul>
+			<li><a href="#"></a></li>
+			<li><a href="#"></a></li>
+			<li><a href="#"></a></li>
+			<li><a href="#"></a></li>
+		</ul>
+	</div>
 	</body>
 </html>

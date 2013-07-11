@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>测试client 和offset的差别</title>
+<style type="text/css">
+* { margin:0; padding: 0; }
+body { font:12px/1.5 arial; }
+#test { height: 100px; width: 60px; padding: 10px; border: 5px solid orange; background: #eee; color: #666; margin: 40px; }
+ul { list-style: none; }
+
+#test ul li { border: 1px solid red; }
+</style>
+</head>
+	<body>
+	<div id="test">
+		<ul>
+			<li>11111111111111111111111111111</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+			<li>6</li>
+			<li>7</li>
+			<li>8</li>
+		</ul>
+    </div>
+	<script type="text/javascript">
+		var test=document.getElementById('test');
+		console.log(test.clientHeight+','+test.clientWidth);
+		console.log(test.offsetHeight+','+test.offsetWidth);
+		console.log(test.scrollHeight+','+test.scrollWidth+','+test.scrollTop+','+test.scrollLeft);
+	</script>
+	</body>
+</html>

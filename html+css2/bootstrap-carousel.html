@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<style type="text/css">
+* { margin:0; padding: 0; }
+body { font:12px/1.5 arial; }
+.carousel {
+    line-height: 1;
+    margin-bottom: 20px;
+    position: relative;
+    width: 980px; 
+    margin: 0 auto;
+}
+.carousel-inner {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+.carousel-inner > .item {
+    display: none;
+    position: relative;
+    transition: left 0.6s ease-in-out 0s;
+}
+.carousel-inner > .item > img, .carousel-inner > .item > a > img {
+    display: block;
+    line-height: 1;
+}
+.carousel-inner > .active, .carousel-inner > .next, .carousel-inner > .prev {
+    display: block;
+}
+.carousel-inner > .active {
+    left: 0;
+}
+.carousel-inner > .next, .carousel-inner > .prev {
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+.carousel-inner > .next {
+    left: 100%;
+}
+.carousel-inner > .prev {
+    left: -100%;
+}
+.carousel-inner > .next.left, .carousel-inner > .prev.right {
+    left: 0;
+}
+.carousel-inner > .active.left {
+    left: -100%;
+}
+.carousel-inner > .active.right {
+    left: 100%;
+}
+.carousel-control {
+    background: none repeat scroll 0 0 #222222;
+    border: 3px solid #FFFFFF;
+    border-radius: 23px 23px 23px 23px;
+    color: #FFFFFF;
+    font-size: 60px;
+    font-weight: 100;
+    height: 40px;
+    left: 15px;
+    line-height: 30px;
+    margin-top: -20px;
+    opacity: 0.5;
+    position: absolute;
+    text-align: center;
+    top: 40%;
+    width: 40px;
+}
+.carousel-control.right {
+    left: auto;
+    right: 15px;
+}
+.carousel-control:hover, .carousel-control:focus {
+    color: #FFFFFF;
+    opacity: 0.9;
+    text-decoration: none;
+}
+.carousel-indicators {
+    list-style: none outside none;
+    margin: 0;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    z-index: 5;
+}
+.carousel-indicators li {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 5px 5px 5px 5px;
+    display: block;
+    float: left;
+    height: 10px;
+    margin-left: 5px;
+    text-indent: -999px;
+    width: 10px;
+}
+.carousel-indicators .active {
+    background-color: #FFFFFF;
+}
+.carousel-caption {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.75);
+    bottom: 0;
+    left: 0;
+    padding: 15px;
+    position: absolute;
+    right: 0;
+}
+.carousel-caption h4, .carousel-caption p {
+    color: #FFFFFF;
+    line-height: 20px;
+}
+.carousel-caption h4 {
+    margin: 0 0 5px;
+}
+.carousel-caption p {
+    margin-bottom: 0;
+}
+</style>
+</head>
+	<body>
+		<div id="myCarousel" class="carousel slide">
+			<ol class="carousel-indicators">
+			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+			<li data-target="#myCarousel" data-slide-to="1"></li>
+			<li data-target="#myCarousel" data-slide-to="2"></li>
+			</ol>
+			<!-- Carousel items -->
+			<div class="carousel-inner">
+				<div class="active item"><img src="../images/bootstrap-mdo-sfmoma-01.jpg" /></div>
+				<div class="item"><img src="../images/bootstrap-mdo-sfmoma-02.jpg" /></div>
+				<div class="item"><img src="../images/bootstrap-mdo-sfmoma-03.jpg" /></div>
+			</div>
+			<!-- Carousel nav -->
+			<a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+			<a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+		</div>
+	<script src="../js/common/jquery.js"></script>
+	<script src="../js/utils/bootstrap-carousel.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.carousel').carousel()
+		});
+	</script>
+	</body>
+</html>

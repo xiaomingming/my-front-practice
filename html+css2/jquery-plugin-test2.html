@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>a simple jquery plugin</title>
+<style type="text/css">
+* { margin:0; padding: 0; }
+body { font:12px/1.5 arial; }
+</style>
+</head>
+	<body>
+	<script src="../js/common/jquery.js"></script>
+	<script>
+		$(function($){
+			
+			$.fn.Test=function(options){
+				var myTest={};
+				myTest.Test=function(options){
+					this.name=options.name;
+				};
+				myTest.Test.prototype.showMessage=function(){
+					alert(this.name);
+				};
+				// myTest.Test.prototype.showMessage
+				var defaults={
+					name:'lalalala'
+				};
+				var settings=$.extend(true,{},defaults,options);
+				return this.each(function(){
+					(new myTest.Test(settings)).showMessage();
+				});
+			};
+			
+		}(jQuery));
+	</script>
+	<script>
+		$(function(){
+			$('body').Test({name:'lal'});
+			
+		});
+	</script>
+	</body>
+</html>

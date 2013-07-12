@@ -89,6 +89,7 @@
             // click prev event
             prev.on('click',function(e){
                 e.preventDefault();
+                this.stop(true);
                 if(pageNum===0){
                     pageNum=(picList.length-1);
                 }else {
@@ -99,6 +100,7 @@
             // click next event
             next.on('click',function(e){
                 e.preventDefault();
+                this.stop(true);
                 if(pageNum===(picList.length-1)){
                     pageNum=0;
                 }else{

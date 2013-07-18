@@ -137,7 +137,7 @@
                 //  play number 
                 play.on('click','a',function(e){
                     e.preventDefault();
-                    animatingFlag&&atuoPlay(pageNum,direction.st);
+                    animatingFlag&&atuoPlay(Number($(this).attr('data-number')),direction.st);
                 });
 
             });

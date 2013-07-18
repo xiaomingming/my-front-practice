@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style>
+			* { margin: 0; padding: 0; }
+			body { font: 12px/1.5 arail; }
+			ul { list-style: none; }
+			button { height: 2em; font-size: 14px; width: 4em; background: orange; color: #fff; border-radius: 3px; cursor: pointer; margin-bottom: 10px; border: 1px solid #eee;}
+			.box { border: 1px solid orange; height: 300px; line-height: 300px; width: 600px; background: #eee; text-align: center; }
+			p.info { font-size: 20px; line-height: 2; font-weight: bold; color: orange; }
+		</style>
+	</head>
+	<body>
+		<div class="test">
+			<button>go</button>
+			<div class="box"><h1>lalalalalla</h1></div>
+			<p class="info">start...</p>
+		</div>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+		<script type="text/javascript">
+			$(function(){
+				var state=true;
+				$('button').on('click',function(){
+					if(state){
+						state=false;
+						console.log('now state is:'+state);
+						$('.box').animate({
+							opacity:'hide'
+						},1000).animate({
+							opacity:'show'
+						},100,function(){
+							state=true;
+							console.log('callback animate flag is:'+state);
+						});
+					}
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -3,13 +3,17 @@
  */
 
 (function($) {
+    console.log(this);
     var pluginName = 'Carousel',
         initAllSelector = '[data-role=carousel], .carousel',
         paramKeys = ['Auto', 'Period', 'Duration', 'Effect', 'Direction', 'Markers', 'Arrows', 'Stop'];
 
     $[pluginName] = function(element, options) {
         if (!element) {
-            return $()[pluginName]({initAll: true});
+            console.log('');
+            return $()[pluginName]({
+                initAll: true
+            });
         }
 
         // default settings
@@ -50,13 +54,14 @@
             stopAutoSlide = false;
 
         // initialization
-        plugin.init = function () {
+        plugin.init = function() {
 
             plugin.settings = $.extend({}, defaults, options);
 
             slides = $element.find('.slides:first-child > .slide');
 
             // if only one slide
+            // 若图片只有一个，或者木有
             if (slides.length <= 1) {
                 return;
             }
@@ -71,7 +76,7 @@
             slideOutPosition = getSlideOutPosition();
 
             // prepare slide elements
-            slides.each(function (index, slide) {
+            slides.each(function(index, slide) {
                 $slide = $(slide);
                 // each slide must have position:absolute
                 // if not, set it
@@ -84,13 +89,16 @@
                 }
             });
 
+            // 若开启了前进后退按钮,则调用响应的函数
+            // 否则,隐藏按钮
             if (plugin.settings.arrows === 'on') {
                 // prev next buttons handlers
-                $element.find('span.control.left').on('click', function(){
+                $element.find('span.control.left').on('click', function() {
+                    console.log('----click left button----');
                     changeSlide('left');
                     startAutoSlide();
                 });
-                $element.find('span.control.right').on('click', function(){
+                $element.find('span.control.right').on('click', function() {
                     changeSlide('right');
                     startAutoSlide();
                 });
@@ -98,21 +106,27 @@
                 $element.find('span.control').hide();
             }
 
-            // markers
+            // 若开启了显示当前项,则创建显示列表
+            // 这个逻辑比较奇葩,跟上面的前进后退不一致啊
             if (plugin.settings.markers === 'on') {
                 insertMarkers();
             }
 
             // enable auto slide
+            // 若设置了自动播放
             if (plugin.settings.auto === true) {
+
+                // 调用自动播放
                 startAutoSlide();
 
                 // stop sliding when cursor over the carousel
+                // 若悬浮在了轮播图片上
+                // 这块儿不太明白啊
                 if (plugin.settings.stop === 'on') {
-                    $element.on('mouseenter', function () {
+                    $element.on('mouseenter', function() {
                         stopAutoSlide = true;
                     });
-                    $element.on('mouseleave', function () {
+                    $element.on('mouseleave', function() {
                         stopAutoSlide = false;
                         startAutoSlide();
                     });
@@ -122,7 +136,7 @@
             // u can use same code:
             // $('#carusel').trigger('changeSlide', [{direction: 'left', effect: 'fade', index: 1}])
             // any option not required
-            $element.on('changeSlide', function(event, options){
+            $element.on('changeSlide', function(event, options) {
                 options = options || {};
                 changeSlide(options.direction, options.effect, options.index);
             });
@@ -131,7 +145,7 @@
         /**
          * returns start position for appearing slide {left: xxx}
          */
-        var getSlideInPosition = function () {
+        var getSlideInPosition = function() {
             var pos;
             if (plugin.settings.direction === 'left') {
                 pos = {
@@ -148,7 +162,7 @@
         /**
          * returns end position of disappearing slide {left: xxx}
          */
-        var getSlideOutPosition = function () {
+        var getSlideOutPosition = function() {
             var pos;
             if (plugin.settings.direction === 'left') {
                 pos = {
@@ -165,10 +179,10 @@
         /**
          * start or restart auto change
          */
-        var startAutoSlide = function () {
+        var startAutoSlide = function() {
             clearInterval(autoSlideTimer);
             // start slide changer timer
-            autoSlideTimer = setInterval(function () {
+            autoSlideTimer = setInterval(function() {
                 if (stopAutoSlide) {
                     return;
                 }
@@ -179,7 +193,7 @@
         /**
          * inserts markers below the carousel
          */
-        var insertMarkers = function () {
+        var insertMarkers = function() {
             var div, ul, li, i;
 
             div = $('<div class="markers"></div>');
@@ -195,7 +209,7 @@
 
             markers = ul.find('li');
 
-            ul.find('li a').on('click', function () {
+            ul.find('li a').on('click', function() {
                 var $this = $(this),
                     index;
 
@@ -225,11 +239,15 @@
 
             effect = effect || plugin.settings.effect;
             // correct slide direction, used for 'slide' and 'slowdown' effects
+            // 这段代码不太明白啊
             if ((effect === 'slide' || effect === 'slowdown') && typeof direction !== 'undefined' && direction !== plugin.settings.direction) {
+                // console.log('slideDirection -1');
                 slideDirection = -1;
             }
+            // console.log('direction is:'+direction);
             if (direction === 'left') {
                 delta = -1;
+                console.log('delta -1,direction left');
             }
 
             outSlide = $(slides[currentSlideIndex]);
@@ -244,7 +262,10 @@
 
             inSlide = $(slides[nextSlideIndex]);
 
+            console.log('animationInProgress is:'+animationInProgress);
+
             if (animationInProgress === true) {
+                console.log('animation flag is true,return');
                 return;
             }
 
@@ -252,7 +273,8 @@
             if (effect !== 'switch') {
                 // when animation in progress no other animation occur
                 animationInProgress = true;
-                setTimeout(function () {
+                console.log('next step is setTimeout to make animation flag to false');
+                setTimeout(function() {
                     animationInProgress = false;
                 }, plugin.settings.duration)
             }
@@ -285,15 +307,19 @@
         /**
          * switch effect
          */
-        var changeSlideSwitch = function (outSlide, inSlide) {
-            inSlide.show().css({'left': 0});
+        var changeSlideSwitch = function(outSlide, inSlide) {
+            inSlide.show().css({
+                'left': 0
+            });
             outSlide.hide();
         };
         /**
          * slide effect
          */
-        var changeSlideSlide = function (outSlide, inSlide, slideDirection) {
-            var unmovedPosition = {'left': 0},
+        var changeSlideSlide = function(outSlide, inSlide, slideDirection) {
+            var unmovedPosition = {
+                'left': 0
+            },
                 duration = plugin.settings.duration;
 
             if (slideDirection !== -1) {
@@ -311,8 +337,10 @@
         /**
          * slowdown slide effect (custom easing 'doubleSqrt')
          */
-        var changeSlideSlowdown = function (outSlide, inSlide, slideDirection) {
-            var unmovedPosition = {'left': 0},
+        var changeSlideSlowdown = function(outSlide, inSlide, slideDirection) {
+            var unmovedPosition = {
+                'left': 0
+            },
                 options;
 
             options = {
@@ -335,7 +363,7 @@
         /**
          * fade effect
          */
-        var changeSlideFade = function (outSlide, inSlide) {
+        var changeSlideFade = function(outSlide, inSlide) {
             inSlide.hide();
             inSlide.css({
                 left: 0,
@@ -362,7 +390,7 @@
                 params = {},
                 plugin;
             if (undefined == that.data(pluginName)) {
-                $.each(paramKeys, function(index, key){
+                $.each(paramKeys, function(index, key) {
                     params[key[0].toLowerCase() + key.slice(1)] = that.data('param' + key);
                 });
                 plugin = new $[pluginName](this, params);
@@ -371,8 +399,10 @@
         });
     };
     // autoinit
-    $(function(){
-        $()[pluginName]({initAll: true});
+    $(function() {
+        $()[pluginName]({
+            initAll: true
+        });
     });
 
 })(jQuery);

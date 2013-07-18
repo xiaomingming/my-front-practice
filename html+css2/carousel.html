@@ -1,5 +1,5 @@
-    <!DOCTYPE HTML>
-    <html>
+<!DOCTYPE HTML>
+<html>
     <head>
     <meta charset="utf-8">
     <title>carousel</title>
@@ -20,108 +20,127 @@
     .carousel .pic ul li a { display: block; height: 480px; line-height: 480px; background: #efefef; }
     </style>
     </head>
-        <body>
+    <body>
         <h1>a simple carousel</h1>
-    <div id="carousel" class="carousel">
-        <div class="pagination">
-            <a href="#" class="prev">prev</a>
-            <a href="#" class="next">next</a>
+        <div id="carousel" class="carousel">
+            <div class="pagination">
+                <a href="#" class="prev">prev</a>
+                <a href="#" class="next">next</a>
+            </div>
+            <div class="play">
+                <!-- 此处需要动态插入一段数字代码 -->
+            </div>
+            <div class="pic">
+                <ul>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li><a href="#">6</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="play">
-            <!-- 此处需要动态插入一段数字代码 -->
-        </div>
-        <div class="pic">
-            <ul>
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">6</a></li>
-            </ul>
-        </div>
-    </div>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js "></script>
-    <script type="text/javascript">
-        $(function(){
-            var containner=$('#carousel');
-            var pagination=containner.find('.pagination');
-            var play=containner.find('.play');
-            var picList=containner.find('.pic ul li');
-            var prev=pagination.find('.prev');
-            var next=pagination.find('.next');
-            var pageNum=0;
-            var speed=4000;
-
-            var timer=null;
-            // initialize play number
-            (function(picListLength){
-                var playHtml='';
-                for(var i=0; i<picListLength; i++){
-                    playHtml+='<a href="#" data-number="'+i+'">'+(i+1)+'</a>';
-                }
-                play.html(playHtml);
-                play.find('a').eq(0).addClass('current')
-            })(picList.length);
-            // 
-            function Carousel(pageNumber){
-
-                picList.eq(pageNumber)
-                .stop(false,true)
-                .show().siblings()
-                .stop(false,true).hide();
-                // add Current class to current play number
-                play.find('a')
-                .eq(pageNumber)
-                .addClass('current')
-                .siblings('').removeClass('current');
-            }
-
-            function start(){
-                timer=setInterval(function(){
-                    Carousel(pageNum);
-                    pageNum++;
-                    if(pageNum===picList.length){
-                        pageNum=0;
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js "></script>
+        <script type="text/javascript">
+            $(function(){
+                var containner=$('#carousel');
+                var pagination=containner.find('.pagination');
+                var play=containner.find('.play');
+                var picList=containner.find('.pic ul li');
+                var prev=pagination.find('.prev');
+                var next=pagination.find('.next');
+                var pageNum=0;
+                var direction={
+                    left:'left',
+                    right:'right',
+                    st:'switch'
+                };
+                var animateTimeConfig={
+                    iterval:3000,
+                    showDelay:800,
+                    hideDelay:300
+                };
+                var animatingFlag=true;
+                var timer=null;
+                
+                // initialize play number
+                
+                (function(picListLength){
+                    var playHtml='';
+                    for(var i=0; i<picListLength; i++){
+                        playHtml+='<a href="#" data-number="'+i+'">'+(i+1)+'</a>';
                     }
-                },speed);
-            }
-            // click prev event
-            prev.on('click',function(e){
-                e.preventDefault();
-                this.stop(true);
-                if(pageNum===0){
-                    pageNum=(picList.length-1);
-                }else {
-                    pageNum--;
+                    play.html(playHtml);
+                    play.find('a').eq(0).addClass('current')
+                })(picList.length);
+                
+                // 
+                function Carousel(pageNumber){
+                    if(animatingFlag){
+                        animatingFlag=false;
+                        picList.eq(pageNumber)
+                        .animate({
+                            opacity:'show'
+                        },800,function(){
+                            picList.eq(pageNumber).siblings()
+                            .animate({
+                                opacity:'hide'
+                            },800,function(){
+                                animatingFlag=true;
+                                playNumber(pageNumber);
+                            }); 
+                        });
+                    }
                 }
-                Carousel(pageNum);
-            });
-            // click next event
-            next.on('click',function(e){
-                e.preventDefault();
-                this.stop(true);
-                if(pageNum===(picList.length-1)){
-                    pageNum=0;
-                }else{
-                    pageNum++;
-                }
-                Carousel(pageNum);
-            });
-            //  play number 
-            play.on('click','a',function(e){
-                e.preventDefault();
-                pageNum=Number($(this).attr('data-number'));
-                Carousel(pageNum);
-            });
 
-            // 这里问题好大
-            containner.hover(function(){
-                clearInterval(timer);
-            },function(){
-                start();
-            }).trigger('mouseleave');
-        });
-    </script>
-        </body>
-    </html>
+                function playNumber(pageNumber){
+                    play.find('a')
+                    .eq(pageNumber)
+                    .addClass('current')
+                    .siblings('').removeClass('current');
+                }
+
+                /*
+                *包含两个参数，分别是direction，当前页数
+                */
+                function getPlayNumber(page,direction){
+                    if(direction==='left'){
+                        pageNum=page===(picList.length-1)?0:pageNum+1;
+                    }else if(direction==='right'){
+                        pageNum=page===0?picList.length-1:pageNum-1;
+                    }else if(direction==='switch'){
+                        pageNum=page;
+                    }
+                    return pageNum;
+                }
+
+                function atuoPlay(pageNum,direction){
+                    var pageNumber=getPlayNumber(pageNum,direction);
+                    Carousel(pageNumber);
+                }
+
+                function stopPlay(){
+                    clearInterval(timer);
+                    timer=null;
+                }
+                // click prev event
+                prev.on('click',function(e){
+                    e.preventDefault();
+                    animatingFlag&&atuoPlay(pageNum,direction.right);
+                });
+                // click next event
+                next.on('click',function(e){
+                    e.preventDefault();
+                    animatingFlag&&atuoPlay(pageNum,direction.left);
+                });
+                //  play number 
+                play.on('click','a',function(e){
+                    e.preventDefault();
+                    animatingFlag&&atuoPlay(pageNum,direction.st);
+                });
+
+            });
+        </script>
+    </body>
+</html>

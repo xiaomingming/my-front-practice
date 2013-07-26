@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>jquery queue,dequeue方法</title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+            .box1,.box2 {
+                width: 160px;
+                height: 80px;
+                border: 1px solid orange;
+                background: #eee;
+                line-height: 80px;
+                margin-top: 20px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="test">
+            <div class="box1"><h1>llalalal</h1></div>
+            <div class="box2"><h1>hahahahah</h1></div>
+        </div>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+        <script type="text/javascript">
+            $(function(){
+                var div = $("div");
+
+                    function runIt() {
+                      div.show("slow");
+                      div.animate({left:'+=200'},2000);
+                      div.slideToggle(1000);
+                      div.slideToggle("fast");
+                      div.animate({left:'-=200'},1500);
+                      div.hide("slow");
+                      div.show(1200);
+                      //div.slideUp("normal", runIt);
+                    }
+
+                    function showIt() {
+                      var n = div.queue("fx");
+                      $("span").text( n);      
+                      setTimeout(showIt, 100);
+                    }
+
+                    runIt();
+                    showIt();
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+        </style>
+    </head>
+    <body>
+        <div class="test" style="border:1px solid orange; ">
+            <button class="btn1">hover me</button>
+            <button class="btn2">hover me</button>
+            <button class="btn3">hover me</button>
+            <button class="btn4">hover me</button>
+        </div>
+        <div>
+            <br /><br /><br />
+            <button id="btnShow">显示提示文字</button>
+        </div>
+            
+        <!-- 弹出层 -->
+        <div id="divPop" style="background-color: #f0f0f0; border: solid 1px #000000; position: absolute; display:none;width: 300px; height: 100px;">
+            <div style="text-align: center;">弹出层</div>
+        </div>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+        <script type="text/javascript">
+            $(function(){
+                $('.test').click(function(e){
+                    console.log(e.target);
+                    console.log('----------------------------');
+                    console.log(e.currentTarget);
+                    console.log('llalalalala');
+                });
+            });
+            $(document).ready(function(){
+                //动画速度
+                var speed = 500;
+
+                //绑定事件处理
+                $("#btnShow").click(function(event){
+                    //取消事件冒泡
+                    event.stopPropagation();
+                    //设置弹出层位置
+                    var offset = $(event.target).offset();
+                    $("#divPop").css({ top: offset.top + $(event.target).height() + "px", left: offset.left });
+                    //动画显示
+                    $("#divPop").show(speed);
+
+                });
+                //单击空白区域隐藏弹出层
+                $(document).click(function(event) { $("#divPop").hide(speed) });
+                //单击弹出层则自身隐藏
+                $("#divPop").click(function(event) { $("#divPop").hide(speed) });
+            });
+        </script>
+    </body>
+</html>

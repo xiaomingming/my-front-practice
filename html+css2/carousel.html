@@ -84,7 +84,8 @@
                 }
                 //
                 function Carousel(pageNumber){
-                    hidePic(pageNumber).then(showPic(pageNumber)).then(playNumber(pageNumber));
+                    animatingFlag=false;
+                    hidePic(pageNumber).then(showPic(pageNumber)).then(function(){animatingFlag=true;}).then(playNumber(pageNumber));
                 }
 
                 function playNumber(pageNumber){

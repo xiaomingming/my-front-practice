@@ -72,24 +72,41 @@
                         playHtml+='<a href="#" data-number="'+i+'">'+(i+1)+'</a>';
                     }
                     play.html(playHtml);
-                    play.find('a').eq(0).addClass('current')
+                    play
+                    .find('a')
+                    .eq(0)
+                    .addClass('current')
                 })(picList.length);
 
                 function showPic(pageNumber){
-                    return picList.eq(pageNumber).fadeIn(800).promise();
+                    return picList
+                    .eq(pageNumber)
+                    .fadeIn(800)
+                    .promise();
                 }
 
                 function hidePic(pageNumber){
-                    return picList.eq(pageNumber).siblings().stop(true,true).fadeOut(500).promise();
+                    return picList.eq(pageNumber)
+                    .siblings()
+                    .stop(true,true)
+                    .fadeOut(500)
+                    .promise();
                 }
                 //
                 function Carousel(pageNumber){
                     animatingFlag=false;
-                    hidePic(pageNumber).then(showPic(pageNumber)).then(function(){animatingFlag=true;}).then(playNumber(pageNumber));
+                    hidePic(pageNumber)
+                    .then(showPic(pageNumber))
+                    .then(function(){animatingFlag=true;})
+                    .then(playNumber(pageNumber));
                 }
 
                 function playNumber(pageNumber){
-                    play.find('a').eq(pageNumber).addClass('current').siblings('').removeClass('current');
+                    play.find('a')
+                    .eq(pageNumber)
+                    .addClass('current')
+                    .siblings('')
+                    .removeClass('current');
                 }
 
                 /*

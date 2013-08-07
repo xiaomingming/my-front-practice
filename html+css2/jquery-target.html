@@ -20,7 +20,7 @@
             <br /><br /><br />
             <button id="btnShow">显示提示文字</button>
         </div>
-            
+
         <!-- 弹出层 -->
         <div id="divPop" style="background-color: #f0f0f0; border: solid 1px #000000; position: absolute; display:none;width: 300px; height: 100px;">
             <div style="text-align: center;">弹出层</div>
@@ -45,6 +45,7 @@
                     event.stopPropagation();
                     //设置弹出层位置
                     var offset = $(event.target).offset();
+                    console.log(event.target);
                     $("#divPop").css({ top: offset.top + $(event.target).height() + "px", left: offset.left });
                     //动画显示
                     $("#divPop").show(speed);

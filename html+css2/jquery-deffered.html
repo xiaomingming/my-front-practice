@@ -21,10 +21,11 @@
             <div class="box2 box">2</div>
             <div class="box3 box">3</div>
             <div class="box4 box">4</div>
+            <p style="font-size:18px;"></p>
         </div>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
         <script type="text/javascript">
-                var f1=function(){
+                /*var f1=function(){
                    return $('.box1').animate({
                         left:'+=100px'
                     },1000).promise();
@@ -42,13 +43,146 @@
                 var success=function(){
                     alert('success...');
                 };
-                f1().then(f2).then(f3).then(success)
+                f1().then(f2).then(f3).then(success)*/
                 /*f1().done(function(){
                     f2().done(function(){
                         f3().done();
                     })
                 });*/
+                /*var fadeIn = function (el) {
 
+                    var promise = $(el).animate({
+                        opacity: 1
+                    }, 4500);
+
+                    // Dynamically create and return an observable promise object which will be resolved when the animation completes.
+                    return promise.promise();
+                };
+
+                var fadeOut = function(el) {
+
+                    var promise = $(el).animate({
+                        opacity: 0
+                    }, 1500);
+
+                    // Dynamically create and return an observable promise object
+                    return promise.promise();
+                };
+
+                // With the setup out of the way, we can now do one of the following.
+
+                // Parallel
+                $.when(fadeOut('div'),fadeIn('div'))
+                    .done(function () {
+                        console.log('Animation finished');
+                        $('p').css('color', 'red').text('Animation finished');
+                    });
+*/
+           /* var a=$.post('');
+            $.when(a).done(function(){
+                $('p').html('lalallalal');
+            }).done(function(){
+                $('p').html('xixixixixi');
+            });*/
+            /*var data = [1,2,3,4]; // the ids coming back from serviceA
+            var processItemsDeferred = [];
+
+            for(var i = 0; i < data.length; i++){
+              processItemsDeferred.push(processItem(data[i]));
+            }
+
+            $.when.apply(null, processItemsDeferred).then(everythingDone);
+
+            function processItem(data) {
+              var dfd = $.Deferred();
+              console.log('called processItem'+data);
+
+              //in the real world, this would probably make an AJAX call.
+              setTimeout(function() { dfd.resolve('process all items'+data) }, 3000);
+
+              return dfd.promise();
+            }
+
+            function everythingDone(data){
+              console.log(data);
+            }*/
+            /*var DeferredHelper = {
+              objectVariableIsSet: function(object, variableName) {
+                var dfd = $.Deferred();
+
+                var interval = setInterval(function() {
+                  if (object[variableName] !== undefined) {
+                    clearInterval(interval);
+                    console.log('objectVariableIsSet');
+                    dfd.resolve()
+                  }
+                }, 10);
+
+                return dfd.promise();
+              },
+
+              arrayContainsElements: function(array) {
+                var dfd = $.Deferred();
+
+                var interval = setInterval(function() {
+                  if (array.length > 0) {
+                    clearInterval(interval);
+                    console.log('arrayContainsElements');
+                    dfd.resolve()
+                  }
+                }, 10);
+
+                return dfd.promise();
+              }
+            }
+
+            var executeThis = function() {
+              console.log('ok!');
+            }
+
+            var object = {};
+            object.var = undefined;
+            var array = [];
+
+            $.when(DeferredHelper.arrayContainsElements(array)).then(executeThis);
+            $.when(DeferredHelper.objectVariableIsSet(object, 'var')).then(executeThis);
+
+            setTimeout(function() {
+              object.var = 2;
+              array.push(2);
+              array.push(3);
+            }, 2000);*/
+            // Naive attempt at working with .then()
+            // Utility Functions
+            function wait(ms) {
+                  var deferred = $.Deferred();
+                  setTimeout(deferred.resolve, ms);
+                  return deferred.promise();
+            }
+            function notifyOfProgress(message, promise) {
+                console.log(message + promise.state());
+            }
+            // Create two new deferred objects
+            var aManualDeferred = new $.Deferred(),
+                secondManualDeferred = aManualDeferred.then(function () {
+                    console.log('1 started');
+
+                    return wait(3500).done(function () {
+                        console.log('1 ended');
+                    });
+                });
+
+            // After secondManualDeferred is resolved
+            secondManualDeferred.then(function () {
+                console.log('2 started');
+
+                return wait(2500).done(function () {
+                    console.log('2 ended');
+                });
+            });
+
+            // Resolve the first promise
+            aManualDeferred.resolve();
         </script>
     </body>
 </html>

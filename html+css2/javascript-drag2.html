@@ -23,8 +23,6 @@
         <div id="box">
             <h2 class="title"></h2>
         </div>
-
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
        <script type="text/javascript">
             function Drag()
             {
@@ -39,7 +37,7 @@
                     this._x = this._y = 0;
                     this._moveDrag = this.bind(this, this.moveDrag);
                     this._stopDrag = this.bind(this, this.stopDrag);
-
+                    // 浅拷贝哦
                     this.setOptions(options);
 
                     this.handle = this.$(this.options.handle);
@@ -48,11 +46,13 @@
                     this.maxTop = Math.max(this.maxContainer.clientHeight, this.maxContainer.scrollHeight) - this.drag.offsetHeight;
                     this.maxLeft = Math.max(this.maxContainer.clientWidth, this.maxContainer.scrollWidth) - this.drag.offsetWidth;
 
+                    // 是否锁定
                     this.limit = this.options.limit;
                     this.lockX = this.options.lockX;
                     this.lockY = this.options.lockY;
                     this.lock = this.options.lock;
 
+                    // 回调，没有意义
                     this.onStart = this.options.onStart;
                     this.onMove = this.options.onMove;
                     this.onStop = this.options.onStop;

@@ -31,8 +31,8 @@
                         // 开始移动
                         // 鼠标按下时，获取当前dom对象的位置
                         var e=e||window.event;
-                        var self=$(this);
-                        // console.log($(this).attr('class'));
+                        e.preventDefault();
+                        var self=$(e.target);
                         dragConfig={
                             dragFlag:true,
                             mouseX:e.clientX,
@@ -45,9 +45,9 @@
                         var moveContainerOffset=moveContainer.offset();
                         var moveContainerLeft=moveContainerOffset.left;
                         var movecontainerTop=moveContainerOffset.top;
-                        var moveContainerWidth=moveContainer.outerWidth(true);
+                        var moveContainerWidth=moveContainer.width();
                         var moveElementWidth=moveElement.outerWidth(true);
-                        var moveContainerHeight=moveContainer.outerHeight(true);
+                        var moveContainerHeight=moveContainer.height();
                         var moveElementHeight=moveElement.outerHeight(true);
 
                         return {
@@ -60,7 +60,7 @@
                     moveEvent:function(e,moveElement,moveContainer){
                         // 移动过程中
                         var e=e||window.event;
-
+                        e.preventDefault();
                         if(dragConfig.dragFlag){
                             // console.log('moving ....');
                             var left=e.clientX-dragConfig.mouseX+dragConfig.leftStyle;
@@ -83,11 +83,15 @@
                         // 移动完成时
                         // console.log('up event...');
                         dragConfig.dragFlag=false;
+                        this.moveEvent=null;
                     }
                 };
                 var dragInitialize=function(dragElement,moveContainer){
                     var doc=$(document);
-                    dragElement.on('mousedown',dragEvent.downEvent);
+                    dragElement.css('cursor','move');
+                    dragElement.on('mousedown',function(e){
+                        dragEvent.downEvent(e);
+                    });
                     doc.on('mousemove',function(e){
                         dragEvent.moveEvent(e,dragElement,moveContainer);
                     });

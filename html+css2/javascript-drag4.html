@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>simple javascript drag</title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; height: 600px;  width: 100%; border: 2px solid orange; }
+            ul { list-style: none; }
+            .test { width:200px; height:200px; position:absolute; top:100px; left:100px; background:#ddd; cursor: move; }
+        </style>
+    </head>
+    <body>
+        <div id="test" class="test">
+
+        </div>
+        <a id="link" href="http://www.baidu.com">click me</a>
+        <script type="text/javascript">
+            var dragEle=document.getElementById('test');
+            dragEle.onmousedown=function(e){
+                console.log('down');
+                var e=e||window.event,
+                t=e.target||e.srcElement,
+                x1=e.clientX,
+                y1=e.clientY,
+                dragLeft=t.offsetLeft,
+                dragTop=t.offsetTop;
+
+                document.onmousemove=function(e){
+                    console.log('move');
+                    var e=e||window.event,
+                    x2=e.clientX,
+                    y2=e.clientY;
+
+                    dragEle.style.left=x2-x1+dragLeft+'px';
+                    dragEle.style.top=y2-y1+dragTop+'px';
+                }
+
+                document.onmouseup=function(e){
+                    console.log('up');
+                    this.onmousemove=null;
+                }
+            };
+            /*var dragEvent={
+                downEvent:function(e){
+                    var e=e||window.event;
+                    var x1=e.clientX;
+                    var y1=e.clientY;
+                    return {
+                        x1:x1,
+                        y1:y1
+                    }
+                },
+                moveEvent:function(e){
+                    var e=e||window.event;
+                    var t=e.target||e.srcElement;
+                    var x2=e.clientX;
+                    var y2=e.clientY;
+                    var left=x2-(dragEvent.downEvent(e).x1)+t.offsetLeft;
+                    var top=y2-(dragEvent.downEvent(e).y1)+t.offsetTop;
+                    console.log('left is:'+left+',top is:'+top);
+                    t.style.cursor='move';
+                    t.style.position='absolute';
+                    t.style.left=left+'px';
+                    t.style.top=top+'px';
+                },
+                upEvent:function(){
+                    dragEvent.moveEvent=null;
+                },
+                initialize:function(dragElement){
+                    var doc=document;
+                    var self=this;
+                    doc.onmousemove=function(e){
+                        dragEvent.moveEvent(e);
+                    }
+                    doc.onmouseup=function(e){
+                        dragEvent.upEvent(e);
+                    }
+                    dragElement.onmousedown=function(e){
+                        dragEvent.downEvent(e);
+                    }
+                }
+            };
+            dragEvent.initialize(dragEle);*/
+        </script>
+        <script type="text/javascript">
+            // var bind=function(object,event,fnHandler){
+            //     /*if(window.addEventListener){
+            //         return object.addEventListener(event,fnHandler,false);
+            //     }else{
+            //         return object.attatchEvent(object,'on'+event);
+            //     }*/
+            //     return window.addEventListener?object.addEventListener(event,fnHandler,false):object.attachEvent('on'+event,fnHandler);
+            // };
+            // function addEvent(el, type, fn){
+            //     if(el.addEventListener){
+            //         el.addEventListener(type, fn, false);
+            //     }else{
+            //         el['a'+fn] = function(){
+            //             fn.call(el, window.event);
+            //         }
+            //         el.attachEvent('on'+type, el['a'+fn]);
+            //     }
+            // }
+            // var body = document.body;
+            // // bind(body,'click',function(){
+            // //     //console.log('body click');
+            // //     alert(this);
+            // // });
+            // addEvent(body,'click',function(){
+            //     alert(this===body);
+            // });
+        </script>
+        <script type="text/javascript">
+            var E = {
+                //添加事件
+                add: function(el, type, fn) {
+                    if (el.addEventListener) {
+                        el.addEventListener(type, fn, false);
+                    } else {
+                        el['e' + fn] = function() {
+                            fn.call(el, window.event);
+                        };
+                        el.attachEvent('on' + type, el['e' + fn]);
+                    }
+                },
+                //删除事件
+                remove: function(el, type, fn) {
+                    if (el.removeEventListener) {
+                        el.removeEventListener(type, fn, false);
+                    } else if (el.detachEvent) {
+                        /*el['e'+fn]=function(){
+                            fn.call(el,window.event);
+                        };*/
+                        alert(el['e' + fn]);
+                        el.detachEvent('on' + type, el['e' + fn]);
+                    }
+                },
+                // 返回事件对象
+                evt: function(e) {
+                    return e || window.event;
+                },
+                target: function(e) {
+                    var evt = this.evt(e);
+                    var t = evt.target || evt.srcElement;
+                    while (t) {
+                        if (t.nodeType === 1) {
+                            return t;
+                        }
+                        t = t.parentNode;
+                    }
+                    return t;
+                },
+                // 阻止默认行为
+                preventDefault: function(e) {
+                    var evt = this.evt(e);
+                    if (evt.preventDefault) {
+                        evt.preventDefault();
+                    } else {
+                        evt.returnValue = false;
+                    }
+                },
+                // 阻止事件冒泡
+                stopPropagation: function(e) {
+                    var evt = this.evt(e);
+                    if (evt.stopPropagation) {
+                        evt.stopPropagation();
+                    } else {
+                        evt.cancelBubble = true;
+                    }
+                }
+            };
+            var doc = document;
+            var body = doc.body;
+            var callback = function() {
+                alert('lalalalal');
+            };
+            var link = doc.getElementById('link');
+            E.add(link, 'click', function(e) {
+                E.stopPropagation(e);
+                E.preventDefault(e);
+            });
+            E.add(body, 'click', callback);
+            //E.remove(body,'click',callback);
+        </script>
+    </body>
+</html>

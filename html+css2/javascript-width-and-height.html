@@ -14,16 +14,18 @@
             .info span { color: #666; }
             .info ul { border: 1px solid orange; margin: 10px; padding: 10px; }
             .info ul li { line-height: 2; }
+            .info2 { margin: 10px; padding: 10px; border: 1px solid orange; font-size: 16px;}
         </style>
     </head>
     <body>
-        <h1 style="position:absolute; font-size:18px; ">test</h1>
-        <div id="test" class="test">
-            <div id="box" class="box">
-                <p style="height:200px; background:#eee; text-align:center;">box</p>
-            </div>
-        </div>
-        <div id="info" class="info"></div>
+<h1 style="position:absolute; font-size:18px; ">test</h1>
+<div id="test" class="test">
+    <div id="box" class="box">
+        <p style="height:200px; padding:20px; background:#eee; text-align:center; ">box</p>
+    </div>
+</div>
+<div id="info" class="info"></div>
+<div id="info2" class="info2">展示滚动条产生的top信息</div>
         <script type="text/javascript">
             function $(id){
                 return typeof id === "string" ? document.getElementById(id) : id;
@@ -64,6 +66,9 @@
                     clientTop:clientTop
                 }
             }
+            /*
+            *信息显示，打印出数据，用以理解属性区别
+            */
             var test=$('test');
             var box=$('box');
             var info=$('info');
@@ -85,7 +90,7 @@
             info.innerHTML=initInfo('test',test);
             info.innerHTML+=initInfo('box',box);
             box.onscroll=function(){
-                info.innerHTML+='<div id="info2"></div>';
+
                 $('info2').innerHTML='<p>box:top:'+getTopModel(box).top+',scrollTop:'+getTopModel(box).scrollTop+',clientTop:'+getTopModel(box).clientTop+',offsetTop:'+getTopModel(box).offsetTop+'</p>';
             }
         </script>

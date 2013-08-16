@@ -30,8 +30,6 @@
                     downEvent:function(e){
                         // 开始移动
                         // 鼠标按下时，获取当前dom对象的位置
-                        var e=e||window.event;
-                        e.preventDefault();
                         var self=$(e.target);
                         dragConfig={
                             dragFlag:true,
@@ -42,6 +40,7 @@
                         };
                     },
                     moveLimited:function(moveElement,moveContainer){
+
                         var moveContainerOffset=moveContainer.offset();
                         var moveContainerLeft=moveContainerOffset.left;
                         var movecontainerTop=moveContainerOffset.top;
@@ -101,6 +100,5 @@
                 dragInitialize($('#test'),$('.wrapper'));
             });
         </script>
-
     </body>
 </html>

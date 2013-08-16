@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>测试</title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+            .wrapper { height: 400px; width: 400px; border: 2px solid orange; }
+            .test { margin: 20px; /*border: 2px solid orange; */ }
+            .bar-wrapper { background: #eee;  height: 20px; width: 400px; position: relative; }
+            .bar-wrapper .progress { background: orange; width: 0; height: 20px; }
+            .bar-wrapper .bar { position: absolute; top: -5px; left: 0; height: 28px; width: 14px; border: 1px solid #666; background: silver; cursor: move; }
+        </style>
+    </head>
+    <body>
+        <div class="test">
+            <div id="bar-wrapper" class="bar-wrapper">
+                <span class="bar"></span>
+                <div class="progress"></div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            (function(){
+                /*
+                * 一个可以拖动的进度条
+                */
+                /*var DOM={
+                    $:function(id){
+                        return typeof id==='string'?document.getElementById(id):id;
+                    },
+                    $$:function(eleClass){
+                        var reg= new Reg
+                    }
+                };
+                var Event ={
+
+                };
+                var SimpleProgressBar=function(options){
+                    var barContainer;
+                    barContainer=this.barContainer=options.barContainer;
+                    this.
+                    this.initialize();
+                };
+                SimpleProgressBar.prototype={
+                    constructor:SimpleProgressBar,
+
+                };
+                new SimpleProgressBar({
+
+                });*/
+            })();
+        </script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+        <script type="text/javascript">
+            $(function(){
+                var dragConfig={
+                    dragFlag:false,
+                    mouseX:0,
+                    mouseY:0,
+                    leftStyle:0,
+                    topStyle:0
+                };
+                var dragEvent={
+                    downEvent:function(e){
+                        // 开始移动
+                        // 鼠标按下时，获取当前dom对象的位置
+                        var self=$(e.target);
+                        e.preventDefault();
+                        dragConfig={
+                            dragFlag:true,
+                            mouseX:e.clientX,
+                            mouseY:e.clientY,
+                            leftStyle:parseInt(self.css('left')),
+                            topStyle:parseInt(self.css('top'))
+                        };
+                    },
+                    moveEvent:function(e,moveElement,moveContainer,progress){
+                        // 移动过程中    
+                        e.preventDefault();              
+                        if(dragConfig.dragFlag){
+                            // console.log('moving ....');
+                            var left=e.clientX-moveContainer.offset().left;
+                            if(left<=0){
+                                left=0;
+                            }
+                            if(left>=moveContainer.width()-moveElement.width()){
+                                left=moveContainer.width()-moveElement.width();
+                            }
+                            moveElement.css({
+                                left:left+'px'
+                            });
+                            progress.css({
+                                width:left+moveElement.width() +'px'
+                            });
+                        }   
+                    },
+                    upEvent:function(){
+                        // 移动完成时
+                        // console.log('up event...');
+                        dragConfig.dragFlag=false;
+                        this.moveEvent=null;
+                    }
+                };
+                var dragInitialize=function(dragElement,moveContainer,progress){
+                    var doc=$(document);
+                    dragElement.css('cursor','move');
+                    dragElement.on('mousedown',function(e){
+                        dragEvent.downEvent(e);
+                    });
+                    doc.on('mousemove',function(e){
+                        dragEvent.moveEvent(e,dragElement,moveContainer,progress);
+                    });
+                    doc.on('mouseup',dragEvent.upEvent);
+                };
+                //dragInitialize($('#test'));
+                // dragInitialize($('#test'),$('.wrapper'));
+                var progressDom= function(){
+                    var barContainer=$('#bar-wrapper'),
+                    bar = barContainer.find('.bar'),
+                    progress = barContainer.find('.progress');
+                    return {
+                        barContainer: barContainer,
+                        bar: bar,
+                        progress: progress
+                    }
+                };
+                dragInitialize(progressDom().bar,progressDom().barContainer,progressDom().progress);
+            });
+        </script>
+    </body>
+</html>

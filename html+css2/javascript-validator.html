@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>测试</title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+            .login .form { overflow: hidden; _zoom: 1;}
+            .login .form-infor { float: left; /*width: 400px;*/ }
+            .login .form-tips { float: right; width: 200px; border: 1px solid orange; }
+            .login .form-item { margin-top: 10px; font-size: 14px; }
+            .login .form-item label { float: left; width: 10em; height: 24px; line-height: 24px; padding-right: 0.5em; text-align: right; }
+            .login .form-item input { height: 22px; line-height: 22px; width: 10em; border: 1px solid #666; color: #444; }
+            .login .form-item input:focus { border: 1px solid green; }
+            .login .form-item .error { color: red; height: 1.3em; line-height: 1.3; overflow: hidden; margin-left: 11em; }
+            .login .submit-container { /*text-align: center;*/ }
+            .login .form-item .form-submit { width: 6em; height: 24px; margin-left: 11em; background: #333; color: #fff; overflow: visible; cursor: pointer; }
+        </style>
+    </head>
+    <body>
+        <div class="login">
+            <form action="http://www.baidu.com" class="form" id="login">
+                <div class="form-infor">
+                    <div class="form-item">
+                        <label>用户名:</label><input type="text" class="text user-name" />
+                    </div>
+                    <div class="form-item"><label>密码:</label><input type="password" class="pwd" /></div>
+                    <div class="form-item"><label>确认密码:</label><input type="password" class="confirm-pwd" /></div>
+                    <div class="form-item"><label>注册邮箱:</label><input type="text" class="text reg-email" /></div>
+                    <div class="form-item submit-container"><input type="submit" class="form-submit" value="注册"></div>
+                </div>
+                <div class="form-tips">
+                    lalalallal
+                </div>
+            </form>
+        </div>
+        
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+        <script type="text/javascript">
+        // JavaScript Document
+        // 应当还要支持动态字段验证
+        // 支持ajax验证
+        // select,radio,checkbox,fileup 等验证，由于绑定的事件不是blur，可以通过回调自定义
+        // 当然，这个验证也需要支持
+        var checkObj={/**数据验证类**/
+                checkFunc:{},//验证数据的函数对象集合
+                errorMessage:[],//错误消息
+                rightMessage:[],//正确消息
+                showInfoFunc:{},//显示消息的函数
+                getType:function(data){
+                    var to=Object.prototype.toString,type='string';
+                    if(to.call(data,null)==='[object Array]'){
+                        // 传入的是个数组
+                        type='array'        
+                    }else if(typeof data==='string'){
+                        // 仅仅传入了一个字符串
+                        type='string';
+                    }else if(to.call(data,null)==='[object Object]'){
+                        // 传入的是个对象
+                        type='object';
+                    }else {
+                        type='null'
+                    }
+                    return type;
+                },
+                check:function(data,checkConfig){//验证
+                    var  msg, checkValue, checker, result_ok, checkType, value;
+                    // for(i in data){
+                        // console.log(data);
+                        value = data.val();
+                        checkValue=checkConfig;//获得相应的验证规则函数名称
+                        // 需要遍历checkValue
+                        // 判断checkValue是数组，还是对象，还是字符串
+                        checkType=this.getType(checkValue);
+
+                        // console.log(checkValue,checkType);
+
+                        if(checkType==='string'){
+                            checker= this.checkFunc[checkValue];
+                            result_ok=checker.validate(value);//对单个进行验证
+                            if(!result_ok){
+                                // console.log(checker.message);
+                                return false;
+                            }
+                           
+                        }else if (checkType==='array'){
+                            for(var k=0,h=checkValue.length;k<h;k++){
+                                result_ok=this.checkFunc[checkValue[k]].validate(value);
+                                if(!result_ok){
+                                    console.log(this.checkFunc[checkValue[k]].message);
+                                    return false;
+                                }
+                            }
+                          
+                        }else if(checkType==='object'){
+                            // 调用自定义函数
+                            // 应当还支持混合验证，即调用通用验证和自定义验证函数
+                            // 使用defaultValidate来配置默认
+                            // 不进行默认与自定义函数名称重复判断
+                            // 若重名，默认配置覆盖自定义配置
+                            if(!!checkValue.defaultValidate){
+                                for(var j in checkValue){
+                                    if(j==='defaultValidate'){
+                                        var validateArr=checkValue.defaultValidate;
+                                        for(var dLoop=0,dLen=validateArr.length;dLoop<dLen;dLoop++){
+                                            result_ok=this.checkFunc[validateArr[dLoop]].validate(value);
+                                            if(!result_ok){
+                                                console.log(this.checkFunc[validateArr[dLoop]].message);
+                                                return false;
+                                            }
+                                        }
+                                    }else {
+                                        result_ok=checkValue[j].validate(value);
+                                        // console.log(checkValue[j]);
+                                        if(!result_ok){
+                                            console.log(checkValue[j].message);
+                                            return false;
+                                        }
+                                    } 
+                                }
+                            }else {
+                                for (var m in checkValue){
+                                    result_ok=checkValue[m].validate(value);
+                                    if(!result_ok){
+                                        console.log(checkValue[m].message);
+                                        return false;
+                                    }
+                                }
+                                
+                            }
+                        }
+                    // }
+                    result_ok=true;
+                    return result_ok;
+                },
+                initialize:function(formId,validateData,checkConfig){
+                    // 针对文本输入框进行blur事件绑定
+                    $.each(validateData,function(i,ele){
+                        ele.blur(function(){
+                            checkObj.check(validateData[i],checkConfig[i]);
+                        });
+                    }) 
+                    formId.find('input[type="submit"]').click(function(e){
+                        // 阻止默认提交
+                        e.preventDefault();
+                        var flag=true;
+                        // 若验证全部完成，则进行表单提交
+                        $.each(validateData,function(i,ele){
+                            if(!checkObj.check(validateData[i],checkConfig[i])){
+                                flag=false;
+                            };
+                        });
+                        flag&&formId.get(0).submit();
+                    });
+                }
+            }
+            
+            /*******检查是否为空*******/
+            checkObj.checkFunc.isEmpty={
+                    validate:function(val){
+                        return val!='';
+                    },
+                    message:'传入的值不能为空！'//错误消息
+                }
+            /*******检查是否选择非默认值******/
+            checkObj.checkFunc.isDefault={
+                    validate:function(val){
+                        var _default='default';
+                        return val!=_default;
+                    },
+                    message:'请选择值！'//错误消息
+                }
+            /*****检查电子邮件*****/
+            checkObj.checkFunc.isEmail={
+                    validate:function(val){
+                        var _reg=/^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+                        return _reg.test(val);
+                    },
+                    message:'请填写正确的邮件格式！'//错误消息
+                }   
+            /******检查是否选择项目**********/
+            checkObj.checkFunc.isChecked={
+                validate:function(val){
+                    return val;
+                },
+                message:'未选择值!'//错误消息
+            }   
+        </script>
+        <script type="text/javascript">
+            /*
+            * 验证的调用顺序对验证的先后有影响
+            * 比如吧defaultValidate定义在自定义函数前面，则优先执行defaultValidate配置规则
+            */
+            checkObj.initialize($('#login'),{
+                fullName:$('.user-name'),
+                regEmail:$('.reg-email'),
+                pwd:$('.pwd'),
+                confirmPwd:$('.confirm-pwd')
+            },{
+                fullName:{
+                    isEmpty:{
+                        validate:function(val){
+                            return val!='';
+                        },
+                        message:'用户名不能为空！'//错误消息
+                    }
+                },
+                regEmail:{
+                    isEmpty:{
+                        validate:function(val){
+                            return val!='';
+                        },
+                        message:'邮箱不能为空！'//错误消息
+                    },
+                    defaultValidate:['isEmail']
+                },
+                pwd:{
+                    defaultValidate:['isEmpty'],
+                    minLength:{
+                        validate:function(val){
+                            return val.length>=6;
+                        },
+                        message:'密码长度至少6位以上'
+                    }
+                },
+                confirmPwd:{
+                    defaultValidate:['isEmpty'],
+                    isSame:{
+                        validate:function(val){
+                            return val===$('.pwd').val();
+                        },
+                        message:'密码不一致'
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>

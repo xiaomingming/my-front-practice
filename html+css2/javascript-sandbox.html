@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>javascript sandbox</title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+            .wrapper { height: 400px; width: 400px; border: 2px solid orange; }
+            .test { margin: 20px; border: 2px solid orange; }
+        </style>
+    </head>
+    <body>
+        <div class="test">
+
+        </div>
+        <script type="text/javascript">
+            function Sandbox() {
+                    // turning arguments into an array
+                var args = Array.prototype.slice.call(arguments),
+                    // the last argument is the callback
+                    callback = args.pop(),
+                    // modules can be passed as an array or as individual parameters
+                    modules = (args[0] && typeof args[0] === "string") ? args : args[0],
+                    i;
+                // make sure the function is called
+                // as a constructor
+                if (!(this instanceof Sandbox)) {
+                    return new Sandbox(modules, callback);
+                }
+                // add properties to `this` as needed:
+                this.a = 1;
+                this.b = 2;
+                // now add modules to the core `this` object
+                // no modules or "*" both mean "use all modules"
+                if (!modules || modules === '*') {
+                    modules = [];
+                    for (i in Sandbox.modules) {
+                        if (Sandbox.modules.hasOwnProperty(i)) {
+                            modules.push(i);
+                        }
+                    }
+                }
+                // initialize the required modules
+                for (i = 0; i < modules.length; i += 1) {
+                    Sandbox.modules[modules[i]](this);
+                }
+                // call the callback
+                callback(this);
+            }
+            // any prototype properties as needed
+            Sandbox.prototype = {
+                name: "My Application",
+                version: "1.0",
+                getName: function () {
+                    return this.name;
+                }
+            };
+        </script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+    </body>
+</html>

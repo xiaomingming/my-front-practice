@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>图片轮播2</title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+            .slider { position: relative; margin: 20px; border: 1px solid red; width: 314px; height: 165px; }
+            .slider li { display: none; position: absolute; height: 146px; width: 239px; overflow: hidden;  }
+            .slider li a { display: block; background: #ddd; overflow: hidden; }
+            .slider li a img { width: 233px; height: 153px; border: 3px solid #b2b2b2; opacity: 0.7; filter:alpha(opacity=70); }
+            .slider li.left ,.slider li.right, .slider li.current { display: block; }
+            .slider li.left { left: 0; bottom: 0; z-index: 0; }
+            .slider li.right { right: 0; bottom: 0; z-index: 1; }
+            .slider li.current { width: 245px; height: 165px; top: 0; left: 36px; z-index: 2; }
+            .slider li.current a { height: 165px; background: #fff; }
+            .slider li.current a img { border: 0; margin: 6px; text-align: center; opacity: 1; filter:alpha(opacity=100); }
+            
+        </style>
+    </head>
+    <body>
+        <div id="Jslider" class="slider">
+            <ul>
+                <li><a href="#"><img src="../images/wdj1.jpg" alt="" title="" /></a></li>
+                <li><a href="#"><img src="../images/wdj5.jpg" alt="" title="" /></a></li>
+                <li><a href="#"><img src="../images/wdj6.jpg" alt="" title="" /></a></li>
+                <li><a href="#"><img src="../images/1.jpg" alt="" title="" /></a></li>
+                <li><a href="#"><img src="../images/2.jpg" alt="" title="" /></a></li>
+                <li><a href="#"><img src="../images/3.jpg" alt="" title="" /></a></li>
+            </ul>
+        </div>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+        <script type="text/javascript">
+            $(function(){
+                var Slider=function(options){
+                    this.container=options.container;
+                    this.interval=options.interval;
+                    this._timer=null;
+                    this._index=1;
+                    this._items=this.container.find('li');
+                    this.initialize();
+                };
+                Slider.prototype={
+                    constructor:Slider,
+                    getIndex:function(index,direction){
+                        var sliderItemsLength=this._items.length;
+                        if(direction===-1){
+                            // 向前计算 previous index
+                            return (index===0)?(sliderItemsLength-1):(index-1);
+                        }else if(direction===1){
+                            // 向后计算 next index
+                            return (index===sliderItemsLength-1)?0:(index+1);
+                        }
+                    },
+                    gotoIndex:function(){
+                        this._index++;
+                        if(this._index===this._items.length){
+                            this._index=0;
+                        }
+                    },
+                    slide:function(index){
+                        var sliderItems=this._items,
+                        self=this,
+                        prevIndex=this.getIndex(index,-1),
+                        nextIndex=this.getIndex(index,1);
+                        sliderItems.attr('class','');
+                        // 显示当前图片,隐藏其它图片
+                        sliderItems.eq(index).addClass('current');
+                        // 将当前图片的上一张放入left
+                        sliderItems.eq(nextIndex).addClass('left');
+                        sliderItems.eq(prevIndex).addClass('right');
+                    },
+                    stopSlide:function(){
+                        var self=this;
+                        clearInterval(self._timer);
+                        self._timer=null;
+                    },
+                    autoSlide:function(){
+                        var self=this;
+                        this._timer=setInterval(function(){
+                            self.slide(self._index);
+                            self.gotoIndex();
+                        },self.interval);
+                    },
+                    // 初始化
+                    initialize:function(){
+                        var self=this,
+                        items=this._items;
+                        items.eq(0).addClass('left');
+                        items.eq(1).addClass('right');
+                        items.eq(2).addClass('current');
+                        this.autoSlide(self._index);
+                    }
+                };
+                new Slider({
+                    container: $('#Jslider'),
+                    interval: 3000
+                });
+            });
+        </script>
+    </body>
+</html>

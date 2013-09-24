@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>图片预加载</title>
+<style type="text/css">
+* { margin:0;padding:0; }
+body{ font:12px/1.5 arial; }
+.img_box { border:2px solid orange; padding:10px; margin-bottom:20px; }
+</style>
+</head>
+
+<body>
+<div id="img_box" class="img_box" imgIndex=""></div>
+<input type="button" id="prev" value="上一张" />
+<input type="button" id="next" value="下一张" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script> 
+<script type="text/javascript">
+    var imgUrlArr=['http://sp1.yokacdn.com/photos/41/d4/675558/photo_74768_500.jpg','http://img.jujoy.com/Img/Img/ShoujiComCn/76/20057264156594.jpg','http://blogcache.artron.net/2009/03/30/70748_200903300715421YO92.jpg','http://imdiy.cn/wp-content/uploads/2008/03/fengjing.jpg'],
+    $imgBox=$('#img_box'),
+    $prevBtn=$('#prev'),
+    $nextBtn=$('#next'),
+    imgLen=imgUrlArr.length,
+    preLoadImg,
+    loadImg,
+    index=0,
+    prevImageIndex,
+    nextImageIndex;
+   
+    prevImageIndex=function(index){
+        return index=(index===0)?(imgLen-1):(index-1);
+    };
+    nextImageIndex=function(index){
+        return index=(index===imgLen-1)?0:(index+1);
+    };
+    //预加载图片
+    preLoadImg=function(url,index,callback){
+        var img=new Image();
+        img.src=url;
+        $imgBox.text('图片加载中...');
+        if(img.complete){
+            callback.call(img,index);    
+            return;
+        }    
+        img.onload=function(){
+            callback.call(img,index);
+        };
+    };
+    //加载图片完成后执行函数
+    loadImg=function(index){
+        $imgBox.text('').attr('imgIndex',index).append(this);
+    };
+    //事件绑定
+    $prevBtn.click(function(e){
+        index=parseInt($imgBox.attr('imgIndex'));
+        preLoadImg(imgUrlArr[index],prevImageIndex(index),loadImg);   
+    });
+    $nextBtn.click(function(e){ 
+        index=parseInt($imgBox.attr('imgIndex'));
+        preLoadImg(imgUrlArr[index],nextImageIndex(index),loadImg);    
+    });
+    //初始化
+    if($imgBox.attr('imgIndex')===''){
+        preLoadImg(imgUrlArr[index],index,loadImg);
+    }
+</script>
+</body>
+</html>

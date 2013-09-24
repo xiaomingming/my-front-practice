@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>测试</title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+            .test { margin: 20px; }
+        </style>
+    </head>
+    <body>
+        <div class="test">
+            <h1>做一个js继承的示例</h1>
+            <a href="http://developer.51cto.com/art/201103/248504.htm">参考文章</a>
+        </div>
+        <script type="text/javascript">
+            /*
+            * 类抄写
+            */
+            var Parent=function(name,age){
+                this.name=name;
+                this.age=age;
+            };
+            Parent.prototype.showInfo=function(){
+                alert(this.name+' is '+this.age+' years old');
+            };
+            var Child=function(x,y){
+                var pObj=new Parent(x,y);
+                for(var key in pObj){
+                    console.log(key);
+                    this[key]=pObj[key];
+                }
+            };
+            // console.log();
+            var son=new Child('xiaoming',23);
+            //console.log(son instanceof Child);
+            //console.log(son.constructor===Child);
+            //console.log(son instanceof Parent);//false
+        /*
+        * 混合做法
+        * 属性继承靠apply
+        * 方法继承靠原型
+        */
+           var Parent2=function(name,age){
+                this.name=name;
+                this.age=age;
+            };
+            Parent2.prototype.showInfo=function(){
+                alert(this.name+' is '+this.age+' years old');
+            };
+            var Child2=function(height){
+                Parent2.call(this,'xiaoqiang',22);
+                this.height=height;
+                // 需要指正构造器
+                this.constructor=Child2;
+            };
+            Child2.prototype=new Parent2();
+            Child2.prototype.showInfo=function(){
+                alert(this.name+' is '+this.age+' years old,'+' height is: '+this.height);
+            };
+            // console.log();
+            var son2=new Child2('173cm');
+            console.log(son2 instanceof Child2);
+            console.log(son2.constructor===Child2);
+            console.log(son2 instanceof Parent2);
+        /*
+        * 浅拷贝
+        */
+        var extend=function(parent,child){
+            var F=function(){};
+            F.prototype=parent.prototype;
+            
+        };
+        </script>
+    </body>
+</html>

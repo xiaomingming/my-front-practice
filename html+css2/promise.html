@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>测试</title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+            #test { position: absolute; border: 2px solid orange; width: 200px; height: 100px; text-align: center; }
+        </style>
+    </head>
+    <body>
+        <form action="http://www.baidu.com" method="post">
+            <div><label for="pid">pid:</label><input type="text" id="pid" /></div>
+            <div><label for="data-content">content:</label><input type="text" id="data-content" /></div>
+            <input type="submit" value="提交" />
+        </form>
+        <div id="test">lalalalalalaal</div>
+        <button>click me</button>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js "></script>
+        <script type="text/javascript">
+            $(function(){
+                var animation1=function(){
+                    var promise=$('#test').animate({
+                        top:'100px'
+                    },3000);
+                    return promise.promise();
+                };
+                var animation2=function(){
+                    return $('#test').slideUp(6000).promise();
+                };
+                animation1().then(animation2()).then(function(){
+                    $('button').on('click',function(){
+                        alert('lalala');
+                    });
+                });
+            });
+        </script>
+        <script type="text/javascript">
+            var reg=/\w/g;
+            var str='hulalawawakula',
+            result;
+            while((result=reg.exec(str))!==null){
+                //console.log(result);
+            }
+        </script>
+        <script type="text/javascript">
+            var walk=function(node,callback,step){
+                var pNode=node;
+                while(step){
+                    pNode=pNode.childNodes;
+                    if(pNode.nodeType!==1){
+                        return;
+                    }
+                    step--;
+                    console.log('lalalal');
+                }
+                callback();
+            };
+            var node=document.body,
+            callback=function(){
+                console.log('what a fucking day');
+            };
+            walk(node,callback,4);
+        </script>
+    </body>
+</html>

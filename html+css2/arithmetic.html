@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>算法练习</title>
+    </head>
+    <body>
+    <script type="text/javascript">
+        /* 数组去重 */
+        (function(){
+            /*var arr=[1,2,3,3,2,1,{a:1,b:2},{a:1,b:2},{c:3},{c:3}];
+            var unique=function(source){
+                var uniqueArr=[],testObj={},i=0,j=source.length;
+                for(;i<j;i++){
+                    console.log(source[i]);
+                    if(!testObj[source[i]]){
+                        testObj[source[i]]=true;
+                        uniqueArr.push(arr[i]);
+                    }else {
+                        console.log(i,source[i]);
+                    }
+                }
+                return uniqueArr;
+            };
+            // 开始测试
+            window.console&&console.log(unique(arr));*/
+        })();
+
+        var arr2=[1,3,8,10,22];
+        var getSorted=function(source){
+            var sorted=source.sort(function(a,b){
+                return a-b;
+            });
+            var missed=[],i=1,j=sorted.length,k,h;
+            // console.log(j,sorted[2]);
+            for(i=1;i<j;i++){
+                h=sorted[i]-sorted[i-1];
+                // console.log(h);
+                for(k=1;k<h;k++){
+                    missed.push(sorted[i-1]+k);
+                }
+            }
+            return {
+                sorted:sorted,
+                missed:missed
+            }
+        };
+        console.log(getSorted(arr2));
+        var walk=function(node,callback,step){
+            
+        }
+    </script>
+    </body>
+</html>

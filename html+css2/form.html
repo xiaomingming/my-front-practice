@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+            .myform { width: 400px; margin: 40px auto 10px auto; font-size: 14px; }
+            .myform .form-item { margin-bottom: 10px; }
+            .myform .form-item label { display: inline-block; width: 120px; padding-right: 10px; text-align: right; font-size: 16px; }
+            .myform .form-item input.text { padding:6px 3px; line-height: 18px; color: #666; width: 200px; border-radius: 3px; border:1px solid #666;}
+            .myform .btn {  height: 24px; padding: 0 10px; margin-left: 130px; color: #333; border-radius: 3px; border: 1px solid #999; cursor: pointer; }
+        </style>
+
+    </head>
+    <body>
+        <form action="#" method="post" id="myform" class="myform">
+            <div class="form-item"><label for="pid">pid:</label><input type="text" id="pid" class="text"/></div>
+            <div class="form-item"><label for="data-content">content:</label><input type="text" id="data-content" class="text" /></div>
+            <input type="submit" value="提交" id="submit-btn" class="btn"/>
+        </form>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+        <script type="text/javascript">
+            $(function(){
+                var submitForm=function(){
+                    var pidVal=$('#pid').val(),
+                    dataContentVal=$('#data-content').val();
+                    $('#myform').attr('action',pidVal+dataContentVal);
+                    //$('#myform').get(0).submit();
+                };
+                $('#submit-btn').on('click',submitForm);
+            });
+        </script>
+    </body>
+</html>

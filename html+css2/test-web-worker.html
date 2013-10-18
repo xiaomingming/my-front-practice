@@ -11,6 +11,7 @@
         </style>
         <script type="text/JavaScript"> 
          function init(){ 
+            var daaa='';
              var worker = new Worker('compute.js'); 
              //event 参数中有 data 属性，就是子线程中返回的结果数据
              worker.onmessage= function (event) { 

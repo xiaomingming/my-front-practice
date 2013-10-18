@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>测试</title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+            input[type="text"]{ border: 1px solid #666; color: #333; padding: 4px; height: 22px; }
+            button { cursor: pointer; border: 1px solid orange; height: 24px; padding: 0 6px; border-radius: 3px; }
+            .fl { float: left; }
+            .test { height: 200px; width: 400px; margin: 20px; /*border: 2px solid orange;*/ float: left; border: 1px solid #ddd; }
+            p { line-height: 24px; font-size: 14px; }
+            p span { color: orange; }
+        </style>
+    </head>
+    <body>
+        <div class="test">
+            <h1>当前页面</h1>
+            <input type="text" placeholder="请输入发送内容" />
+            <button id="btn" type="button">post---></button>
+            <p id="message"><strong>接受到的信息：</strong><span></span></p>
+        </div>
+        
+        <div class="fl" style="height:300px; width:600px;"><iframe id="iframe" src="http://dev.moxiu.net/~zhaojian/xiuzhuti/src/template/html/test-accept-message.html" frameborder="0" height="100%" width="100%"></iframe></div>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+        <script type="text/javascript">
+        $(function(){
+            var w=document.getElementById('iframe').contentWindow;
+            //w.postMessage('haha','http://localhost/mygithub');
+            $('#btn').on('click',function(){
+                var obj={name:'xiaoqiang',age:24};
+                w.postMessage(JSON.stringify(obj),'http://dev.moxiu.net/~zhaojian/xiuzhuti/src/template/html/test-accept-message.html');
+            });
+            window.onmessage=function(e){
+                if(e.origin==='http://dev.moxiu.net'){
+                    $('#message span').text(e.data);
+                }
+            };
+        });
+        </script>
+    </body>
+</html>

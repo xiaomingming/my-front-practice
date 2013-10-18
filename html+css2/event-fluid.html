@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>事件流</title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+            h1 { font-size: 18px; }
+            h2 { font-size: 16px; }
+            .test { margin: 20px; }
+            .test-title { color: orange; line-height: 1.2; margin-bottom: 10px; }
+            .test-result { color: #666; margin-bottom: 10px; }
+            .test-area h2 { color: #666; }
+        </style>
+    </head>
+    <body>
+        <div class="test">
+            <h1 class="test-title">标题描述</h1>
+            <h2 class="test-result">结论：</h2>
+            <ul class="test-result-list">
+                <li></li>
+            </ul>
+            <div class="test-area">
+                <h2>实验园地</h2>
+                <button id="btn">click me</button>
+            </div>
+            
+
+        </div>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+        <script type="text/javascript">
+            $(function(){
+                var btn=document.getElementById('btn');
+                btn.onclick=function(event){
+                    //event.stopPropagation();
+                    alert('btn click:'+event.eventPhase);
+                };
+                document.body.onclick=function(event){
+                    alert('body onclick:'+event.eventPhase);
+                };
+                document.body.addEventListener('click',function(event){
+                    alert('body addEventListener:'+event.eventPhase);
+                },true);
+                
+            });
+        </script>
+    </body>
+</html>

@@ -16,7 +16,18 @@
         </div>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
         <script type="text/javascript">
+            function wait(ms) {
+              var deferred = $.Deferred();
+              setTimeout(deferred.resolve, ms);
 
+             // We just need to return the promise not the whole deferred.
+             return deferred.promise();
+            }
+            // Use it
+            wait(5500).then(function () {
+                alert('hahahaah');
+              // Do something brilliant here!
+            });
         </script>
     </body>
 </html>

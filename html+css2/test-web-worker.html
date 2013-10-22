@@ -11,12 +11,12 @@
         </style>
         <script type="text/JavaScript"> 
          function init(){ 
-            var daaa='';
+             var lalala='';
              var worker = new Worker('compute.js'); 
              //event 参数中有 data 属性，就是子线程中返回的结果数据
              worker.onmessage= function (event) { 
                  // 把子线程返回的结果添加到 div 上
-                 document.getElementById("result").innerHTML += 
+                    document.getElementById("result").innerHTML += 
                     event.data+"<br/>"; 
              }; 
          } 

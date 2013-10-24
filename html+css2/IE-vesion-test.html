@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>测试</title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+            .test { margin: 20px; border: 2px solid orange; }
+        </style>
+    </head>
+    <body>
+        <div class="test">
+
+        </div>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+        <script type="text/javascript">
+            var _IE = (function(){
+            var v = 3, div = document.createElement('div'), all = div.getElementsByTagName('i');
+            do {
+                // 先加到4，浏览器进行判断，若是IE9及其以下版本（到6为止，其它忽略）
+                // 则注释语句会被解析，html内容为i,v++
+                // 直到大于当前版本，则调出循环
+                div.innerHTML = '<!--[if gt IE ' + (++v) + ']><i></i><![endif]-->';
+                //console.log(div.innerHTML,v);
+            } while (all[0]);
+            return v > 4 ? v : false;
+            }());
+        </script>
+    </body>
+</html>

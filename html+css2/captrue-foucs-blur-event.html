@@ -7,26 +7,44 @@
             * { margin: 0; padding: 0; }
             body { font: 12px/1.5 arail; }
             ul { list-style: none; }
-            .test { margin: 20px; border: 2px solid orange; }
+            .test { margin: 20px;  }
+            input[type="text"]{ outline: none; }
         </style>
     </head>
     <body>
-        <div class="test">
-
+        <div id="test" class="test">
+            <input id="text" type="text" />
+            <p>
+                <button id="btn" style="border:1px solid orange; color:#333; cursor:pointer;display:none;">click me,lalala</button>
+            </p>
         </div>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+        <script src="../js/common/basic.js"></script>
         <script type="text/javascript">
-            var _IE = (function(){
-            var v = 3, div = document.createElement('div'), all = div.getElementsByTagName('i');
-            do {
-                // 先加到4，浏览器进行判断，若是IE9及其以下版本（到6为止，其它忽略）
-                // 则注释语句会被解析，html内容为i,v++
-                // 直到大于当前版本，则调出循环
-                div.innerHTML = '<!--[if gt IE ' + (++v) + ']><i></i><![endif]-->';
-                console.log(div.innerHTML,v);
-            } while (all[0]);
-            return v > 4 ? v : false;
-            }());
+            // 启用
+            (function(){
+                E.addEvent(window,'load',function(){
+                    var test=$('test'),text=$('text'),btn=$('btn');
+                    // 事件绑定
+                    E.focusin(text,function(e){
+                        UI.show(btn);
+                    });
+                    E.focusout(text,function(){
+                        UI.hide(btn);
+                    });
+                    E.addEvent(btn,'click',function(){
+                        UI.show(this);
+                    });
+                    // D.$$('body')[0].innerHTML='';
+                    var a=document.createElement('a');
+                    a.setAttribute('href','http://www.baidu.com');
+                    a.innerText='baidu';
+                    alert(D.$$('div.test')[0].innerHTML);
+                    alert(D.$$('p',D.$$('body')[0])[0].innerHTML);
+                    // D.$$('.test').appendChild(a);
+                });
+            })();
+            
         </script>
     </body>
 </html>

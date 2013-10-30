@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>测试</title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none;  }
+            /*.test { margin: 20px; border: 2px solid orange; }*/
+            .switch-list {  position: relative; width: 600px; border: 2px solid red; height: 375px; overflow: hidden; background: #333; color: #fff; margin: 0 auto; }
+            .switch-list li,.switch-list li.normal { /*display: none;*/ position: absolute; width: 600px; height: 375px; line-height: 375px; color: #fff; font-size: 18px; z-index: 1; background: #333; }
+            /*.switch-list li.current { display: block;  z-index: 10; background: orange; }
+            .switch-list li.prev { left: -600px; display: block; transition:0.1s left linear 0.6s; }
+            .switch-list li.next { left: 600px; display: block; transition:0.1s left linear 0.6s; }*/
+
+        </style>
+    </head>
+    <body>
+        <div class="test">
+            <ul id="switch-list" class="switch-list">
+                <!-- <li><a href="#" title="1"><img src="../images/1.jpg" alt=""></a></li>
+                <li><a href="#" title="1"><img src="../images/2.jpg" alt=""></a></li>
+                <li><a href="#" title="1"><img src="../images/3.jpg" alt=""></a></li>
+                <li><a href="#" title="1"><img src="../images/4.jpg" alt=""></a></li>
+                <li class="prev"><a href="#"><img src="../images/5.jpg" alt=""></a></li> -->
+                <li>1111111111</li>
+                <li>222222222</li>
+                <li>3333333</li>
+                <li>4444444444</li> <!---->
+            </ul>
+        </div>
+        <div class="test2" style="postion:relative;height:40px;"><p style="position:absolute;">kakdfdjfdfdfkdfjdkfdkk</p></div>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+        <script type="text/javascript" src="easySwitch.js"></script>
+        <script type="text/javascript">
+            $(function(){
+                $('#switch-list').EasySwitch({
+                    'switchEffect':'left'
+                });
+            });
+        </script>
+    </body>
+</html>

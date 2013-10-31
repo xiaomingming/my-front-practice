@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+#noticeList span { margin-right: 10px; }
+</style>
+<title>用javascript实现文字无缝平滑循环横向滚动</title>
+</head>
+<body>
+<div id="s" style="width:100px; position:relative; white-space:nowrap; overflow:hidden; height:20px;">
+    <div id="noticeList" style="position:absolute; top:0; height:20px;">
+        <span>jQuery文字横向滚动</span>
+        <span>jQuery制作文字横向滚动</span>
+        <span>www.xiaoboy.com原创</span></div>
+</div>
+</body>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+<script type="text/javascript">
+   $.fn.textScroll=function(){
+        var speed=60,flag=null,tt,that=$(this),child=that.children();
+        var p_w=that.width(), w=child.width();
+        child.css({left:p_w});
+        var t=(w+p_w)/speed * 1000;
+        function play(m){
+            var tm= m==undefined ? t : m;
+            child.animate({left:-w},tm,"linear",function(){            
+                $(this).css("left",p_w);
+                play();
+            });                
+        }
+        child.on({
+            mouseenter:function(){
+                var l=$(this).position().left;
+                $(this).stop();
+                tt=(-(-w-l)/speed)*1000;
+            },
+            mouseleave:function(){
+                play(tt);
+                tt=undefined;
+            }
+        });
+        play();
+    }
+    $("#s").textScroll();
+</script>
+</html>

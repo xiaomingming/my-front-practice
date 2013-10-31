@@ -15,7 +15,7 @@
         <div id="test" class="test">
             <input id="text" type="text" />
             <p>
-                <button id="btn" style="border:1px solid orange; color:#333; cursor:pointer;display:none;">click me,lalala</button>
+                <button id="btn" style="border:1px solid orange; color:#333; cursor:pointer;">click me,lalala</button>
             </p>
         </div>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
@@ -24,27 +24,44 @@
             // 启用
             (function(){
                 E.addEvent(window,'load',function(){
-                    var test=$('test'),text=$('text'),btn=$('btn');
-                    // 事件绑定
-                    E.focusin(text,function(e){
-                        UI.show(btn);
-                    });
-                    E.focusout(text,function(){
-                        UI.hide(btn);
-                    });
-                    E.addEvent(btn,'click',function(){
-                        UI.show(this);
-                    });
+                    
                     // D.$$('body')[0].innerHTML='';
                     var a=document.createElement('a');
                     a.setAttribute('href','http://www.baidu.com');
                     a.innerText='baidu';
-                    alert(D.$$('div.test')[0].innerHTML);
-                    alert(D.$$('p',D.$$('body')[0])[0].innerHTML);
+                    E.addEvent(D.$$('button')[0],'mousedown',function(e){
+                        alert(E.getEvent(e).button);
+                    });
+                    // alert(D.$$('div.test')[0].innerHTML);
+                    // alert(D.$$('p',D.$$('body')[0])[0].innerHTML);
                     // D.$$('.test').appendChild(a);
                 });
             })();
-            
+            var arr=[0,3,2,10,5,6,9,8,12,35,22,1,7,11,18];
+            var b=arr.sort(function(a,b){
+                return a-b;
+            });
+            alert(b.toString());
+            var arrA = [6,2,4,3,5,1]; 
+            arrA.sort( function(x, y){ 
+                if (x % 2 ==0) 
+                    return -1; 
+                if (x % 2 !=0) 
+                    return 1; 
+                } 
+            );
+            alert(arrA);
+            var arr=['alalala','xixi','bbb','aed','bc'];
+            var res=arr.sort(function(a,b){
+                if(a>b){
+                    return 12;
+                }else if(a<b){
+                    return -1;
+                }else if(a===b){
+                    return 0;
+                }
+            });
+            //alert(res);
         </script>
     </body>
 </html>

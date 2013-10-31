@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>滚动文字jquery插件</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+<script type="text/javascript">
+ (function($) {  
+      $.fn.extend({        
+          roll: function(options) { 
+                       var defaults = {
+                            speed:1           
+                       };
+                       var options = $.extend(defaults, options); 
+                       var speed=(document.all) ? options.speed : Math.max(1,options.speed-1);
+                       if ($(this) == null) return ; 
+                       var $container = $(this);
+                       var $content = $("#content");
+                       var init_left = $container.width();
+                       $content.css({left:parseInt(init_left) + "px"});
+                       var This = this;
+                       var time = setInterval(function(){This.move($container,$content,speed);},20); //setInterval会改变this指向，即使加了This=this，也要用匿名函数封装，这里调试了n久
+                       
+                       $container.bind("mouseover",function()
+                      {
+                             clearInterval(time);
+                      });
+                       $container.bind("mouseout",function()
+                      {
+                             time = setInterval(function(){This.move($container,$content,speed);},20);
+                      });
+                       
+                       return this;    
+         },
+          move:function($container,$content,speed){
+                       var container_width = $container.width();
+                       var content_width = $content.width();
+                       if (parseInt($content.css("left")) + content_width > 0)
+                       {
+                            $content.css({left:parseInt($content.css("left")) - speed + "px"});
+                       }
+                       else
+                       {
+                            $content.css({left:parseInt(container_width) + "px"});
+                       }
+          }
+   });
+})(jQuery);
+//插件的调用$("#yourId").roll({speed:#yourSpeed});
+$(document).ready(
+     function(){
+    $("#container").roll({speed:2});
+     }
+);
+</script>
+<style type="text/css">
+#container{
+    background:#CCCCCC;
+    position:relative;
+    overflow:hidden;  /*这个东西折腾了很久才弄出来*/
+    width:550px;
+    height:25px;
+    line-height:25px;
+    margin:100px;
+}
+
+#content{
+    position:absolute;
+    left:0;
+    top:0;
+    white-space:nowrap;   /*重要，不然文字显示效果不好*/
+}
+</style>
+
+</head>
+
+<body>
+<div id="container">
+    <div id="content">This is a roll word test,created by Baidu FE.</div>
+</div>
+</body>
+</html>

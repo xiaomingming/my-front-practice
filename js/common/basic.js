@@ -36,6 +36,35 @@ E.getEvent = function(event) {
 E.getTarget = function(event) {
     return E.getEvent(event).target || E.getEvent(event).srcElement;
 };
+// 获取相关事件对象
+// IE8 将其保存在event.fromElement(mouseover)和event.toElement(out)属性中
+E.getRelatedTarget=function(event){
+    var evt=E.getEvent(event);
+    return evt.relatedTarget||evt.fromElement||evt.toElement||null;
+};
+// 鼠标按键
+// 返回值为数字，0代表左键，1代表滚轮，2代表右键
+E.getButton=function(event){
+    if(document.implementation.hasFeature('MouseEvents','2.0')){
+        return E.getEvent(event).button;
+    }else{
+        // 针对IE8及版本之前的规范差异
+        // IE8 规范的还挺啰嗦的
+        switch(E.getEvent(event).button){
+            case 0:
+            case 1:
+            case 3:
+            case 5:
+            case 7:
+                return 0;
+            case 2:
+            case 6:
+                return 2;
+            case 4:
+                return 1;
+        }
+    }
+};
 // 阻止默认行为
 E.preventDefault = function(event) {
     if (event.preventDefault) {

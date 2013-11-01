@@ -161,13 +161,14 @@
     // 指定版本号
     $.fn[pluginName].version = 0.1;
     // 提供DATA-API绑定支持
-    $(window).on('load',function(){
-        $('[data-plugin="easySwitch"]').each(function(){
-            var self=$(this),opts={},dataSet=$(this).data();
-            opts.switchDuration=dataSet.switchDuration;
-            opts.switchInterval=dataSet.switchInterval;
-            opts.switchEffect=dataSet.switchEffect;
-            return new EasySwitch($(this),opts);
+    $(window).on('load', function() {
+        $('[data-plugin="easySwitch"]').each(function() {
+            var self = $(this),
+                opts = {}, dataSet = $(this).data();
+            opts.switchDuration = dataSet.switchDuration;
+            opts.switchInterval = dataSet.switchInterval;
+            opts.switchEffect = dataSet.switchEffect;
+            return new EasySwitch($(this), opts);
         });
     });
 })(jQuery);

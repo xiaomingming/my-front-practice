@@ -18,26 +18,32 @@
     </head>
     <body>
         <div class="test">
-            <ul id="switch-list" class="switch-list">
-                <!-- <li><a href="#" title="1"><img src="../images/1.jpg" alt=""></a></li>
+            <ul id="switch-list" class="switch-list" data-plugin="easySwitch" data-switch-duration="1000" data-switch-interval="3000" data-switch-effect="right">
+                <!----> <li><a href="#" title="1"><img src="../images/1.jpg" alt=""></a></li>
                 <li><a href="#" title="1"><img src="../images/2.jpg" alt=""></a></li>
                 <li><a href="#" title="1"><img src="../images/3.jpg" alt=""></a></li>
                 <li><a href="#" title="1"><img src="../images/4.jpg" alt=""></a></li>
-                <li class="prev"><a href="#"><img src="../images/5.jpg" alt=""></a></li> -->
-                <li>1111111111</li>
+                <li class="prev"><a href="#"><img src="../images/5.jpg" alt=""></a></li> 
+                <!--<li>1111111111</li>
                 <li>222222222</li>
                 <li>3333333</li>
-                <li>4444444444</li> <!---->
+                <li>4444444444</li> -->
             </ul>
         </div>
-        <div class="test2" style="postion:relative;height:40px;"><p style="position:absolute;">kakdfdjfdfdfkdfjdkfdkk</p></div>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
         <script type="text/javascript" src="../js/utils/easySwitch.js"></script>
         <script type="text/javascript">
             $(function(){
-                $('#switch-list').EasySwitch({
-                    'switchEffect':'left'
+                $('.switch-list').easySwitch({
+                    'switchEffect':'left',
+                    'duration':1000
                 });
+            });
+            $(function(){
+                var $list=$('body');
+                $list.data('test1',{name:'test'});
+                $.data($list,'test2',{age:22});
+                console.log($list.data(),$.data($list));
             });
         </script>
     </body>

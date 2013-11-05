@@ -8,7 +8,6 @@
      */
     var pluginName = 'easySwitch',
         EasySwitch = (function() {
-
             function EasySwitch(ele, opts) {
                 var that = ele,
                     settings = $.extend({}, $.fn.easySwitch.defaults, opts),
@@ -137,20 +136,34 @@
                 runSwitch: function(self) {
                     var myIndex = self.getIndex();
                     self.switchAnimate(myIndex);
+                },
+                // 停止轮播
+                stopRun: function() {
+                    clearInterval(this.timer);
+                    this.timer = null;
                 }
-
             };
             return EasySwitch;
         })();
 
     // each回调中只需要传入绑定的DOM对象，以及参数，其它事情就在构造函数中去做
     $.fn[pluginName] = function(opts) {
-        return this.each(function() {
-            var that = $(this);
-            if (!$.data(that, 'plugin-' + pluginName)) {
-                return $.data(that, 'plugin-' + pluginName, new EasySwitch(that, opts));
+        if (typeof opts === 'string') {
+            if (opts === 'api') {
+                return $(this).data('plugin-'+pluginName);
+            }else {
+                throw new Error('error string ,here supports "api" only!');
             }
-        }); //
+        }
+        return this.each(function() {
+            var that = $(this),
+            s1=new EasySwitch(that, opts);
+
+            if(!that.data('plugin-'+pluginName)){
+                return that.data('plugin-'+pluginName,s1);
+            }
+            
+        }); 
     };
     // 提供公用的对外接口设置
     $.fn[pluginName].defaults = {
@@ -161,14 +174,17 @@
     // 指定版本号
     $.fn[pluginName].version = 0.1;
     // 提供DATA-API绑定支持
-    $(window).on('load', function() {
-        $('[data-plugin="easySwitch"]').each(function() {
+    // 此处有个疑问，就是如何避免方法调用和DATA-API调用产生的冲突？
+    $(function() {
+        var $plugin = $('[data-plugin="' + pluginName + '"],.easySwitch');
+        $plugin.each(function() {
             var self = $(this),
                 opts = {}, dataSet = $(this).data();
             opts.switchDuration = dataSet.switchDuration;
             opts.switchInterval = dataSet.switchInterval;
             opts.switchEffect = dataSet.switchEffect;
-            return new EasySwitch($(this), opts);
+
+            return self[pluginName](opts);
         });
     });
 })(jQuery);

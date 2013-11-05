@@ -16,9 +16,9 @@
 
         </style>
     </head>
-    <body>
+    <body class="bd" data-name="{age:24,name:'xixix'}">
         <div class="test">
-            <ul id="switch-list" class="switch-list" data-plugin="easySwitch" data-switch-duration="1000" data-switch-interval="3000" data-switch-effect="right">
+            <ul id="switch-list" class="switch-list"  >
                 <!----> <li><a href="#" title="1"><img src="../images/1.jpg" alt=""></a></li>
                 <li><a href="#" title="1"><img src="../images/2.jpg" alt=""></a></li>
                 <li><a href="#" title="1"><img src="../images/3.jpg" alt=""></a></li>
@@ -34,16 +34,17 @@
         <script type="text/javascript" src="../js/utils/easySwitch.js"></script>
         <script type="text/javascript">
             $(function(){
-                $('.switch-list').easySwitch({
-                    'switchEffect':'left',
-                    'duration':1000
-                });
+                var s1=$('.switch-list').easySwitch().easySwitch('api');
+                
             });
             $(function(){
-                var $list=$('body');
-                $list.data('test1',{name:'test'});
-                $.data($list,'test2',{age:22});
-                console.log($list.data(),$.data($list));
+                var $D1=$('body'),
+                $D2=$('.bd');
+                $D1.data('test1',{name:'test'});
+                $.data($D1,'test2',{age:0022});
+                $.data($D2,'test3',{sex:'man'});
+                // console.log($D1.data(),$.data($D1),$.data($D2));
+                // alert(typeof $D1.data('name'));
             });
         </script>
     </body>

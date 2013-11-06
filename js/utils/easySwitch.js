@@ -1,10 +1,9 @@
-;
-(function($, undefined) {
+;(function($, undefined) {
     'use strict';
     /*
      * 书写一个jquery简单轮播
      * 支持上下左右四个方向
-     * 每次轮播，起始转换无跳动
+     * 每次轮播，起始转换无跳动，霸气！
      */
     var pluginName = 'easySwitch',
         EasySwitch = (function() {
@@ -12,14 +11,20 @@
                 var that = ele,
                     settings = $.extend({}, $.fn.easySwitch.defaults, opts),
                     self = this;
+                this.container = ele;
                 this.switchItem = that.find('li');
                 this.switchListLen = this.switchItem.length;
 
                 this.timer = null; // 定时器id
-                this.switchIndex = 0;
+                this.startIndex = settings.startIndex;
+                this.switchIndex = this.startIndex;
                 this.switchDuration = settings.switchDuration; //获取轮播的动画持续时间
                 this.switchInterval = settings.switchInterval; //获取设置的轮播间隔时间
                 this.switchEffect = settings.switchEffect; //获取设置的滚动方向
+                this.isPlayNumber = settings.isPlayNumber;
+
+                this.isAnimating = false; //设置动画状态
+
                 this.switchWidth = that.width(); //获取容器宽度
                 this.switchHeight = that.height(); //获取容器高度
                 this.effectMoveObj = {
@@ -28,6 +33,7 @@
                     'top': self.switchHeight,
                     'bottom': -self.switchHeight
                 }; // 配置对应的移动距离
+                // 配置对应的移动属性
                 this.effectPostionAttrObj = {
                     'left': 'left',
                     'right': 'left',
@@ -43,33 +49,110 @@
                 constructor: EasySwitch,
                 init: function() {
                     var self = this;
-                    this.intializeSwitchPostion();
-                    this.timer = setInterval(function() {
-                        // 修正this指向
-                        self.runSwitch.call(null, self);
-                    }, self.switchInterval);
+
+                    this.isPlayNumber && this.renderPlayNumber();
+                    // 初始化位置，需要加1，这样被处理减去1后，可以正确归位
+                    this.intializeSwitchPostion(self.getNextIndex(self.startIndex));
+                    this.autoRun();
                 },
                 // 初始化图片位置，为切换做预备
-                intializeSwitchPostion: function() {
-                    // 初始化下一次轮播的位置
-                    var self = this;
-                    (this.switchListLen > 3) && this.switchItem.eq(self.getPrevIndex(self.switchIndex)).css({
-                        'display': 'block',
-                        'left': -self.effectMoveRes + 'px',
-                        'z-index': '0'
-                    });
+                intializeSwitchPostion: function(currentIndex) {
+                    // 初始化下一次轮播的位置，
+                    // 所以，这个初始化的位置应当是基于 (currentIndex-1)
+                    // console.log('now next index is:' + currentIndex);
+                    var self = this,
+                        cIndex = this.getPrevIndex(currentIndex),
+                        pIndex = this.getPrevIndex(cIndex),
+                        nIndex = this.getNextIndex(cIndex);
+
+                    var readyStyleConfig = {
+                        prev: {
+                            common: {
+                                'display': 'block',
+                                'z-index': '0'
+                            },
+                            left: -self.effectMoveRes + 'px',
+                            top: -self.effectMoveRes + 'px'
+                        },
+                        current: {
+                            common: {
+                                'display': 'block',
+                                'z-index': '10'
+                            },
+                            left: '0',
+                            top: '0'
+                        },
+                        next: {
+                            common: {
+                                'display': 'block',
+                                'z-index': '0'
+                            },
+                            left: self.effectMoveRes + 'px',
+                            top: self.effectMoveRes + 'px'
+                        },
+                        others: {
+                            common: {
+                                'display': 'none',
+                                'z-index': '0'
+                            },
+                            left: '0',
+                            top: '0'
+                        }
+                    };
+                    var getReadyStyleConfig = function(orderStr) {
+                        var position = self.effectPostionRes,
+                            orderObj = readyStyleConfig[orderStr],
+                            commonObj = orderObj.common;
+                        commonObj[position] = readyStyleConfig[orderStr][position];
+                        return commonObj;
+                    };
+                    // 上一个
+                    (this.switchListLen > 3) && this.switchItem.eq(pIndex).css(getReadyStyleConfig('prev'));
                     // 当前
-                    this.switchItem.eq(self.switchIndex).css({
-                        'display': 'block',
-                        'z-index': '10',
-                        'left': '0'
-                    });
+                    this.switchItem.eq(cIndex).css(getReadyStyleConfig('current'));
                     // 下一个
-                    this.switchItem.eq(self.getNextIndex(self.switchIndex)).css({
-                        'display': 'block',
-                        'z-index': '0',
-                        'left': self.effectMoveRes + 'px'
+                    this.switchItem.eq(nIndex).css(getReadyStyleConfig('next'));
+                    // 其它
+
+                },
+                // 创建播放数字
+                createPlayNumber: function() {
+                    var tpl = '<ul class="switch-number">',
+                        i = 1,
+                        j = this.switchListLen;
+                    for (; i <= j; i++) {
+                        tpl += '<li><a href="#">' + i + '</a></li>';
+                    }
+                    tpl += '</ul>';
+                    return tpl;
+                },
+                // 渲染播放数字
+                renderPlayNumber: function() {
+                    var self = this,
+                        tpl = this.createPlayNumber();
+                    this.container.wrap('<div class="easy-switch-wrapper"></div>');
+                    this.container.after(tpl);
+
+                    // 绑定跳转事件
+                    this.container.parent().find('.switch-number').on('click', 'li', function(e) {
+                        // e.preventDefault();
+                        // 判断动画是否完成
+                        self.goTo($(this).index());
                     });
+                },
+                // 数字跳转
+                goTo: function(index) {
+                    this.stopRun();
+                    this.playNumber();
+
+                    this.switchIndex = index;
+                    this.switchAnimate(index);
+                    this.autoRun();
+                },
+                // 数字自动播放
+                playNumber: function(index) {
+                    var playNumberItems = this.container.parent().find('.switch-number>li');
+                    playNumberItems.eq(index).addClass('current').siblings('li').removeClass('current');
                 },
                 // 获取前一个下标
                 getPrevIndex: function(index) {
@@ -89,57 +172,101 @@
                 },
                 // 切换逻辑
                 switchAnimate: function(currentIndex) {
+                    // 应当先执行预备工作
+                    this.intializeSwitchPostion(currentIndex);
+                    // 然后执行滚动
                     var self = this,
                         prevIndex = this.getPrevIndex(currentIndex),
                         nextIndex = this.getNextIndex(currentIndex);
+                    var animateConfig = {
+                        current: {
+                            common: {},
+                            left: '0',
+                            top: '0'
+                        },
+                        next: {
+                            common: {
+                                'z-index': '0',
+                                'display': 'block'
+                            },
+                            left: self.effectMoveRes + 'px',
+                            top: self.effectMoveRes + 'px'
+                        },
+                        prev: {
+                            common: {},
+                            left: -self.effectMoveRes + 'px',
+                            top: -self.effectMoveRes + 'px'
+                        },
+                        others: {
+                            common: {
+                                'display': 'none',
+                                'z-index': '0'
+                            },
+                            left: '0',
+                            top: '0'
+                        }
+                    };
+                    var getAnimateConfig = function(orderStr) {
+                        var position = self.effectPostionRes,
+                            orderObj = animateConfig[orderStr],
+                            commonObj = orderObj.common;
+                        commonObj[position] = animateConfig[orderStr][position];
+                        return commonObj;
+
+                    };
                     // 轮播的元素个数超过3，过滤才有意义
                     // 有没有更好的过滤方法，我这里效率有点低啊
                     (this.switchListLen > 3) && $.each(self.switchItem, function(index, ele) {
                         // 其它会被隐藏在next动画完成后变成current的同一位置
                         if (index !== currentIndex && index !== prevIndex && index !== nextIndex) {
-                            $(ele).css({
-                                'display': 'none',
-                                'z-index': '0',
-                                'left': '0'
-                            });
+                            $(ele).css(getAnimateConfig('others'));
                         }
                     });
                     // 轮播的元素个数至少为3的情况下，才有当前活动对象的之前位置设置，
                     // 否则，只有两个的话，就只需要设置下一个的位置信息
-                    (this.switchListLen >= 3) && this.switchItem.eq(prevIndex).animate({
-                        'left': -self.effectMoveRes + 'px'
-                    }, self.switchDuration, 'linear').promise().then(function() {
+                    if (this.isAnimating) {
+                        return;
+                    }
+                    this.isAnimating = true;
+
+                    var prevPromise = this.switchItem.eq(prevIndex).stop(true, true).animate(getAnimateConfig('prev'), self.switchDuration, 'linear').promise().then(function() {
                         $(this).css({
                             'display': 'block',
                             'z-index': '0'
                         });
-                    });
+                    }).promise();
 
-                    // 当前
-                    this.switchItem.eq(currentIndex).animate({
-                        'left': '0'
-                    }, self.switchDuration, 'linear').promise().then(function() {
+                    var currentPromise = this.switchItem.eq(currentIndex).stop(true, true).animate(getAnimateConfig('current'), self.switchDuration, 'linear').promise().then(function() {
                         $(this).css({
                             'display': 'block',
                             'z-index': '10'
                         });
+                    }).promise();
+
+                    $.when((this.switchListLen >= 3) && prevPromise, currentPromise).done(function() {
+                        self.isAnimating=false;
                     });
 
                     // 下一个
-                    this.switchItem.eq(nextIndex).css({
-                        'left': self.effectMoveRes + 'px',
-                        'z-index': '0',
-                        'display': 'block'
-                    });
+                    this.switchItem.eq(nextIndex).css(getAnimateConfig('next'));
+                    // 若设置了数字播放，则执行播放
+                    this.isPlayNumber && this.playNumber(currentIndex);
                 },
                 // 切换回调
                 runSwitch: function(self) {
                     var myIndex = self.getIndex();
                     self.switchAnimate(myIndex);
                 },
+                autoRun: function() {
+                    var self = this;
+                    this.timer = setInterval(function() {
+                        // 修正this指向
+                        self.runSwitch.call(null, self);
+                    }, self.switchInterval);
+                },
                 // 停止轮播
                 stopRun: function() {
-                    clearInterval(this.timer);
+                    this.timer && clearInterval(this.timer);
                     this.timer = null;
                 }
             };
@@ -150,26 +277,28 @@
     $.fn[pluginName] = function(opts) {
         if (typeof opts === 'string') {
             if (opts === 'api') {
-                return $(this).data('plugin-'+pluginName);
-            }else {
+                return $(this).data('plugin-' + pluginName);
+            } else {
                 throw new Error('error string ,here supports "api" only!');
             }
         }
         return this.each(function() {
             var that = $(this),
-            s1=new EasySwitch(that, opts);
+                s1 = new EasySwitch(that, opts);
 
-            if(!that.data('plugin-'+pluginName)){
-                return that.data('plugin-'+pluginName,s1);
+            if (!that.data('plugin-' + pluginName)) {
+                return that.data('plugin-' + pluginName, s1);
             }
-            
-        }); 
+
+        });
     };
     // 提供公用的对外接口设置
     $.fn[pluginName].defaults = {
+        'startIndex': 0,
         'switchDuration': 300,
         'switchInterval': 3000,
-        'switchEffect': 'left'
+        'switchEffect': 'left',
+        'isPlayNumber': true
     };
     // 指定版本号
     $.fn[pluginName].version = 0.1;

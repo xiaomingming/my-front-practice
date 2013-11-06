@@ -7,6 +7,7 @@
             * { margin: 0; padding: 0; }
             body { font: 12px/1.5 arail; }
             ul { list-style: none;  }
+            a img { border: 0; }
             .easy-switch-wrapper { position: relative; width: 600px; height: 375px; }
             .switch-list {  position: relative; width: 600px; border: 2px solid red; height: 375px; overflow: hidden; background: #333; color: #fff; margin: 0 auto; }
             .switch-list li,.switch-list li.normal { position: absolute; width: 600px; height: 375px; line-height: 375px; color: #fff; font-size: 18px; z-index: 1; background: #333; }
@@ -14,15 +15,16 @@
             .switch-number li { float: left; margin-right: 10px; }
             .switch-number li a { display: block; padding: 0 6px; line-height: 22px; border: 1px solid orange; background: #333; color: #fff; text-decoration: none; }
             .switch-number li.current a { background: #fff; color: #333; }
+            
         </style>    
     </head>
-    <body class="bd" data-name="{age:24,name:'xixix'}">
+    <body>
         <div class="test">
-            <ul id="switch-list" class="switch-list"  >
+            <ul id="switch-list" class="switch-list">
                 <li><a href="#" title="1"><img src="../images/1.jpg" alt=""></a></li>
-                <li><a href="#" title="1"><img src="../images/2.jpg" alt=""></a></li>
-                <li><a href="#" title="1"><img src="../images/3.jpg" alt=""></a></li>
-                <li><a href="#" title="1"><img src="../images/4.jpg" alt=""></a></li>
+                <li><a href="#" title="2"><img src="../images/2.jpg" alt=""></a></li>
+                <li><a href="#" title="3"><img src="../images/3.jpg" alt=""></a></li>
+                <li><a href="#" title="4"><img src="../images/4.jpg" alt=""></a></li>
                 <li><a href="#"><img src="../images/5.jpg" alt=""></a></li> 
             </ul>
         </div>
@@ -31,10 +33,12 @@
         <script type="text/javascript">
             $(function(){
                 var s1=$('.switch-list').easySwitch({
-                    'switchEffect':'right',
+                    'startIndex':4,
+                    'switchEffect':'top',
                     'switchInterval':3000,
                     'switchDuration':500,
-                    'isPlayNumber':false
+                    'isPlayNumber':true,
+                    'isHoverPause':true
                 });
                 
             });

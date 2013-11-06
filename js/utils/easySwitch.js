@@ -1,9 +1,14 @@
-;(function($, undefined) {
+;
+(function($, undefined) {
     'use strict';
     /*
      * 书写一个jquery简单轮播
+     * 支持data-api设置
      * 支持上下左右四个方向
      * 每次轮播，起始转换无跳动，霸气！
+     * 支持显示/去除播放数字
+     * 支持悬浮滚动/停止
+     * 尚未支持图像预载入loading效果
      */
     var pluginName = 'easySwitch',
         EasySwitch = (function() {
@@ -21,8 +26,8 @@
                 this.switchDuration = settings.switchDuration; //获取轮播的动画持续时间
                 this.switchInterval = settings.switchInterval; //获取设置的轮播间隔时间
                 this.switchEffect = settings.switchEffect; //获取设置的滚动方向
-                this.isPlayNumber = settings.isPlayNumber;
-
+                this.isPlayNumber = settings.isPlayNumber; //设置是否显示播放数字
+                this.isHoverPause = settings.isHoverPause; //设置是否悬浮停止轮播
                 this.isAnimating = false; //设置动画状态
 
                 this.switchWidth = that.width(); //获取容器宽度
@@ -49,10 +54,18 @@
                 constructor: EasySwitch,
                 init: function() {
                     var self = this;
-
+                    // 是否显示轮换数字
                     this.isPlayNumber && this.renderPlayNumber();
+                    // 是否悬浮停止轮播
+                    this.isHoverPause && this.switchItem.hover(function() {
+                        self.stopRun();
+                    }, function() {
+                        self.autoRun();
+                    });
+
                     // 初始化位置，需要加1，这样被处理减去1后，可以正确归位
                     this.intializeSwitchPostion(self.getNextIndex(self.startIndex));
+                    // 自动轮播
                     this.autoRun();
                 },
                 // 初始化图片位置，为切换做预备
@@ -139,14 +152,24 @@
                         // 判断动画是否完成
                         self.goTo($(this).index());
                     });
+
+                    // 初始化开始轮播的数字状态
+                    this.setStartPlayNuberStatus();
+                },
+                // 设置开始的播放数字状态
+                setStartPlayNuberStatus: function() {
+                    var self = this;
+                    this.playNumber(self.startIndex);
                 },
                 // 数字跳转
                 goTo: function(index) {
+                    // 停止轮播
                     this.stopRun();
-                    this.playNumber();
-
+                    // 更改轮播的下标
                     this.switchIndex = index;
+                    // 调用轮播
                     this.switchAnimate(index);
+                    // 恢复轮播
                     this.autoRun();
                 },
                 // 数字自动播放
@@ -228,23 +251,25 @@
                         return;
                     }
                     this.isAnimating = true;
-
+                    // 上一个
                     var prevPromise = this.switchItem.eq(prevIndex).stop(true, true).animate(getAnimateConfig('prev'), self.switchDuration, 'linear').promise().then(function() {
                         $(this).css({
                             'display': 'block',
                             'z-index': '0'
                         });
                     }).promise();
-
+                    // 下一个
                     var currentPromise = this.switchItem.eq(currentIndex).stop(true, true).animate(getAnimateConfig('current'), self.switchDuration, 'linear').promise().then(function() {
                         $(this).css({
                             'display': 'block',
                             'z-index': '10'
                         });
                     }).promise();
-
+                    // 同时完成后，设置回isAniamting标志
                     $.when((this.switchListLen >= 3) && prevPromise, currentPromise).done(function() {
-                        self.isAnimating=false;
+                        self.isAnimating = false;
+                    }).fail(function(){
+                        throw new Error('animate bug');
                     });
 
                     // 下一个
@@ -257,6 +282,7 @@
                     var myIndex = self.getIndex();
                     self.switchAnimate(myIndex);
                 },
+                // 自动播放
                 autoRun: function() {
                     var self = this;
                     this.timer = setInterval(function() {
@@ -294,11 +320,12 @@
     };
     // 提供公用的对外接口设置
     $.fn[pluginName].defaults = {
-        'startIndex': 0,
-        'switchDuration': 300,
-        'switchInterval': 3000,
-        'switchEffect': 'left',
-        'isPlayNumber': true
+        'startIndex': 0, //开始播放的下标
+        'switchDuration': 300, //动画持续时间
+        'switchInterval': 3000, //间隔时间
+        'switchEffect': 'left', //移动的方向，支持,top,bottom,left,right
+        'isPlayNumber': true, // 是否显示播放数字
+        'isHoverPause': false
     };
     // 指定版本号
     $.fn[pluginName].version = 0.1;

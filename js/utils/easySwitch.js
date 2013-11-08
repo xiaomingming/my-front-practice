@@ -257,16 +257,18 @@
                             'display': 'block',
                             'z-index': '0'
                         });
-                    }).promise();
+                    });
                     // 下一个
                     var currentPromise = this.switchItem.eq(currentIndex).stop(true, true).animate(getAnimateConfig('current'), self.switchDuration, 'linear').promise().then(function() {
                         $(this).css({
                             'display': 'block',
                             'z-index': '10'
                         });
-                    }).promise();
+                    });
                     // 同时完成后，设置回isAniamting标志
                     $.when((this.switchListLen >= 3) && prevPromise, currentPromise).done(function() {
+                        // 若设置了数字播放，则执行播放
+                        self.isPlayNumber && self.playNumber(currentIndex);
                         self.isAnimating = false;
                     }).fail(function(){
                         throw new Error('animate bug');
@@ -274,8 +276,7 @@
 
                     // 下一个
                     this.switchItem.eq(nextIndex).css(getAnimateConfig('next'));
-                    // 若设置了数字播放，则执行播放
-                    this.isPlayNumber && this.playNumber(currentIndex);
+                    
                 },
                 // 切换回调
                 runSwitch: function(self) {

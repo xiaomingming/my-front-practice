@@ -233,7 +233,8 @@ D.addClass = function(ele, className) {
         iL = classArr.length,
         i = 0,
         jL = cNameArr.length,
-        j = 0;
+        j = 0,
+        resClass;
     // 若类名不为空
     // 有相同的类名，则进行置空
     // 循环结束后，进行拼接
@@ -242,14 +243,14 @@ D.addClass = function(ele, className) {
             for (i = 0; i < iL; i++) {
                 if (classArr[i] === cNameArr[j]) {
                     // cNameCopyArr.splice(j, 1);
-                    cNameArr[j]='';
+                    cNameArr[j] = '';
                     break;
                 }
             }
         }
     }
-    var res=Utils.trim(cNameArr.concat(classArr).join(' '));
-    ele.setAttribute('class',res);
+    resClass = Utils.trim(cNameArr.concat(classArr).join(' '));
+    ele.setAttribute('class', res);
 };
 // 移除类名
 // className为空，则全部移除

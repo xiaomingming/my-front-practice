@@ -263,20 +263,20 @@ D.removeClass = function(ele, className) {
         i = 0,
         jL = cNameArr.length,
         j = 0;
+
     if (cName === '') {
         ele.setAttribute('class', ''); // 移除全部
     } else if (classNameCacheStr !== '') {
         // 若类名不为空
-        for (i = 0; i < iL; i++) {
-            for (j = 0; j < jL; j++) {
+        for (j = 0; j < jL; j++) {
+            for (i = 0; i < iL; i++) {
                 if (classArr[i] === cNameArr[j]) {
-                    classNameCopyArr.splice(i, 1);
-                    console.log(i,classNameCopyArr);
+                    // 若相同，则将数组对应的位置补空
+                    classArr[i] = '';
                 }
             }
         }
-        console.log(classNameCopyArr);
-        classNameCopyArr.length ? ele.setAttribute('class', classNameCopyArr.join(' ')) : ele.setAttribute('class', '');
+        ele.setAttribute('class',Utils.trim(classArr.join(' ')));
     }
 };
 // 获取某个下标的元素

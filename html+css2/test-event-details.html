@@ -5,15 +5,16 @@
         <title>测试</title>
         <style>
             * { margin: 0; padding: 0; }
-            body { font: 12px/1.5 arail; }
+            body { font: 12px/1.5 arail; width: 3000px; overflow: auto; margin:20px;}
             ul { list-style: none; }
             .test { margin: 20px; border: 2px solid orange; }
         </style>
     </head>
     <body class="lalal ddd  aa">
-        <div id="p" style="height:1200px; border:2px solid orange; width:90%; margin:0 auto; ">
+        <div id="p" style="height:1200px; border:2px solid orange; width:90%; margin:100px auto; ">
             <input type="text" id="lala" class="xixi" />
             <button id="s" class="haha test2">click me</button>
+            <div id="s2" style="width:100px;overflow:auto;">dkfjjjjjjjjjjjjjjdldkkkkkkkkkkkkkkkkkdkfjjjjjjjjjjjjjjdldkkkkkkkkkkkkkkkkkdkfjjjjjjjjjjjjjjdldkkkkkkkkkkkkkkkkkdkfjjjjjjjjjjjjjjdldkkkkkkkkkkkkkkkkk</div>
         </div>
         <ul>
             <li>1</li>
@@ -25,11 +26,13 @@
         <script type="text/javascript" src="../js/common/basic.js"></script>
         <script type="text/javascript">
         (function(){
-            var btn=$('#s');
-            console.log(btn.offset());
-            var s=D.$('body')[0];
-            console.log(s);
-            console.log(E.offset(s));
+            var btn=D.$('#s');
+            E.offset(btn)
+            // console.log(btn.offset());
+            // var s=D.$('body')[0];
+            // console.log(s);
+            // console.log(E.offset(s));
+            // console.log(E.offset(D.$('#s2')));
             // webkit
             /*E.addEvent(document,'mousewheel',function(e){
                 var e=E.getEvent(e);

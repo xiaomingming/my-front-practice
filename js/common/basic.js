@@ -3,8 +3,7 @@
 /*
  * 工具函数
  */
-var document = window.document,
-    docElem = document.documentElement;
+var docElem = document.documentElement;
 var Utils = {};
 Utils.trim = function(str) {
     return str.replace(/(^\s*)|(\s*$)/g, '');
@@ -12,12 +11,12 @@ Utils.trim = function(str) {
 Utils.isWindow = function(obj) {
     return obj != null && obj == obj.window;
 };
-Utils.getWindow=function(elem){
-    return this.isWindow( elem ) ?
+Utils.getWindow = function(elem) {
+    return this.isWindow(elem) ?
         elem :
         elem.nodeType === 9 ?
-            elem.defaultView || elem.parentWindow :
-            false;
+        elem.defaultView || elem.parentWindow :
+        false;
 };
 // 一个节点是否包含另一个节点
 // 取自jquery　1.8.2
@@ -106,7 +105,7 @@ E.delegate = function(eventType, context, target, fn) {
     self.addEvent(context, eventType, function(e) {
         var e = self.getEvent(e),
             eTarget = self.getTarget(e);
-        console.log(target, eTarget);
+        // console.log(target, eTarget);
         if (eTarget === target) {
             fn(e);
         };
@@ -179,7 +178,7 @@ E.offset = function(elem) {
     if (!doc) {
         return;
     }
-
+    // 与其他元素计算不同的是，body的offsetLeft,offsetTop计算并没有包括margin
     if ((body = doc.body) === elem) {
         var top = body.offsetTop,
             left = body.offsetLeft;
@@ -210,9 +209,10 @@ E.offset = function(elem) {
     win = Utils.getWindow(doc);
     clientTop = docElem.clientTop || body.clientTop || 0;
     clientLeft = docElem.clientLeft || body.clientLeft || 0;
+
+
     scrollTop = win.pageYOffset || docElem.scrollTop;
     scrollLeft = win.pageXOffset || docElem.scrollLeft;
-    console.log(box.top + scrollTop - clientTop);
     return {
         top: box.top + scrollTop - clientTop,
         left: box.left + scrollLeft - clientLeft

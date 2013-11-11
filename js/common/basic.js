@@ -228,7 +228,6 @@ D.addClass = function(ele, className) {
     // class属性名遍历
     var cName = Utils.trim(className),
         cNameArr = cName.split(' '), //预添加类名数组
-        cNameCopyArr = cName.split(' '),
         classNameCacheStr = Utils.trim(ele.className),
         classArr = classNameCacheStr.split(' '), //已存在类名数组
         iL = classArr.length,
@@ -236,17 +235,21 @@ D.addClass = function(ele, className) {
         jL = cNameArr.length,
         j = 0;
     // 若类名不为空
+    // 有相同的类名，则进行置空
+    // 循环结束后，进行拼接
     if (classNameCacheStr !== '') {
-        for (i = 0; i < iL; i++) {
-            for (j = 0; j < jL; j++) {
+        for (j = 0; j < jL; j++) {
+            for (i = 0; i < iL; i++) {
                 if (classArr[i] === cNameArr[j]) {
-                    cNameCopyArr.splice(j, 1);
+                    // cNameCopyArr.splice(j, 1);
+                    cNameArr[j]='';
                     break;
                 }
             }
         }
     }
-    cNameCopyArr.length && ele.setAttribute('class', classNameCacheStr + (classNameCacheStr ? ' ' : '') + cNameCopyArr.join(' '));
+    var res=Utils.trim(cNameArr.concat(classArr).join(' '));
+    ele.setAttribute('class',res);
 };
 // 移除类名
 // className为空，则全部移除
@@ -276,12 +279,16 @@ D.removeClass = function(ele, className) {
                 }
             }
         }
-        ele.setAttribute('class',Utils.trim(classArr.join(' ')));
+        ele.setAttribute('class', Utils.trim(classArr.join(' ')));
     }
 };
 // 获取某个下标的元素
-D.eq = function(index) {
+// 需要传入下标，默认基于兄弟元素顺序
+// 若传入标签名，则依照此来排序
+D.eq = function(ele, index, baseEle) {
+    if (Utils.trim(baseEle) !== '') {
 
+    }
 };
 // 获取下标
 // 默认是dom同级的下标，也可以提供约束条件context

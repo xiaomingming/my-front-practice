@@ -21,10 +21,15 @@
             <li>3</li>
             <li>4</li>
         </ul>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+        <script type="text/javascript" src="../js/common/jquery-1.8.2.js"></script>
         <script type="text/javascript" src="../js/common/basic.js"></script>
         <script type="text/javascript">
         (function(){
+            var btn=$('#s');
+            console.log(btn.offset());
+            var s=D.$('body')[0];
+            console.log(s);
+            console.log(E.offset(s));
             // webkit
             /*E.addEvent(document,'mousewheel',function(e){
                 var e=E.getEvent(e);
@@ -37,7 +42,7 @@
             });*/
             
             // 模拟事件委托
-            var mytest={
+            /*var mytest={
                 s:D.$('#s'),
                 p:D.$('#p')
             };
@@ -46,7 +51,7 @@
                 alert('hahahah');
             });
             // D.removeClass(mytest.s,'haha')
-            D.addClass(mytest.s,'test2 test test3');
+            D.addClass(mytest.s,'test2 test test3');*/
             // D.addClass(mytest.s,'xixiix');
             // console.log(D.$$('test')[0]);
             // D.removeClass(mytest.s,'test');

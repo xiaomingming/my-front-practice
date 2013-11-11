@@ -1,10 +1,48 @@
+// 目前缺少：
+// offset位置计算
 /*
- * 事件编写
+ * 工具函数
  */
+var document = window.document,
+    docElem = document.documentElement;
 var Utils = {};
 Utils.trim = function(str) {
     return str.replace(/(^\s*)|(\s*$)/g, '');
 };
+Utils.isWindow = function(obj) {
+    return obj != null && obj == obj.window;
+};
+Utils.getWindow=function(elem){
+    return this.isWindow( elem ) ?
+        elem :
+        elem.nodeType === 9 ?
+            elem.defaultView || elem.parentWindow :
+            false;
+};
+// 一个节点是否包含另一个节点
+// 取自jquery　1.8.2
+// 参考自： http://blog.csdn.net/huajian2008/article/details/3960343
+Utils.contains = docElem.contains ?
+    function(a, b) {
+        var adown = a.nodeType === 9 ? a.documentElement : a,
+            bup = b && b.parentNode;
+        return a === bup || !! (bup && bup.nodeType === 1 && adown.contains && adown.contains(bup));
+} :
+    docElem.compareDocumentPosition ?
+    function(a, b) {
+        return b && !! (a.compareDocumentPosition(b) & 16);
+} :
+    function(a, b) {
+        while ((b = b.parentNode)) {
+            if (b === a) {
+                return true;
+            }
+        }
+        return false;
+};
+/*
+ * 事件编写
+ */
 var E = {};
 // 添加事件
 E.addEvent = (function() {
@@ -46,6 +84,15 @@ E.getRelatedTarget = function(event) {
     var evt = E.getEvent(event);
     return evt.relatedTarget || evt.fromElement || evt.toElement || null;
 };
+// keyCode IE8 及opera support
+E.getKeyCode = function(e) {
+    var e = E.getEvent(e);
+    if (typeof e.charCode === 'number') {
+        return e.charCode;
+    } else {
+        return e.keyCode;
+    }
+};
 // 事件委托
 // 事件类型，委托的父元素，事件目标字符串，回调
 // 事件目标字符串只支持html tag，class，id
@@ -53,6 +100,9 @@ E.delegate = function(eventType, context, target, fn) {
     var self = this;
     // 若父元素不存在
     // 介个。。。。
+    if (Utils.trim(context) === '') {
+        context = document.body;
+    }
     self.addEvent(context, eventType, function(e) {
         var e = self.getEvent(e),
             eTarget = self.getTarget(e);
@@ -118,6 +168,56 @@ E.stopPropagation = function(event) {
 /*
  *获取事件坐标
  */
+E.offset = function(elem) {
+    var docElem, body, win, clientTop, clientLeft, scrollTop, scrollLeft,
+        box = {
+            top: 0,
+            left: 0
+        },
+        doc = elem && elem.ownerDocument;
+
+    if (!doc) {
+        return;
+    }
+
+    if ((body = doc.body) === elem) {
+        var top = body.offsetTop,
+            left = body.offsetLeft;
+
+        if (body.offsetTop !== 1) {
+            top += parseFloat(body.style.marginTop) || 0;
+            left += parseFloat(body.style.marginLeft) || 0;
+        }
+
+        return {
+            top: top,
+            left: left
+        };
+    }
+
+    docElem = doc.documentElement;
+
+    // Make sure it's not a disconnected DOM node
+    if (!Utils.contains(docElem, elem)) {
+        return box;
+    }
+
+    // If we don't have gBCR, just use 0,0 rather than error
+    // BlackBerry 5, iOS 3 (original iPhone)
+    if (typeof elem.getBoundingClientRect !== "undefined") {
+        box = elem.getBoundingClientRect();
+    }
+    win = Utils.getWindow(doc);
+    clientTop = docElem.clientTop || body.clientTop || 0;
+    clientLeft = docElem.clientLeft || body.clientLeft || 0;
+    scrollTop = win.pageYOffset || docElem.scrollTop;
+    scrollLeft = win.pageXOffset || docElem.scrollLeft;
+    console.log(box.top + scrollTop - clientTop);
+    return {
+        top: box.top + scrollTop - clientTop,
+        left: box.left + scrollLeft - clientLeft
+    };
+};
 // 浏览器窗口位置
 // 即使页面滚动了，鼠标只要相对浏览器窗口位置不变，那么x，y就不变
 E.clientX = function(event) {

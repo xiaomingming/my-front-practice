@@ -453,7 +453,6 @@ D.addClass = function(ele, className) {
 };
 // 移除类名
 // className为空，则全部移除
-// 此处有bug
 D.removeClass = function(ele, className) {
     // 若该className不存在，则不执行附加操作
     // class属性名遍历

@@ -5,7 +5,8 @@
         <title>测试</title>
         <style>
             * { margin: 0; padding: 0; }
-            body { font: 12px/1.5 arail; width: 3000px; overflow: auto; margin:20px;}
+            html { border: 6px solid red; }
+            body { font: 12px/1.5 arail; width: 3000px; overflow: auto; margin:20px; border: 2px solid orange;}
             ul { list-style: none; }
             .test { margin: 20px; border: 2px solid orange; }
         </style>
@@ -26,8 +27,8 @@
         <script type="text/javascript" src="../js/common/basic.js"></script>
         <script type="text/javascript">
         (function(){
-            var btn=D.$('#s');
-            E.offset(btn)
+
+            // console.log($('#s2').offset(),E.pageX(D.$('#s2')));
             // console.log(btn.offset());
             // var s=D.$('body')[0];
             // console.log(s);

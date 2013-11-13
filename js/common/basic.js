@@ -1,5 +1,98 @@
-// 目前缺少：
-// offset位置计算
+// dom ready实现
+// 参考百度 tangram
+// 另外参考：https://github.com/addyosmani/jquery.parts/blob/master/jquery.documentReady.js
+(function() {
+    var ready = function() {
+        var readyBound = false,
+            readyList = [],
+            DOMContentLoaded;
+
+        if (document.addEventListener) {
+            DOMContentLoaded = function() {
+                document.removeEventListener('DOMContentLoaded', DOMContentLoaded, false);
+                ready();
+            };
+
+        } else if (document.attachEvent) {
+            DOMContentLoaded = function() {
+                if (document.readyState === 'complete') {
+                    document.detachEvent('onreadystatechange', DOMContentLoaded);
+                    ready();
+                }
+            };
+        }
+        /**
+         * @private
+         */
+
+        function ready() {
+            if (!ready.isReady) {
+                ready.isReady = true;
+                for (var i = 0, j = readyList.length; i < j; i++) {
+                    readyList[i]();
+                }
+            }
+        }
+        /**
+         * @private
+         */
+
+        function doScrollCheck() {
+            try {
+                document.documentElement.doScroll("left");
+            } catch (e) {
+                setTimeout(doScrollCheck, 1);
+                return;
+            }
+            ready();
+        }
+        /**
+         * @private
+         */
+
+        function bindReady() {
+            if (readyBound) {
+                return;
+            }
+            readyBound = true;
+
+            if (document.readyState === 'complete') {
+                ready.isReady = true;
+            } else {
+                if (document.addEventListener) {
+                    document.addEventListener('DOMContentLoaded', DOMContentLoaded, false);
+                    window.addEventListener('load', ready, false);
+                } else if (document.attachEvent) {
+                    document.attachEvent('onreadystatechange', DOMContentLoaded);
+                    window.attachEvent('onload', ready);
+
+                    var toplevel = false;
+
+                    try {
+                        toplevel = window.frameElement == null;
+                    } catch (e) {}
+
+                    if (document.documentElement.doScroll && toplevel) {
+                        doScrollCheck();
+                    }
+                }
+            }
+        }
+        bindReady();
+
+        return function(callback) {
+            if (ready.isReady) {
+                callback();
+            } else {
+                readyList.push(callback);
+            }
+            // ready.isReady ? callback() : readyList.push(callback);
+        };
+    }();
+
+    ready.isReady = false;
+    window.ready = ready;
+})();
 /*
  * 工具函数
  */
@@ -166,6 +259,8 @@ E.stopPropagation = function(event) {
 };
 /*
  *获取事件坐标
+ *参考：http://www.cnblogs.com/yaozhiyi/archive/2013/01/12/2855583.html
+ *http://www.css88.com/archives/1772
  */
 E.offset = function(elem) {
     var docElem, body, win, clientTop, clientLeft, scrollTop, scrollLeft,
@@ -231,13 +326,17 @@ E.clientY = function(event) {
 // 若是超过一屏，还要加上计算滚动坐标
 E.pageX = function(event) {
     var event = E.getEvent(event);
+    // lte IE8
     if (event.pageX === undefined) {
+        //混杂及标准模式下
         return event.clientX + (document.body.scrollLeft || document.documentElement.scrollLeft);
     }
 };
 E.pageY = function(event) {
     var event = E.getEvent(event);
+    // lte IE8
     if (event.pageY === undefined) {
+        //混杂及标准模式下
         return event.clientY + (document.body.scrollTop || document.documentElement.scrollTop);
     }
 };

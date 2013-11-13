@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>window.frameElement</title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+            .test { margin: 20px; border: 2px solid orange; }
+        </style>
+    </head>
+    <body>
+        <div class="test">
+            <h1>window.frameElement 测试</h1>
+            <iframe src="form.html" frameborder="0"></iframe>
+        </div>
+        <script type="text/javascript">
+            (function() {
+                var ready  = function() {
+                    var readyBound = false,
+                        readyList = [],
+                        DOMContentLoaded;
+
+                    if (document.addEventListener) {
+                        DOMContentLoaded = function() {
+                            document.removeEventListener('DOMContentLoaded', DOMContentLoaded, false);
+                            ready();
+                        };
+
+                    } else if (document.attachEvent) {
+                        DOMContentLoaded = function() {
+                            if (document.readyState === 'complete') {
+                                document.detachEvent('onreadystatechange', DOMContentLoaded);
+                                ready();
+                            }
+                        };
+                    }
+                    /**
+                     * @private
+                     */
+
+                    function ready() {
+                        if (!ready.isReady) {
+                            ready.isReady = true;
+                            for (var i = 0, j = readyList.length; i < j; i++) {
+                                readyList[i]();
+                            }
+                        }
+                    }
+                    /**
+                     * @private
+                     */
+
+                    function doScrollCheck() {
+                        try {
+                            document.documentElement.doScroll("left");
+                        } catch (e) {
+                            setTimeout(doScrollCheck, 1);
+                            return;
+                        }
+                        ready();
+                    }
+                    /**
+                     * @private
+                     */
+
+                    function bindReady() {
+                        if (readyBound) {
+                            return;
+                        }
+                        readyBound = true;
+
+                        if (document.readyState === 'complete') {
+                            ready.isReady = true;
+                        } else {
+                            if (document.addEventListener) {
+                                document.addEventListener('DOMContentLoaded', DOMContentLoaded, false);
+                                window.addEventListener('load', ready, false);
+                            } else if (document.attachEvent) {
+                                document.attachEvent('onreadystatechange', DOMContentLoaded);
+                                window.attachEvent('onload', ready);
+
+                                var toplevel = false;
+
+                                try {
+                                    toplevel = window.frameElement == null;
+                                } catch (e) {}
+
+                                if (document.documentElement.doScroll && toplevel) {
+                                    doScrollCheck();
+                                }
+                            }
+                        }
+                    }
+                    bindReady();
+
+                    return function(callback) {
+                        if(ready.isReady){
+                            callback();
+                        }else{
+                            readyList.push(callback);
+                        }
+                        // ready.isReady ? callback() : readyList.push(callback);
+                    };
+                }();
+
+                ready.isReady = false;
+                window.ready=ready;
+            })();
+        </script>
+        <script type="text/javascript">
+            ready(function(){
+                document.write('lalalalal');
+            });
+        </script>
+    </body>
+</html>

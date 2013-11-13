@@ -8,7 +8,6 @@
      * 每次轮播，起始转换无跳动，霸气！
      * 支持显示/去除播放数字
      * 支持悬浮滚动/停止
-     * 尚未支持图像预载入loading效果
      */
     var pluginName = 'easySwitch',
         EasySwitch = (function() {

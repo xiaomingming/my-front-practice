@@ -31,7 +31,14 @@
                     //$('#myform').get(0).submit();
                 };
                 $('#submit-btn').on('click',submitForm);
+                var test=window.frameElement;
+                var test2=window.top;
+                alert(test2);
+                if(test){
+                    test.src="http://www.baidu.com"
+                }
             });
+
         </script>
     </body>
 </html>

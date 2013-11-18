@@ -3,13 +3,14 @@
 // 另外参考：https://github.com/addyosmani/jquery.parts/blob/master/jquery.documentReady.js
 (function() {
     var ready = function() {
-        var readyBound = false,
+        console.log(ready.isReady);
+        var readyBound = false,// 不知为何物
             readyList = [],
             DOMContentLoaded;
 
         if (document.addEventListener) {
             DOMContentLoaded = function() {
-                document.removeEventListener('DOMContentLoaded', DOMContentLoaded, false);
+                document.removeEventListener('DOMContentLoaded', DOMContentLoaded, false);//立即解绑
                 ready();
             };
 
@@ -63,7 +64,7 @@
                     document.addEventListener('DOMContentLoaded', DOMContentLoaded, false);
                     window.addEventListener('load', ready, false);
                 } else if (document.attachEvent) {
-                    document.attachEvent('onreadystatechange', DOMContentLoaded);
+                    document.attachEvent('onreadystatechange', DOMContentLoaded);//只执行一次回调
                     window.attachEvent('onload', ready);
 
                     var toplevel = false;
@@ -81,16 +82,11 @@
         bindReady();
 
         return function(callback) {
-            if (ready.isReady) {
-                callback();
-            } else {
-                readyList.push(callback);
-            }
-            // ready.isReady ? callback() : readyList.push(callback);
+            ready.isReady ? callback() : readyList.push(callback);
         };
     }();
 
-    ready.isReady = false;
+    ready.isReady = false;//设置这个标志，和匿名函数内部的isReady无关啊
     window.ready = ready;
 })();
 /*

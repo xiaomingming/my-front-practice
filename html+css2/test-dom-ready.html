@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>测试 dom ready</title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+            .test { margin: 20px; border: 2px solid orange; }
+        </style>
+    </head>
+    <body>
+        <div class="test">
+            <h1>测试 dom ready</h1>
+            <button id="btn">click me</button>
+        </div>
+        <script type="text/javascript">
+        /*(function(){
+            var f1=function(){
+                console.log('1111'+f1);
+                function f2(){
+                    if(!f2.flag){
+                        f2.flag=true;
+                    }
+                }
+                return function(callback){
+                    console.log('callback222222222222222');
+                    callback();
+                }
+            }();
+            f1.flag=false;
+            window.f1=f1;
+            console.log('22222');
+        })();
+        f1(function(){
+            console.log('excute');
+        });*/   
+        var btn=document.getElementById('btn');
+        var callback=function(){
+            console.log('xxixixixi');
+        };
+        var d=function(){
+            btn.removeEventListener('click',d,false);//执行一次，立马解绑
+            callback();
+        };
+        btn.addEventListener('click',d,false);
+        </script>
+    </body>
+</html>

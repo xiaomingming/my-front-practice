@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>测试隐藏元素宽高</title>
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; display: none; }
+            .test { display: block; margin: 20px; border: 2px solid orange; position: absolute; }
+            .test p { display: none; }
+        </style>
+    </head>
+    <body>
+        <div class="test">
+            <p>lalalalalalalalal</p>
+        </div>
+        <button id="btn">获取隐藏元素宽高</button>
+        <p style="height:1200px;"></p>
+        
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+        <script type="text/javascript">
+            
+            $(function(){
+                var btn=$('#btn');
+                var test=$('.test p');
+
+                btn.on('click',function(){
+                        test.html('<span>lalalalalaalalallalalal</span><br><span>lalalalalaalalallalalal</span><br><span>lalalalalaalalallalalal</span><br><span>lalalalalaalalallalalal</span><br><span>lalalalalaalalallalalal</span><br><span>lalalalalaalalallalalal</span><br><span>lalalalalaalalallalalal</span><br><span>lalalalalaalalallalalal</span><br><span>lalalalalaalalallalalal</span><br><span>lalalalalaalalallalalal</span><br>');
+                        console.log(test.outerWidth(true),test.outerHeight(true));
+                        $(window).scroll(function(){
+                        console.log(test.outerWidth(true),test.outerHeight(true));
+                    });
+                });
+                    
+            });
+        </script>
+    </body>
+</html>

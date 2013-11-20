@@ -362,9 +362,9 @@ E.focusout = function(ele, handler) {
  */
 var D = {};
 // id选择器,类别选择器，标签选择器
-// 仅仅D.$('#test')支持，但不支持$('div#test')，$('#div>p')
+// 仅仅D.$('#test')支持，但不支持D.$('div#test')，D.$('#div>p')
 // 类别选择器，这里只支持class和html tag
-// 比如：D.$$('.test'),D.$$('p.test'),D.$$('p'),D.$$('p',document.body)
+// 比如：D.$('.test'),D.$('p.test'),D.$('p'),D.$('p',document.body)
 // 注意，传入context限制条件时，必须传入一个唯一的dom选择器
 D.$ = function(selectorString, context) {
     var selectorTag = selectorString[0],
@@ -445,7 +445,7 @@ D.addClass = function(ele, className) {
         }
     }
     resClass = Utils.trim(cNameArr.concat(classArr).join(' '));
-    ele.setAttribute('class', res);
+    ele.setAttribute('class', resClass);
 };
 // 移除类名
 // className为空，则全部移除

@@ -1,0 +1,1 @@
+define('lalala,string test starts...');

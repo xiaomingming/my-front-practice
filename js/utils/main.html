@@ -1,0 +1,394 @@
+<{include file="inc/admin/header.html"}>
+<style>
+    #topic_list {
+        width: 100%;
+        margin-right: auto;
+        margin-left: auto;
+    }
+    
+    #topic_list td {
+        text-align: center;
+    }
+    
+    #coverImagePreview {
+        max-width: 500px;
+        cursor:pointer;
+        border: 1px solid #ccc;
+    }
+
+    #dialog_select {
+        font-size: 200%;
+        display: table-cell;
+        vertical-align:middle;
+        text-align:center;
+    }
+    #dialog_select a, #dialog_select button {
+        margin: 10px;
+        width: 80%;
+    }
+
+    #bannar_list {
+        list-style-type: none;
+        margin: 5px;
+    }
+    #bannar_list>li {
+        padding-top: 10px;
+        margin-bottom: 10px;
+        background: #e6e6e6;
+        vertical-align:middle;
+        text-align:center;
+    }
+    #bannar_list img {
+        max-width: 600px;
+    }
+
+    .createButton, .saveButton {
+        margin-top: 20px;
+        width:100%;
+        font-size: 200%;
+    }
+</style>
+
+<div class="ui-layout-center">
+    <div>
+        <div class="ideal-form">
+            <div class="ideal-wrap ideal-tabs ideal-full-width">
+                <ul class="ideal-tabs-wrap">
+                    <li class="ideal-tabs-tab ideal-tabs-tab-active">
+                        <span>已有专题列表</span></li>
+                    <li class="ideal-tabs-tab">
+                    <a href="?do=Topic.Create"><span>创建新专题</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div>
+        <table id="topic_list" class="full">
+            <tr>
+                <th width="15%">标题</th>
+                <th width="15%">时间</th>
+                <th width="10%">主题数</th>
+                <th width="20%">小封面</th>
+                <th width="20%">封面</th>
+                <th width="40%">操作</th>
+            </tr>
+
+        <{foreach from=$data.list item=item}>
+            <tr data-id="<{$item.id}>">
+                <td><{$item.title}></td>
+                <td><{$item.ctime|date_format:"%Y-%m-%d"}></td>
+                <td><{$item.themes_num}></td>
+                <td><img src="<{$item.cover_url_small}>" style="max-width:250px"/></td>
+                <td><img src="<{$item.cover_url}>" style="max-width:250px"/></td>
+                <td>
+                <a class="button" href="?do=Topic.Edit&id=<{$item.id}>">编辑</a>
+                <button class="del">删除</button>
+                <button class="view">查看</button>
+                </td>
+            </tr>
+        <{/foreach}>
+    </table>
+    <div class="flickr clearfix">
+    <{$data.meta|multi_html}>
+    </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        //发布更新
+        $("#dialog_publish").dialog({
+            resizable: false,
+            autoOpen: false,
+            height: 180,
+            modal: true,
+            open: function(event, ui) { 
+                $('.ui-dialog .button,.ui-dialog :button').blur();
+            } 
+        });
+
+        $("#btn_publish").click(function() {
+            $("#dialog_publish").dialog("option", "buttons", {
+                "确定发布": function() {
+                    var data = {channel: '<{$current_channel.tag}>'}
+                    $.getJSON('json.php?do=Bannar.Publish', data, function(d) {
+                        if (d.code == 200) {
+                            $("#dialog_publish").dialog("close");
+                        } else {
+                            alert(d.message);
+                        }
+                    });
+                }
+            });
+            $("#dialog_publish").dialog('open');
+        });
+
+        //channel选择
+        var options = { 
+            modal: true,
+            autoOpen: false,
+            closeOnEscape: false, 
+            open: function(event, ui) { 
+                $(".ui-dialog-titlebar-close").hide(); 
+                $('.ui-dialog .button').blur();
+            } 
+        }
+        $("#dialog_select").dialog(options);
+        $("#change_channel").click(function() {
+            $("#dialog_select").dialog('open');
+        });
+
+        //默认出现 
+        <{if $current_channel}>
+        $("#bannar_list").sortable();
+        <{else}>
+            $("#dialog_select").dialog('open');
+        <{/if}>
+        //channel end
+
+
+        //初始化新bannar表单内容
+
+        var options = {disableCustom:'file',
+            inputs: {
+                'url' : {
+                    filters: 'required url',
+                }
+            }
+        };
+        var $bannarForm = $('#bannarForm').idealforms(options).data('idealforms');
+
+        //封面图片上传处理
+        var coverImageFile;
+        $("#coverImage").change(function(e) {
+            var reader = new FileReader();  
+            var file = this.files[0];
+
+            if (file.type != 'image/jpeg' && file.type != 'image/png') {
+                alert('图片类型 必须是jpg或png');
+                return false;
+            }
+            reader.onload = function(e){
+                coverImageFile = file;
+                $("#coverImagePreview").attr('src', e.target.result);
+            }
+            reader.readAsDataURL(file);  
+        });
+
+        //预览图点击执行上传
+        $("#coverImagePreview").click(function() {
+            $("#coverImage").click();
+        });
+       
+        
+        //新增一个bannar的方法
+        var addNewBannar = function(preview, url) {
+            var html = "";
+            html += "<li class='ui-state-default'>";
+            html += "<img class='img' src='" + preview.url + "'/>";
+            html += "<p>";
+            html += "<span>链接:</span>";
+            html += "<span class='url'>" + url + "</span>";
+            html += "<button class='edit' >编辑</button>";
+            html += "<button class='del' >删除</button>";
+            html += "</p>";
+            html += "</li>";
+                
+            //定义一个html对象，追加到bannar_list下面
+            var item = $(html);
+            //将button转换成按钮
+            item.find('button').button();
+            $("#bannar_list").prepend(item);
+            $("#dialog_create").dialog('close');
+        }
+
+        var adding = true;
+        //bannar管理
+        $("#dialog_create").dialog({
+            resizable: false,
+            width: 700,
+            modal:true,
+            autoOpen: false,
+            buttons: {
+                "确定" : function() {
+                if(adding){
+                    //验证
+                    if (!$bannarForm.isValid()) {
+                        alert('资料填写不完整');
+                        return false;
+                    }
+
+                    console.log(typeof coverImageFile);
+                    if (typeof coverImageFile != 'object') {
+                        alert('封面图片没有正确设置');
+                        return false;
+                    }
+                    adding = false;
+                    var formData = new FormData();
+                    formData.append("img", coverImageFile);
+                }
+                    $.ajax({
+                        type: 'POST',
+                        contentType:false,
+                        processData:false,
+                        url: '?do=Image.Save',
+                        data: formData,
+                    }).done(function(d) {
+                        if (d.code == 200) {
+                            var url = $bannarForm.$form.find("input[name='url']").val();
+                            addNewBannar(d.data, url);
+                            adding = true;
+                        } else {
+                            return;
+                        }
+                    })
+                },
+            }
+        });
+
+    //创建bannar
+    $(".createButton").click(function() {
+        $("#dialog_create").find("#coverImagePreview").attr('src', "<{$_static}>pic/add_topic_img.png");
+        $("#dialog_create").find("input[name='url']").val("");
+        $("#dialog_create").dialog('open');
+    });
+
+    //保存bannar
+    $(".saveButton").click(function() {
+        var data = "channel=<{$current_channel.tag}>";
+
+        var items = $("#bannar_list").find('li');
+        for (var i = 0; i < items.length; i++) {
+            var item = $(items[i]);
+            data += "&list[" + i + "][img]=" + escape(item.find(".img").attr('src'));
+            data += "&list[" + i + "][url]=" + escape(item.find(".url").text());
+        }
+
+        console.log(data);
+
+        $.post('?do=Bannar.Save', data, function(d) {
+            if(d.code == 200){
+                alert("保存成功！");   
+            } else {
+                alert("保存失败！");
+            }
+        })
+    });
+
+
+
+    
+    //编辑bannar
+    $("#bannar_list").delegate(".edit", "click", function() {
+        
+        //需要多次使用的，可以定义成变量
+        var $p = $(this).closest('p'),
+        $li = $p.parent(),
+        $url = $p.find('.url').text();
+
+        //模版
+        var html = "<div>";
+        html += "<form id='editform'>";
+        html += "<input name='url' type='text' value='" + $url + "' style='width:227px;height:25px'/>";
+        html += "<input type='file' style='display:none'/>";
+        html += "<button class='save'>保存</button>";
+        html += "<button class='cancel'>取消</button>";
+        html += "</form>";
+        html += "</div>";
+        $obj = $(html);
+
+        $obj.find('button').button();
+
+        //初始化新bannar表单内容
+
+        //还原并取消绑定事件
+        var clean = function() {
+            $p.show();
+            $obj.remove();
+            $li.find('.img').off('click');
+        }
+        //保存处理
+        $obj.find('.save').click(function(){
+            $p.find('.url').text($obj.find("input[type='text']").val());
+            var options = {disableCustom:'file',
+                inputs: {
+                    'url' : {
+                        filters: 'required url',
+                    }
+                }
+            };
+            var $editform = $('#editform').idealforms(options).data('idealforms');
+
+            if (!$editform.isValid()) {
+                        alert('链接格式错误！');
+                        return false;
+            }
+
+            clean();
+        });
+        //删除处理
+        $obj.find('.cancel').click(function(){
+            clean();
+        });
+
+        //图片文件处理
+        $obj.find("input[type='file']").change(function() {
+            var reader = new FileReader();  
+            var file = this.files[0];
+
+            if (file.type != 'image/jpeg' && file.type != 'image/png') {
+                alert('图片类型 必须是jpg或png');
+                return false;
+            }
+
+            var formData = new FormData();
+            formData.append("img", file);
+
+            $.ajax({
+                type: 'POST',
+                contentType:false,
+                processData:false,
+                url: '?do=Image.Save',
+                data: formData,
+            }).done(function(d) {
+                if (d.code == 200) {
+                    //上传图片成功返回图片信息id、服务端url
+                    $li.find('.img').attr('src', d.data.url);
+                } else {
+                    alert(d.message);
+                    return;
+                }
+            })
+        });
+
+        $li.find('.img').click(function() {
+            $obj.find("input[type='file']").click();
+        });
+
+        $li.append($obj);
+        $p.hide();
+
+        var options = {disableCustom:'file',
+            inputs: {
+                'url' : {
+                    filters: 'required url',
+                }
+            }
+        };
+
+        setTimeout(function() {
+        //    $("#editform").idealforms(options).data('idealforms');
+        }, 100);
+        return ;
+    });
+ 
+    //删除bannar
+    $("#bannar_list").delegate(".del", "click", function() {
+        $(this).closest('li').remove();
+    });
+
+    });
+</script>
+
+<{include file="inc/admin/footer.html"}>

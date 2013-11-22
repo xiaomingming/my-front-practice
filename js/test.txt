@@ -1,0 +1,5 @@
+define(function(require,exports){
+    exports.randomN=function(){
+        return Math.random()*9+1
+    }
+});

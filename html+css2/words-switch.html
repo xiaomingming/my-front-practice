@@ -10,7 +10,7 @@
             a img { border: 0; }
             .easy-switch-wrapper { position: relative; width: 600px; height: 375px; }
             .switch-list {  position: relative; width: 600px; border: 2px solid red; height: 375px; overflow: hidden; background: #333; color: #fff; margin: 0 auto; }
-            .switch-list li,.switch-list li.normal { position: absolute; width: 600px; height: 375px; line-height: 375px; color: #fff; font-size: 18px; z-index: 1; background: #333; }
+            .switch-list li,.switch-list li.normal { display: none; position: absolute; width: 600px; height: 375px; line-height: 375px; color: #fff; font-size: 18px; z-index: 1;  }
             .switch-number { position: absolute; right: 10px; bottom: 20px; z-index: 12; }
             .switch-number li { float: left; margin-right: 10px; }
             .switch-number li a { display: block; padding: 0 6px; line-height: 22px; border: 1px solid orange; background: #333; color: #fff; text-decoration: none; }
@@ -34,7 +34,7 @@
             $(function(){
                 var s1=$('.switch-list').easySwitch({
                     'startIndex':0,
-                    'switchEffect':'left',
+                    'switchEffect':'right',
                     'switchInterval':3000,
                     'switchDuration':500,
                     'isPlayNumber':true,

@@ -29,45 +29,45 @@ var start = function(response) {
     response.write(body);
     response.end();
 };
-// 响应upload
-var upload = function(response, request) {
-    console.log('Request handler "upload" was called.');
-    var form=new formidable.IncomingForm();
-    console.log('about to parse');
+    // 响应upload
+    var upload = function(response, request) {
+        console.log('Request handler "upload" was called.');
+        var form=new formidable.IncomingForm();
+        console.log('about to parse');
 
-    // 写一个临时路径
-    form.uploadDir='tmp';
-    form.parse(request,function(err,fields,files){
-        console.log('parsing done');
-        console.log(files.upload);
-        // 同步操作文件，需要try catch
-        try{
-            fs.renameSync(files.upload.path,'tmp/test.png');
-        }catch(e){
-            console.log(e);
-        }
-        
-        response.writeHead(200,{'Content-Type':'text/html'});
-        response.write('received img:</br>');
-        response.write('<a href="/show"><img src="/show" /></a>');
-        response.end();
-    });
-};
-// 显示文件
-var show=function(response){
-    console.log('request handler "upload" was called');
-    fs.readFile('./tmp/test.png','binary',function(err,file){
-        if(err){
-            response.writeHead(500,{'Content-Type':'text/plain'});
-            response.write(err+'\n');
+        // 写一个临时路径
+        form.uploadDir='tmp';
+        form.parse(request,function(err,fields,files){
+            console.log('parsing done');
+            console.log(files.upload);
+            // 同步操作文件，需要try catch
+            try{
+                fs.renameSync(files.upload.path,'tmp/test.png');
+            }catch(e){
+                console.log(e);
+            }
+            
+            response.writeHead(200,{'Content-Type':'text/html'});
+            response.write('received img:</br>');
+            response.write('<a href="/show"><img src="/show" /></a>');
             response.end();
-        }else{
-            response.writeHead(200,{'Content-Type':'image/png'});
-            response.write(file,'binary');
-            response.end();
-        }
-    });
-};
+        });
+    };
+    // 显示文件
+    var show=function(response){
+        console.log('request handler "upload" was called');
+        fs.readFile('./tmp/test.png','binary',function(err,file){
+            if(err){
+                response.writeHead(500,{'Content-Type':'text/plain'});
+                response.write(err+'\n');
+                response.end();
+            }else{
+                response.writeHead(200,{'Content-Type':'image/png'});
+                response.write(file,'binary');
+                response.end();
+            }
+        });
+    };
 // 不可访问
 var disabled = function(response) {
     response.writeHead(404, {

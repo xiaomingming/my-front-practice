@@ -1,4 +1,3 @@
-;
 (function($, undefined) {
     'use strict';
     /*
@@ -269,13 +268,13 @@
                         // 若设置了数字播放，则执行播放
                         self.isPlayNumber && self.playNumber(currentIndex);
                         self.isAnimating = false;
-                    }).fail(function(){
+                    }).fail(function() {
                         throw new Error('animate bug');
                     });
 
                     // 下一个
                     this.switchItem.eq(nextIndex).css(getAnimateConfig('next'));
-                    
+
                 },
                 // 切换回调
                 runSwitch: function(self) {

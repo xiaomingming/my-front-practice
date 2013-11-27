@@ -11,10 +11,10 @@
             body { font: 12px/1.5 arail; }
             ul { list-style: none; }
             .test { width: 960px; background:#eee; margin: 0 auto; }
-            .switch-wrapper { position: relative; width: 400px; height: 200px; }
-            .switch-list { position: relative; border: 2px solid orange; width: 400px; height: 200px; overflow: hidden;  }
+            .switch-wrapper { position: relative; /*width: 400px; height: 200px;*/ }
+            .switch-list { position: relative; border: 2px solid orange; width: 600px; height: 375px; overflow: hidden;  }
             /*注意此处的z-index设置*/
-            .switch-list li { position: absolute; width: 400px; height: 200px; z-index: 0;  text-align: center; line-height: 200px; display: none; font-size: 16px; background: #333; color: #fff; }
+            .switch-list li { display: none; position: absolute; left: 0; top: 0;  z-index: 0;  text-align: center;  font-size: 16px; background: #333; color: #fff; }
             .switch-list li.prev { display: block; z-index: 1; }
             .switch-list li.current { display: block; z-index: 2; /*left: 400px;*/ }
 
@@ -27,7 +27,6 @@
         </style>
     </head>
     <body>
-        <div class="test">
         <ul class="switch-list">
             <!--<li>解释就是掩饰，掩饰就是讲故事!</li>
             <li>有些人在哪里摔倒就在哪里躺下。</li>
@@ -41,16 +40,16 @@
                 <li><a href="#" title="4"><img src="../images/4.jpg" alt=""></a></li>
                 <li><a href="#"><img src="../images/5.jpg" alt=""></a></li> 
         </ul>
-        </div>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
         <script type="text/javascript" src="../js/utils/easyScroll.js"></script>
         <script type="text/javascript">
             $(function(){
                 // var s=$('.switch-list').wordScroll().wordScroll('api');
                 $('.switch-list').wordScroll({
-
+                    'moveDirection':'top'
                 });
             });
+
         </script>
     </body>
 </html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>测试javascript 中~线的运算</title>
+        <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        < ![endif]-->
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+        </style>
+    </head>
+    <body>
+        <div id="test">
+
+        </div>
+        <script type="text/javascript">
+            var arr=[5.6,1.2,-5.6,-1.2,0,7.8,-7.44,-5.24,-6.89];
+            var f=function(num){
+                if(num>0){
+                    return -Math.floor(num)-1;
+                }else {
+                    return Math.floor(-num)-1;
+                }
+            };
+            var f1=function(num){
+                return ~(num);
+            };
+            var f2=function(num){
+                return f(f(num));
+            };
+            var f3=function(num){
+                return ~~(num);
+            };
+            var res=[],res1=[],res2=[],res3=[];
+            for(var i=0,j=arr.length;i<j;i++){
+                res.push(f(arr[i]));
+                res1.push(f1(arr[i]));
+                res2.push(f2(arr[i]));
+                res3.push(f3(arr[i]));
+            }
+            var s='<h1>测试javascript 中~线的运算</h1><h2>测试数据为：</h2>';
+            s+=arr;
+            s+='<h2>测试结果分别为函数f1处理，~处理：</h2>';
+            s+=res+'<br>'+res1;
+            s+='<h2>测试结果分别为函数f2处理，~~处理：</h2>';
+            s+=res2+'<br>'+res3;
+            document.getElementById('test').innerHTML=s;
+            console.log('测试数据为：');
+            console.log(arr);
+            console.log('测试结果分别为函数处理，~处理：');
+            console.log(res,res1);
+            console.log('测试结果分别为函数处理，~~处理：');
+            console.log(res2,res3);
+        </script>
+    </body>
+</html>

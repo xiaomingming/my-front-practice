@@ -1,29 +1,58 @@
-(function(window, $, undefined) {
+/*
+* author:leweiming
+* gmail:xmlovecss 艾特 gmail dot com
+* 一个简单的轮播
+* 轮播的图片宽度应当一致
+* 轮播特效分为 移动，fadeIn/fadeOut两种
+* 移动又分为left,top两种方式
+* 支持配置上一张，下一张按钮
+* 支持配置轮播分页
+* 支持悬浮图片停止/继续 轮播
+* 支持自适应
+* 对于上一张，下一张按钮的文字配置，考虑到实际，还是写死算了，你们会用图片的
+* example:
+*　$(window).load(function(){
+    $('.switch-list').easySwitch({
+        'effect': 'fadeEffect', // fadeEffect or moveEffect
+        'moveDirection': 'left', //left or top 
+        'isHoverPause': true,
+        'isPlayNumber': true,
+        'isDirbtn': true,
+        'startIndex': 0,
+        'intervalTime': 3000,
+        'effectDuration': 800
+    });
+*　});
+*/
+;(function(window, $, undefined) {
     var my = {},
-        constructorFunName = 'scroll',
-        pluginName = 'wordScroll';
+        constructorFunName = 'Carousel',
+        pluginName = 'easySwitch';
 
     my[constructorFunName] = function(container, options) {
-        var self = this;
+        var self = this,
+            imgEle;
         this.container = container;
         var settings = $.extend({}, $.fn[pluginName].defaults, options);
         this.timer = null;
-        // 获取宽高
-        this.width = this.container.width();
-        this.height = this.container.height();
-        // 获取设置的层叠值
-        // this.zIndex=settings.zIndex();
         // 获取设置的初始滚动下标
         this.startIndex = settings.startIndex;
-        // 
+        // 获取图片宽高
+        imgEle = container.find('li img').eq(this.startIndex);
+        // 显示才能获取宽高
+        imgEle.parents('li').addClass('prev');
+
+        this.width = imgEle.width() || this.container.width();
+        this.height = imgEle.height() || this.container.height();
+
         this.itemsLen = this.container.find('li').length;
         // 全局timer，动画状态判断
         this.timer = null;
         this.isAnimating = false;
         // 获取延迟
-        this.duration = settings.duration;
-        // 获取动画delay
-        this.delay = settings.delay;
+        this.intervalTime = settings.intervalTime;
+        // 获取动画effectDuration
+        this.effectDuration = settings.effectDuration;
         // 是否创建播放数字
         this.isPlayNumber = settings.isPlayNumber;
         // 是否创建前进后退按钮
@@ -42,21 +71,21 @@
         };
         this.moveLen = this.moveLenConfig[this.moveDirection];
         // 移动的动画配置
-        this.moveAnimateConfig={
-            currentE:{
-                animate:{},
-                css:{}
+        this.moveAnimateConfig = {
+            currentE: {
+                animate: {},
+                css: {}
             },
-            prevE:{
-                animate:{},
-                css:{}
+            prevE: {
+                animate: {},
+                css: {}
             }
         };
 
-        this.moveAnimateConfig.currentE.animate[self.moveDirection]=0;
-        this.moveAnimateConfig.prevE.animate[self.moveDirection]=0;
+        this.moveAnimateConfig.currentE.animate[self.moveDirection] = 0;
+        this.moveAnimateConfig.prevE.animate[self.moveDirection] = 0;
 
-        this.moveAnimateConfig.currentE.css[self.moveDirection]=0;
+        this.moveAnimateConfig.currentE.css[self.moveDirection] = 0;
         // 初始化
         this.init();
     };
@@ -65,19 +94,29 @@
         // 滚动初始化
         init: function() {
             var self = this;
-            this.container.find('li').eq(this.startIndex).addClass('prev');
+            this.setContainerStyle();
+            // this.container.find('li').eq(this.startIndex).addClass('prev');
             this.isPlayNumber && this.renderPlayNumber();
             this.isDirbtn && this.renderDirectionBtn();
             // 自动播放
-            this.autoScroll();
+            this.autoSwitch();
             // 悬浮停止配置
             this.isHoverPause && this.container.on('mouseover', function() {
-                self.stopSrcoll();
+                self.stopSwitch();
             }).on('mouseout', function() {
-                self.autoScroll();
+                self.autoSwitch();
             });
         },
-        // create switch wrapper
+        // 设置图片列表ul宽高
+        setContainerStyle: function() {
+            var self = this;
+            this.container.css({
+                'width': self.width,
+                'height': self.height
+            });
+        },
+        // 若有分页，或者前进，后退按钮
+        // 需要创建一个外层包含框
         createSwitchWrapper: function() {
             if (!this.isSwitchWrapperCreated) {
                 this.isSwitchWrapperCreated = true;
@@ -86,7 +125,7 @@
                 return false;
             }
         },
-        // create playNumber
+        // 创建分页
         createPlayNumber: function() {
             var i = 0,
                 j = this.itemsLen,
@@ -130,12 +169,12 @@
         gotoIndex: function(index, prevIndex, directionFlag) {
             // 停止轮播
             var self = this;
-            this.stopSrcoll();
+            this.stopSwitch();
 
             // self.startIndex = index;
             // 
             this.scroll(index, prevIndex, directionFlag);
-            this.autoScroll();
+            this.autoSwitch();
         },
 
         // create next,prev button
@@ -235,25 +274,24 @@
             // 移动效果
             if (this.effect === 'moveEffect') {
                 moveDistance = this.getMoveDistance(index, prevIndex, directionFlag);
-                self.moveAnimateConfig.currentE.css[self.moveDirection]=moveDistance+'px';
-                self.moveAnimateConfig.prevE.animate[self.moveDirection]=-moveDistance+'px';
+                self.moveAnimateConfig.currentE.css[self.moveDirection] = moveDistance + 'px';
+                self.moveAnimateConfig.prevE.animate[self.moveDirection] = -moveDistance + 'px';
 
                 // 当前
-                promiseCurrent = currentEle.addClass('current').css(self.moveAnimateConfig.currentE.css).stop(true, true).animate(self.moveAnimateConfig.currentE.animate, self.delay, 'linear', function() {
+                promiseCurrent = currentEle.addClass('current').css(self.moveAnimateConfig.currentE.css).stop(true, true).animate(self.moveAnimateConfig.currentE.animate, self.effectDuration, 'linear', function() {
                     $(this).siblings().removeClass('prev').attr('style', '');
                     $(this).css('z-index', '1');
                 }).promise();
 
                 // 当前图片的前一个
-                promisePrev = prevEle.addClass('prev').stop(true, true).animate(self.moveAnimateConfig.prevE.animate, self.delay, 'linear', function() {
+                promisePrev = prevEle.addClass('prev').stop(true, true).animate(self.moveAnimateConfig.prevE.animate, self.effectDuration, 'linear', function() {
                     $(this).attr('style', '');
                 }).promise();
             }
             // fade 效果
             if (this.effect === 'fadeEffect') {
-                promiseCurrent = currentEle.stop(true, true).fadeIn(self.delay).promise();
-
-                promisePrev = prevEle.stop(true, true).fadeOut(self.delay).promise();
+                promiseCurrent = currentEle.stop(true, true).fadeIn(self.effectDuration).promise();
+                promisePrev = prevEle.stop(true, true).fadeOut(self.effectDuration).promise();
             }
             // 效果这里控制，本来使用key/value来进行控制，这样代码显得优雅
             // 但是，在$.when()中，作为参数，产生了问题，于是这里代码就先ugly着
@@ -263,17 +301,17 @@
             });
         },
         // 触发自动滚动
-        autoScroll: function() {
+        autoSwitch: function() {
             var self = this,
                 perveIndex;
             this.timer = setInterval(function() {
                 pervIndex = self.startIndex;
                 self.startIndex = self.getNext(self.startIndex);
                 self.scroll(self.startIndex, pervIndex, 1);
-            }, self.duration);
+            }, self.intervalTime);
         },
         // 阻止滚动
-        stopSrcoll: function() {
+        stopSwitch: function() {
             var self = this;
             if (this.timer) {
                 clearInterval(self.timer);
@@ -308,7 +346,7 @@
         'isPlayNumber': true,
         'isDirbtn': true,
         'startIndex': 0,
-        'duration': 3000,
-        'delay': 800
+        'intervalTime': 3000,
+        'effectDuration': 800
     };
 })(window, jQuery);

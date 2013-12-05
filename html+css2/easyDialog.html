@@ -58,15 +58,13 @@
                             $(cont).html('<p>异步回调哦</p>');
                         }).fail(function(res){
                             $(cont).html('<p>异步回调失败咯</p>');
+                            
                         });
                         /*return setTimeout(function(){
                             $(cont).html('<p>异步回调哦</p>');
                         },5*1000);*/
                     },//可以为函数，也可以为html片段，但是必须返回html片段的格式
                     'dCloseTxt':'[]',
-                    'cancel':function(){
-                        alert('cancel');
-                    },
                     'OK':function(){
                         window.location.href="http://www.baidu.com"
                     }

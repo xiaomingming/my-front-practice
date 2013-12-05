@@ -4,14 +4,18 @@
         <meta charset="utf-8" />
         <title>测试</title>
         <style>
+            body { width: 2500px; }
+            * { margin: 0; padding: 0; }
             .easy-dailog-filter { display: none; position: fixed; background: #000; opacity:.8; filter: alpha(opacity=80); width: 100%; height: 100%; z-index: 10; }
-            .easy-dialog { width: 300px; background: #fff;  }
+            .easy-dialog { /*position: absolute; left: 50%; top: 50%;*/ width: 300px; background: #fff;  }
             .easy-dialog * { margin: 0; padding: 0; }
             .easy-dialog-header { position: relative; width: 100%; height: 30px; line-height: 30px; background: lightseagreen; color: #fff; }
             .easy-dialog-header h1 { position: absolute; line-height: 30px; padding-left: 20px; font-size: 14px; }
             .easy-dialog-close { position: absolute; right: 10px; font-size: 12px; text-decoration: none; color: #fff; line-height: 30px; }
-
-            .easy-dialog-content { min-height: 100px; background: #eee; color: #222; }
+            /*最终宽高需要自行设定*/
+            /*计算inner层内容的实际宽高，填充到其父层easy-dialog-content*/
+            .easy-dialog-content { height:60px; background: #eee; color: #222; overflow-y: auto; }
+            .easy-dialog-content .inner { padding: 10px; font-size: 12px; }
             .easy-dialog-footer { position: relative; text-align: right; background: lightgray; height: 30px; }
             .easy-dialog-footer p { display: inline-block; *display: inline; *zoom: 1; }
             .easy-dialog-footer button { float: left; margin-top: 3px; border: 1px solid orange; color: #666; border-radius: 3px; height: 24px; line-height: 24px; padding: 0 10px;  overflow: visible;/*for ie6*/ cursor: pointer; margin-left: 10px; _display: inline; }
@@ -19,7 +23,7 @@
         </style>
     </head>
     <body>
-        <div class="easy-dialog">
+        <!-- <div class="easy-dialog">
             <div class="easy-dialog-header">
                 <h1>弹层名</h1>
                 <a href="#" class="easy-dialog-close">关闭</a>
@@ -29,20 +33,47 @@
             </div>
             <div class="easy-dialog-footer">
                 <p>
-                    <button type="button" class="btn-confirm" disabled>确定</button>
+                    <button type="button" class="btn-confirm">确定</button>
                     <button type="button" class="btn-cancel">取消</button>
                 </p>
             </div>
+        </div> -->
+        <div class="other" style="height:900px;border:1px solid red;">
+            <button id="btn">click me</button>
         </div>
-
+        <div class="easy-dialog"></div>
         <div class="easy-dailog-filter"></div>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+        <script type="text/javascript" src="../js/common/jquery-1.8.2.js"></script>
         <script type="text/javascript" src="../js/utils/easyDialog.js"></script>
         <script type="text/javascript">
-            $('.easy-dialog').easyDialog({
-                'dContentTmp':'<p>ixixixixixixixixii</p>'
-            });
-            
+        $(function(){
+            var start=function(){
+                $('.easy-dialog').show().easyDialog({
+                    'cHeight':80,
+                    'dTitle':'测试标题',
+                    'dContentTmp':function(cont){
+                        // return '<p>lalalalalla</p>'
+                        console.log($(cont));
+                        return $.get('http://dev.moxiu.net/~xululu/moxiu/test-mx-tv/src/www/?do=Api.Show').done(function(res){
+                            $(cont).html('<p>异步回调哦</p>');
+                        }).fail(function(res){
+                            $(cont).html('<p>异步回调失败咯</p>');
+                        });
+                        /*return setTimeout(function(){
+                            $(cont).html('<p>异步回调哦</p>');
+                        },5*1000);*/
+                    },//可以为函数，也可以为html片段，但是必须返回html片段的格式
+                    'dCloseTxt':'[]',
+                    'cancel':function(){
+                        alert('cancel');
+                    },
+                    'OK':function(){
+                        window.location.href="http://www.baidu.com"
+                    }
+                });
+            };
+            $('#btn').click(start);
+        });
         </script>
     </body>
 </html>

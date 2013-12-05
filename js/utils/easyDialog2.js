@@ -7,9 +7,7 @@
  * 设置内容宽高，否则，将使用系统默认宽高
  * 自定义填充内容
  * 自定义关闭回调
- * 支持内容异步获取（这个为嘛好难）
- * 异步阻塞会产生一个问题，未响应时，内容区为空，没有高度；响应后，还得重新计算高度
- * 对于这个问题，还是自行定义内容区高度，用户体验会更好，不至于产生抖动
+ * 支持内容异步获取（这个为嘛好难的说）
  * 支持显示关闭的特效（暂时没想法）
  * example:
  *       $('.easy-dialog').easyDialog({
@@ -40,6 +38,7 @@
         '<div class="easy-dialog-footer">',
         '<p>',
         '<button type="button" class="btn-confirm">确定</button>',
+        '<button type="button" class="btn-cancel">取消</button>',
         '</p>',
         '</div>'
     ].join('');
@@ -47,8 +46,7 @@
     my.dialogFilterTmp = '<div class="easy-dailog-filter"></div>';
     // 启动渲染模板
     my.renderTmp = function(wrapper) {
-        // 先清空，再填充，避免产生重复填充的问题
-        wrapper.html('').append(my.dialogTmp);
+        wrapper.append(my.dialogTmp);
     };
 
     // 构造函数开始
@@ -83,7 +81,7 @@
         this.closeBtn = this.header.find('.easy-dialog-close');
         // 确定，取消按钮
         this.confirmBtn = this.footer.find('.btn-confirm');
-        // this.cancelBtn = this.footer.find('.btn-cancel');
+        this.cancelBtn = this.footer.find('.btn-cancel');
 
         // 获取回调
         this.cancel = settings.cancel;
@@ -102,7 +100,7 @@
         },
         // 计算弹层总体高度
         // 应当在内容填充成功以后作为回调
-        // 配置的内容宽度，高度，加上弹层本身的头部和底部高度
+        // 配置的内容宽度，高度，加上弹层本省的头部和底部高度
         getDialogModelStyle: function() {
             // 精确获取内容实际宽高
             // 弹层内容宽度
@@ -126,18 +124,27 @@
         },
         // 渲染弹层相关盒子样式
         renderDialogModel: function() {
-            var _this = this,
-                containerHeight = this.getDialogModelStyle().containerHeight;
+            var _this = this;
             /*
-             * 内容区填充
+             * 内容区填充,包含框样式定义
              */
+            this.renderContStyle();
+            this.renderContainerStyle();
+            return this;
+        },
+        // 渲染内容宽高
+        renderContStyle: function() {
+            var _this = this;
             this.cont.parent('.easy-dialog-content').css({
                 'width': _this.cWidth + 'px',
                 'height': _this.cHeight + 'px'
             });
-            /*
-             * 包含框样式定义
-             */
+            return this;
+        },
+        // 渲染包含块
+        renderContainerStyle: function() {
+            var _this = this,
+                containerHeight = this.getDialogModelStyle().containerHeight;
             this.container.css({
                 'position': 'absolute',
                 'width': _this.cWidth + 'px',
@@ -147,7 +154,6 @@
                 'marginTop': (-containerHeight / 2) + 'px',
                 'marginLeft': (-_this.cWidth / 2) + 'px'
             });
-            return this;
         },
         // 盒模型确定好后，
         // 开始进行内容渲染
@@ -160,12 +166,10 @@
             this.header.find('.easy-dialog-close').text(this.dCloseTxt);
             return this;
         },
-        setDialogContent: function(cont) {
+        setDialogContent: function() {
             if (my.isYourType(this.dContentTmp, 'function')) {
-                console.log('先走function');
-                return this.dContentTmp(cont);
+                return this.dContentTmp(wrapper);
             } else if (my.isYourType(this.dContentTmp, 'string')) {
-                console.log('string');
                 return this.dContentTmp;
             }
 
@@ -174,22 +178,16 @@
         // 确定和取消的回调函数应当在此处执行
         // 关闭不受此影响
         renderDialogContent: function() {
-            console.log(this.setDialogContent);
             var _this = this;
-
+            this.cont.html(_this.setDialogContent());
             // 判断设置内容回调
             // 若是返回串，则插入到this.cont
             // 否则传入this.cont，进行回调
-            if (my.isYourType(this.setDialogContent(), 'string')) {
-                console.log('返回的是个串啊。。。。');
-                this.cont.html(this.setDialogContent());
-            } else {
-                this.setDialogContent(this.cont);
-            }
+            
 
             // 确定，取消
             this.confirmBtn.on('click', $.proxy(_this.confirmEvent, _this));
-            // this.cancelBtn.on('click', $.proxy(_this.cancelEvent, _this));
+            this.cancelBtn.on('click', $.proxy(_this.cancelEvent, _this));
             return this;
         },
         // 事件控制
@@ -199,7 +197,7 @@
             // 使用代理，事件回调中的this已经变成了当前的事件DOM对象
             this.closeBtn.on('click', $.proxy(_this.closeEvent, _this));
 
-            $(window).on('scroll', $.proxy(_this.scrollEvent, _this))
+            $(window).on('scroll', $.proxy(_this.scrollEvent, _this));
             return this;
         },
         // 浏览器滚动条滚动事件
@@ -251,7 +249,6 @@
             var that = $(this),
                 s1 = new my[constructorFunName](that, opts);
 
-            // 若存在该实例，则不需要进行new
             if (!that.data('plugin-' + pluginName)) {
                 return that.data('plugin-' + pluginName, s1);
             }
@@ -259,9 +256,6 @@
         });
 
     };
-    /*
-    * 默认配置
-    */
     $.fn[pluginName].defaults = {
         'cWidth': 300,
         'dContentTmp': function() {

@@ -1,6 +1,7 @@
 /*
  * author:leweiming
  * gmail:xmlovecss
+ * 增加对localStorage的支持
  * 参考：https://github.com/ScottHamper/Cookies
  * 本来，设置max-age比设置expires要可靠的多
  * 但是，暂时不这么支持
@@ -8,6 +9,25 @@
 (function(window, undefined) {
     var dk = document.cookie;
     var ckUtils = {};
+    // 若是支持localStorage对象
+    // 不过，无法支持失效时间
+    // 只能提供移除
+    if (window.localStorage) {
+        var wls = window.localStorage;
+        ckUtils = {
+            get: function(key) {
+                return wls.getItem(key);
+            },
+            set: function(key, value, opts) {
+                return wls.setItem(key, value);
+            },
+            remove: function(key) {
+                return wls.removeItem(key);
+            }
+        };
+        window.easyStorage = ckUtils;
+        return;
+    }
     // 基本配置
     // 对外可更改
     ckUtils.defaults = {
@@ -40,7 +60,7 @@
     ckUtils.extendOpt = function(opts) {
         var d = this.defaults;
         // console.log(opts);
-        opts=opts||{};
+        opts = opts || {};
         return {
             expires: opts.expires || d.expires,
             path: opts.path || d.path,
@@ -85,7 +105,10 @@
         return true;
     };
     // 删除cookie
-    ckUtils.del = function(key) {
+    // 设置过期时间
+    // var t=new Date(0);
+    // t.toGMTString();
+    ckUtils.remove = function(key) {
         if (!key || !this.hasCookie(key)) {
             return false;
         } else {
@@ -95,5 +118,5 @@
         }
     };
     // 暴露接口
-    window.easyCookie = ckUtils;
+    window.easyStorage = ckUtils;
 })(window);

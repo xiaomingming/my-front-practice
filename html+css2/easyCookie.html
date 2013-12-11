@@ -3,9 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <title>测试</title>
-        <!--[if lt IE 9]>
-            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        < ![endif]-->
+        
         <style>
             * { margin: 0; padding: 0; }
             body { font: 12px/1.5 arail; }
@@ -21,16 +19,13 @@
         <script type="text/javascript" src="../js/utils/jquery-cookie.js"></script>
         <script type="text/javascript" src="../js/utils/cookie.js"></script>
         <script type="text/javascript">
-            var s=easyCookie.setCookie('ck2','xiaoqiang',{
+            var s=easyStorage.set('ck2','xiaoqiang',{
                 'expires':new Date().getTime()+10*1000
             });
-            easyCookie.setCookie('ck3','ddd')
-            $.cookie('ck1','xixixix',{expires:7});
-            /*easyCookie.setCookie('ck2','xiahong',{
-                'expires':new Date().getTime()+60*1000,
-                'path':'/',
-                'secure':true
-            });*/
+            easyStorage.set('ck3','ddd');
+            alert(easyStorage.get('ck2'));
+            easyStorage.remove('ck2');
+            alert(easyStorage.get('ck2'));
         </script>
     </body>
 </html>

@@ -65,6 +65,8 @@
         // 底部
         this.footer = container.find('.easy-dialog-footer');
 
+        // 弹层层叠值
+        this.zindex = settings.zindex;
         // 弹层标题
         this.dTitle = settings.dTitle;
         // 弹层关闭内容
@@ -98,6 +100,7 @@
                 .renderDialogContent()
                 .renderDialogTitle()
                 .renderDialogModel()
+                .renderFilterContent()
                 .eventControl();
         },
         // 计算弹层总体高度
@@ -115,7 +118,7 @@
                 footerHeight = this.footer.outerHeight(),
                 containerHeight = this.cHeight + headerHeight + footerHeight;
 
-            console.log(_this.cHeight, headerHeight, footerHeight);
+            // console.log(_this.cHeight, headerHeight, footerHeight);
 
             return {
                 headerHeight: headerHeight,
@@ -127,7 +130,8 @@
         // 渲染弹层相关盒子样式
         renderDialogModel: function() {
             var _this = this,
-                containerHeight = this.getDialogModelStyle().containerHeight;
+                containerHeight = this.getDialogModelStyle().containerHeight,
+                windowScrollTop = $(window).scrollTop();
             /*
              * 内容区填充
              */
@@ -144,9 +148,10 @@
                 'height': containerHeight + 'px',
                 'left': '50%',
                 'top': '50%',
-                'marginTop': (-containerHeight / 2) + 'px',
-                'marginLeft': (-_this.cWidth / 2) + 'px'
-            });
+                'marginTop': (-containerHeight / 2) + windowScrollTop + 'px',
+                'marginLeft': (-_this.cWidth / 2) + 'px',
+                'zIndex': _this.zindex
+            }).show();
             return this;
         },
         // 盒模型确定好后，
@@ -162,10 +167,8 @@
         },
         setDialogContent: function(cont) {
             if (my.isYourType(this.dContentTmp, 'function')) {
-                console.log('先走function');
                 return this.dContentTmp(cont);
             } else if (my.isYourType(this.dContentTmp, 'string')) {
-                console.log('string');
                 return this.dContentTmp;
             }
 
@@ -174,14 +177,12 @@
         // 确定和取消的回调函数应当在此处执行
         // 关闭不受此影响
         renderDialogContent: function() {
-            console.log(this.setDialogContent);
             var _this = this;
 
             // 判断设置内容回调
             // 若是返回串，则插入到this.cont
             // 否则传入this.cont，进行回调
             if (my.isYourType(this.setDialogContent(), 'string')) {
-                console.log('返回的是个串啊。。。。');
                 this.cont.html(this.setDialogContent());
             } else {
                 this.setDialogContent(this.cont);
@@ -191,6 +192,21 @@
             this.confirmBtn.on('click', $.proxy(_this.confirmEvent, _this));
             // this.cancelBtn.on('click', $.proxy(_this.cancelEvent, _this));
             return this;
+        },
+        // 渲染遮罩层
+        renderFilterContent: function() {
+            // 若遮罩层存在，则不进行重复插入
+            !($('.easy-dailog-filter').length) && $('body').append(my.dialogFilterTmp);
+            // 为了兼容IE6，设置遮罩层高度
+            // 高度为浮层高度和document高度中最大的
+            var filterHeight = Math.max(this.getDialogModelStyle().containerHeight, $(document).height());
+            // console.log(this.container);
+            $('.easy-dailog-filter').css('height', filterHeight + 'px').show();
+            return this;
+        },
+        // 隐藏遮罩层
+        hideFilter: function() {
+            return $('.easy-dailog-filter').hide();
         },
         // 事件控制
         eventControl: function() {
@@ -218,23 +234,25 @@
         // 按钮关闭
         // 这里要考虑，关闭按钮后，是否清空内容区，还是仅仅隐藏
         closeEvent: function() {
+            // console.log('close filter');
             this.container.hide();
+            // 若有弹层，关闭弹层
+            this.hideFilter();
         },
         // 确定事件
         // 始终会调用默认关闭
+        // 是应当先关闭，再执行回调
+        // 还是应当先执行完回调，再关闭呢
         confirmEvent: function() {
-            console.log(this);
             // 此处对于是否存在回调，要做进一步的判断
-            console.log(my.isYourType(this.OK, 'function'));
-            my.isYourType(this.OK, 'function') && this.OK();
-            console.log('here confirmEvent');
             this.closeEvent();
+            my.isYourType(this.OK, 'function') && this.OK();
+
         },
         // 取消事件
         cancelEvent: function() {
             my.isYourType(this.cancel, 'function') && this.cancel();
             // 取消是否绑定默认关闭呢。。。
-            console.log('here cancelEvent');
             this.closeEvent();
         }
     };
@@ -260,13 +278,14 @@
 
     };
     /*
-    * 默认配置
-    */
+     * 默认配置
+     */
     $.fn[pluginName].defaults = {
         'cWidth': 300,
         'dContentTmp': function() {
             return ''
         },
+        'zindex': 4,
         'cancel': function() {},
         'OK': function() {}
     };

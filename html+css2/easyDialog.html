@@ -6,7 +6,7 @@
         <style>
             body { width: 2500px; }
             * { margin: 0; padding: 0; }
-            .easy-dailog-filter { display: none; position: fixed; background: #000; opacity:.8; filter: alpha(opacity=80); width: 100%; height: 100%; z-index: 10; }
+            .easy-dailog-filter { display: none; position: fixed; _position: absolute; background: #000; opacity:.8; filter: alpha(opacity=80); width: 100%; height: 100%; z-index: 3;  left: 0; top: 0; }
             .easy-dialog { /*position: absolute; left: 50%; top: 50%;*/ width: 300px; background: #fff;  }
             .easy-dialog * { margin: 0; padding: 0; }
             .easy-dialog-header { position: relative; width: 100%; height: 30px; line-height: 30px; background: lightseagreen; color: #fff; }
@@ -41,37 +41,48 @@
         <div class="other" style="height:900px;border:1px solid red;">
             <button id="btn">click me</button>
         </div>
-        <div class="easy-dialog"></div>
+        <div id="easy-dialog" class="easy-dialog"></div>
+        <div id="easy-dialog2" class="easy-dialog"></div>
         <div class="easy-dailog-filter"></div>
         <script type="text/javascript" src="../js/common/jquery-1.8.2.js"></script>
         <script type="text/javascript" src="../js/utils/easyDialog.js"></script>
         <script type="text/javascript">
-        $(function(){
-            var start=function(){
-                $('.easy-dialog').show().easyDialog({
-                    'cHeight':80,
-                    'dTitle':'测试标题',
-                    'dContentTmp':function(cont){
+            $(function() {
+                $('#easy-dialog2').easyDialog({
+                    'cHeight': 80,
+                    'dTitle': '测试标题',
+                    // 可以传入字符串，也可以作为回调函数
+                    dContentTmp: function() {
                         // return '<p>lalalalalla</p>'
-                        console.log($(cont));
-                        return $.get('http://dev.moxiu.net/~xululu/moxiu/test-mx-tv/src/www/?do=Api.Show').done(function(res){
-                            $(cont).html('<p>异步回调哦</p>');
-                        }).fail(function(res){
-                            $(cont).html('<p>异步回调失败咯</p>');
-                            
-                        });
+                        // console.log($(cont));
+                        // return $.get('http://dev.moxiu.net/~xululu/moxiu/test-mx-tv/src/www/?do=Api.Show').done(function(res){
+                        //     $(cont).html('<p>异步回调哦</p>');
+                        // }).fail(function(res){
+                        //     $(cont).html('<p>异步回调失败咯</p>');
+
+                        // });
                         /*return setTimeout(function(){
-                            $(cont).html('<p>异步回调哦</p>');
-                        },5*1000);*/
-                    },//可以为函数，也可以为html片段，但是必须返回html片段的格式
-                    'dCloseTxt':'[]',
-                    'OK':function(){
-                        window.location.href="http://www.baidu.com"
+                                    $(cont).html('<p>异步回调哦</p>');
+                                },5*1000);*/
+                        return '<p>嘻嘻嘻嘻</p>'
+                    }, //可以为函数，也可以为html片段，但是必须返回html片段的格式
+                    'dCloseTxt': '[]',
+                    OK: function() {
+                        $('#easy-dialog').easyDialog({
+                            'cHeight': 80,
+                            'dTitle': '测试标题',
+                            // 可以传入字符串，也可以作为回调函数
+                            dContentTmp: function() {
+                                return '<p>box111111111111111111111111111</p>'
+                            }, //可以为函数，也可以为html片段，但是必须返回html片段的格式
+                            'dCloseTxt': 'close',
+                            OK: function() {
+                                
+                            }
+                        });
                     }
                 });
-            };
-            $('#btn').click(start);
-        });
+            });
         </script>
     </body>
 </html>

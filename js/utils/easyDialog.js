@@ -28,6 +28,10 @@
     my.isYourType = function(obj, type) {
         return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase() === type;
     };
+    // 判断浏览器为IE6
+    my.isIE6 = function() {
+        return $.browser.msie && ($.browser.version === '6.0');
+    };
     // 弹层模板
     my.dialogTmp = [
         '<div class="easy-dialog-header">',
@@ -81,12 +85,18 @@
         this.cWidth = Number(settings.cWidth || 0);
         // 弹层内容高度
         this.cHeight = Number(settings.cHeight || 0);
+        // 获取位置设置
+        this.pLeft = settings.pLeft;
+        this.pTop = settings.pTop;
+        this.pRight = settings.pRight;
+        this.pBottom = settings.pBottom;
         // 关闭
         this.closeBtn = this.header.find('.easy-dialog-close');
         // 确定，取消按钮
         this.confirmBtn = this.footer.find('.btn-confirm');
         // this.cancelBtn = this.footer.find('.btn-cancel');
-
+        // 是否显示遮罩层
+        this.isShowFilter = settings.isShowFilter;
         // 获取回调
         this.cancel = settings.cancel;
         this.OK = settings.OK;
@@ -100,8 +110,8 @@
                 .renderDialogContent()
                 .renderDialogTitle()
                 .renderDialogModel()
-                .renderFilterContent()
                 .eventControl();
+            this.isShowFilter && this.renderFilterContent();
         },
         // 计算弹层总体高度
         // 应当在内容填充成功以后作为回调
@@ -127,11 +137,27 @@
             }
 
         },
+        // 设置浮层的位置
+        // 这样配置灵活
+        setDialogPosition: function() {
+            if (this.pLeft === 'center') {
+                this.pLeft = '50%';
+                this.leftCenter = true;
+            }
+            if (this.pTop === 'center') {
+                this.pTop = '50%';
+                this.topCenter = true;
+            }
+        },
         // 渲染弹层相关盒子样式
         renderDialogModel: function() {
             var _this = this,
                 containerHeight = this.getDialogModelStyle().containerHeight,
-                windowScrollTop = $(window).scrollTop();
+                windowScrollTop = $(window).scrollTop(),
+                dialogStyleSettings = {}, pubSettings = {};
+
+            // 初始化浮层位置
+            this.setDialogPosition();
             /*
              * 内容区填充
              */
@@ -139,19 +165,32 @@
                 'width': _this.cWidth + 'px',
                 'height': _this.cHeight + 'px'
             });
-            /*
-             * 包含框样式定义
-             */
-            this.container.css({
-                'position': 'absolute',
+            // 自定义位置配置
+            dialogStyleSettings.left = this.pLeft;
+            dialogStyleSettings.right = this.pRight;
+            dialogStyleSettings.bottom = this.pBottom;
+            dialogStyleSettings.top = this.pTop;
+
+            // 若位置设置都不存在
+            // 则使用居中
+            if (!dialogStyleSettings.left && !dialogStyleSettings.right && !dialogStyleSettings.top && !dialogStyleSettings.bottom) {
+                dialogStyleSettings.left = '50%';
+                dialogStyleSettings.top = '50%';
+                this.topCenter = true;
+                this.leftCenter = true;
+            }
+            // 公共样式配置
+            pubSettings = {
+                'position': my.isIE6() ? 'absolute' : 'fixed',
                 'width': _this.cWidth + 'px',
                 'height': containerHeight + 'px',
-                'left': '50%',
-                'top': '50%',
-                'marginTop': (-containerHeight / 2) + windowScrollTop + 'px',
-                'marginLeft': (-_this.cWidth / 2) + 'px',
+                'marginTop': _this.topCenter ? ((-containerHeight / 2) + (my.isIE6() ? windowScrollTop : 0) + 'px') : '0',
+                'marginLeft': _this.leftCenter ? ((-_this.cWidth / 2) + 'px') : '0',
                 'zIndex': _this.zindex
-            }).show();
+            };
+            dialogStyleSettings = $.extend(dialogStyleSettings, pubSettings);
+            // 
+            this.container.css(dialogStyleSettings).show();
             return this;
         },
         // 盒模型确定好后，
@@ -204,9 +243,15 @@
             $('.easy-dailog-filter').css('height', filterHeight + 'px').show();
             return this;
         },
+        // 隐藏弹层
+        hideDialog: function() {
+            this.container.hide();
+            return this;
+        },
         // 隐藏遮罩层
         hideFilter: function() {
-            return $('.easy-dailog-filter').hide();
+            $('.easy-dailog-filter').hide();
+            return this;
         },
         // 事件控制
         eventControl: function() {
@@ -215,7 +260,9 @@
             // 使用代理，事件回调中的this已经变成了当前的事件DOM对象
             this.closeBtn.on('click', $.proxy(_this.closeEvent, _this));
 
-            $(window).on('scroll', $.proxy(_this.scrollEvent, _this))
+            // 滚动滚动条时，调整弹层位置
+            // 只针对IE6
+            my.isIE6() && $(window).on('scroll', $.proxy(_this.scrollEvent, _this))
             return this;
         },
         // 浏览器滚动条滚动事件
@@ -235,7 +282,7 @@
         // 这里要考虑，关闭按钮后，是否清空内容区，还是仅仅隐藏
         closeEvent: function() {
             // console.log('close filter');
-            this.container.hide();
+            this.hideDialog();
             // 若有弹层，关闭弹层
             this.hideFilter();
         },
@@ -275,13 +322,13 @@
             }
 
         });
-
     };
     /*
      * 默认配置
      */
     $.fn[pluginName].defaults = {
         'cWidth': 300,
+        'isShowFilter': true,
         'dContentTmp': function() {
             return ''
         },

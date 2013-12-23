@@ -81,7 +81,9 @@
         <script type="text/javascript">
             $(function(){
                 var tb=$('#calender tbody');
-                console.log(myCalender.getMonthDays(2013,2));
+                var str=myCalender.renderMonthOfDays(2013,2);
+                console.log(str,myCalender.getMonthDays(2013,2));
+                $('#calender tbody').append(myCalender.renderMonthOfDays(2013,2));
             });
         </script>
     </body>

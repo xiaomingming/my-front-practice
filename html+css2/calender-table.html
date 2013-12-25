@@ -47,18 +47,20 @@
             .calender { width: 100%; }
             .calender table { width: 100%; }
             .calender table tr td { text-align: center; }
+            .calender-header .date-title th { cursor: pointer; }
             .calender table thead tr { background: brown; color: #fff; height: 30px; }
             .calender table thead th { line-height: 30px; border: 1px solid #aaa; }
             .calender table tbody td { line-height: 30px; background: #eee; border: 1px solid #aaa; }
+            .calender table tbody td.current { background: #fff; color: #333; }
         </style>
     </head>
     <body>
         <div id="calender" class="calender">
-            <table>
+            <!-- <table class="date-panel">
                 <thead>
                     <tr class="date-title">
                         <th class="prev"><<</th>
-                        <th colspan="5" class="format-date">2013/12</th>
+                        <th colspan="5" class="format-date"></th>
                         <th class="next">>></th>
                     </tr>
                     <tr class="week-title">
@@ -74,16 +76,13 @@
                 <tbody>
                     
                 </tbody>
-            </table>
+            </table> -->
         </div>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
         <script type="text/javascript" src="../js/utils/calender.js"></script>
         <script type="text/javascript">
             $(function(){
-                var tb=$('#calender tbody');
-                var str=myCalender.renderMonthOfDays(2013,2);
-                console.log(str,myCalender.getMonthDays(2013,2));
-                $('#calender tbody').append(myCalender.renderMonthOfDays(2013,2));
+                myCalender.setDaysPanelCont(2013,10);
             });
         </script>
     </body>

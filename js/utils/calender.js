@@ -1,13 +1,19 @@
 /*
- * 先尝试写一个日历
+ * author:leweiming
+ * gmail:xmlovecss 艾特 gmail dot com
+ * 简单的日历插件
+ * 个人练习
+ * example:
  */
-(function($, window, undefined) {
+
+;
+(function(window, $, undefined) {
     // $(function(){
     var myCalender = {};
     // 日历模板
     // 公用模板头
     myCalender.tableTmp = [
-        '<table><thead class="calender-header">',
+        '<table><thead class="easy-calender-header">',
         '</thead>',
         '</table>'
     ];
@@ -50,6 +56,25 @@
         '<tbody class="tenYears-panel">',
         '</tbody>'
     ];
+    // 格式化年月日
+    myCalender.formatDate = function(date, formatStr) {
+        var fomatedStr = '';
+        switch (formatStr) {
+            case 'yy/mm/dd':
+                break;
+        }
+        return formated;
+    };
+    // 获取当前年月日
+    myCalender.getNow = function() {
+        var d = new Date();
+        return {
+            year: d.getFullYear(),
+            month: d.getMonth() + 1,
+            date: d.getDate(),
+            day: d.getDay()
+        }
+    };
     //获取每月开始星期
     myCalender.getMonthStartDay = function(year, month) {
         return new Date(year, month - 1, 1).getDay();
@@ -60,31 +85,7 @@
     };
     // 获取每月天数
     myCalender.getMonthDays = function(year, month) {
-        var days = 0;
-        switch (month) {
-            case 1:
-            case 3:
-            case 5:
-            case 7:
-            case 8:
-            case 10:
-            case 12:
-                days = 31;
-                break;
-            case 4:
-            case 6:
-            case 9:
-            case 11:
-                days = 30;
-                break;
-            case 2:
-                days = (this.isLeapYear(year)) ? 29 : 28;
-                break;
-            default:
-                days = 0;
-                break;
-        }
-        return days;
+        return [31,(this.isLeapYear(year)) ? 29 : 28,31,30,31,30,31,31,30,31,30,31][month-1];
     };
     // 渲染年份
     myCalender.renderYears = function(year, month) {
@@ -159,7 +160,7 @@
                     sRows += '<td>' + (prevStartDay++) + '</td>';
                 } else if (days < thisMonthOfDays) {
                     // 当前月
-                    if (days === date) {
+                    if (days + 1 === date) {
                         sRows += '<td class="current">' + (++days) + '</td>';
                     } else {
                         sRows += '<td>' + (++days) + '</td>';
@@ -173,14 +174,16 @@
         return sRows;
     };
     // 天天面板
-    myCalender.setDaysPanelCont = function(year, month) {
+    myCalender.setDaysPanelCont = function(year, month, date) {
         var prev = month,
             next = month;
+        year = !year ? this.getNow().year : year;
+        month = !month ? this.getNow().month : month;
         var tablePanel = this.tableTmp[0];
         this.calenderHeaderTmp[2] = '<th colspan="5" class="date-switch">' + year + '/' + month + '</th>';
         tablePanel += this.calenderHeaderTmp.join('') + this.daysHeaderTmp.join('') + this.tableTmp[1];
         tablePanel += this.daysPanelTmp[0] + this.renderMonthOfDays(year, month) + this.daysPanelTmp[1] + this.tableTmp[2];
-        $('#calender').html(tablePanel);
+        /*$('#calender').html(tablePanel);
         $('#calender thead .prev').off('click').on('click', function() {
             // 更改显示年月
             prev--;
@@ -201,7 +204,7 @@
         });
         $('#calender thead .date-switch').off('click').on('click', function() {
             myCalender.setMonthsPanelCont(year);
-        });
+        });*/
         return tablePanel;
     };
     // 月月面板
@@ -211,7 +214,7 @@
         tablePanel += this.calenderHeaderTmp.join('') + this.tableTmp[1];
         tablePanel += this.monthsPanelTmp[0] + this.renderMonths(year) + this.monthsPanelTmp[1] + this.tableTmp[2];
         // console.log(tablePanel);
-        $('#calender').html(tablePanel);
+        /*$('#calender').html(tablePanel);
         $('#calender thead .prev').off('click').on('click', function() {
             // 更改显示年月
             year -= 1;
@@ -224,7 +227,7 @@
         });
         $('#calender thead .date-switch').off('click').on('click', function() {
             myCalender.setYearsPanelCont(year);
-        });
+        });*/
         return tablePanel;
     };
     // 获取年范围
@@ -256,6 +259,92 @@
         });
         return tablePanel;
     };
+    // 对外暴露该接口
     window.myCalender = myCalender;
-    // });
-})(jQuery, window);
+    // 
+    var my = {},
+        constructorFunName = 'EasyCalender',
+        pluginName = 'easyCalender';
+
+    my[constructorFunName] = function(dateText, options) {
+        var settings = $.extend({}, $.fn[pluginName].defaults, options);
+        this.dateInput = dateText;
+        // 初始化
+        this.init();
+    };
+    my[constructorFunName].prototype = {
+        constructor: my[constructorFunName],
+        // 滚动初始化
+        init: function() {
+            var self = this;
+            this.dateInput.on('click', function(e){
+                self.renderDateTable(e);
+            }).on('blur',function(e){    
+                // self.calenderContainer.hide();
+            });
+            $('body').on('click',function(e){
+                var $target=$(e.target);
+                console.log($target.attr('id')==self.dateInput.attr('id'));
+                if($target.attr('id')!==self.dateInput.attr('id')){
+
+                    self.calenderContainer.hide();
+                }
+            });
+            return this;
+        },
+        // 插入显示表格
+        renderDateTable: function(e) {
+            if (!$('.easy-calender').length) {
+                $('body').append('<div class="easy-calender"></div>');
+                this.calenderContainer=$('.easy-calender');
+            }
+            this.setDateTablePosition(e);
+            $('.easy-calender').html(myCalender.setDaysPanelCont()).show();
+        },
+        // 设置包含块的位置
+        setDateTablePosition: function(e) {
+            var pos=this.getDateInputPosition(),
+            model=this.getDateInputBoxModel();
+            $('.easy-calender').css({
+                'left':pos.left+'px',
+                'top':pos.top+model.height+4+'px'
+            });
+            return this;
+        },
+        // 获取日期输入框的位置
+        getDateInputPosition:function(){
+            var pos=this.dateInput.offset();
+            return pos;
+        },
+        getDateInputBoxModel:function(){
+            return {
+                width:this.dateInput.outerWidth(),
+                height:this.dateInput.outerHeight()
+            }
+        }
+
+    };
+    $.fn[pluginName] = function(opts) {
+        // 可初始化并自定义属性及函数
+        if (typeof opts === 'string') {
+            if (opts === 'api') {
+                return $(this).data('plugin-' + pluginName);
+            } else {
+                throw new Error('error string ,here supports "api" only!');
+            }
+        }
+        return this.each(function() {
+            var that = $(this),
+                s1 = new my[constructorFunName](that, opts);
+
+            if (!that.data('plugin-' + pluginName)) {
+                return that.data('plugin-' + pluginName, s1);
+            }
+
+        });
+
+    };
+    $.fn[pluginName].defaults = {
+
+    };
+})(window, jQuery);

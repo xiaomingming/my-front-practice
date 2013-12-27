@@ -7,82 +7,24 @@
             <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
         <style type="text/css">
-        /*-----reset.css---*/
-        html, body, applet, object, iframe, table, caption, tbody, tfoot, thead, tr, th, td, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, dl, dt, dd, ol, ul, li, fieldset, form, label, legend { padding: 0; margin: 0; }
-        :focus { outline: 0; }
-        body { background: #fff; color: #999; font: 12px/1.5 "微软雅黑",arail; }
-        a { text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        ol, ul { list-style: none; }
-        table { border-collapse: collapse; border-spacing: 0; table-layout: fixed; }
-        blockquote:before, blockquote:after, q:before, q:after { content: ""; }
-        blockquote, q { quotes: "" ""; }
-        a img { border: 0; }/*for ie*/
-        input,button { _border: 0 none; } /* for IE6 */
-        /* 更正按钮基于border-box的默认盒模式 */
-        button, input[type="text"], input[type="button"], input[type="submit"], input[type="password"], input[type="email"], input[type="url"] { border: 0 none; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; box-sizing: content-box; }
-        input, textarea, select { -webkit-outline: none; font-family: arial, simsun; }
-        section, header, footer, hgroup, article, nav, menu { display: block; }
-        /*table*/
-        table { table-layout: fixed; border-spacing: 0; border-collapse: collapse; }
-        
-        /* 浮动清除 */
-        .clearfix:after { content:'.'; display:block; clear:both; height: 0; visibility:hidden; font-size:0; }
-        .clearfix { *zoom: 1; }
-        /* 原子类 */
-        /*显示隐藏*/
-        .show { display: block; }
-        .hide { display: none; }
-        /*定位*/
-        .fl { float: left; }
-        .fr { float: right; }
-        .pr { position: relative; }
-        .pa { position: absolute; }
-        /*边距类*/
-        .mt10 { margin-top: 10px; }
-        .mt40 { margin-top: 40px; }
-        .mt56 { margin-top: 56px; }
-        </style>
-        <style type="text/css">
-            .calender { width: 100%; }
-            .calender table { width: 100%; }
-            .calender table tr td { text-align: center; }
-            .calender-header .date-title th { cursor: pointer; }
-            .calender table thead tr { background: brown; color: #fff; height: 30px; }
-            .calender table thead th { line-height: 30px; border: 1px solid #aaa; }
-            .calender table tbody td { line-height: 30px; background: #eee; border: 1px solid #aaa; }
-            .calender table tbody td.current { background: #fff; color: #333; }
+            .easy-calender { display: none; position: absolute; width: 242px; }
+            .easy-calender table { width: 100%; border-collapse: collapse; border-spacing: 0; }
+            .easy-calender table tr td { text-align: center; cursor: pointer; }
+            .easy-calender-header .date-title th { cursor: pointer; }
+            .easy-calender table thead tr { background: brown; color: #fff; height: 30px; }
+            .easy-calender table thead th { line-height: 30px; border: 1px solid #aaa; }
+            .easy-calender table tbody td { line-height: 30px; background: #eee; border: 1px solid #aaa; }
+            .easy-calender table tbody td.current { background: peachpuff; color: #333; }
+            .easy-calender-input { margin: 0; border: 1px solid orange; width: 12em; height: 22px; line-height: 22px; }
         </style>
     </head>
     <body>
-        <div id="calender" class="calender">
-            <!-- <table class="date-panel">
-                <thead>
-                    <tr class="date-title">
-                        <th class="prev"><<</th>
-                        <th colspan="5" class="format-date"></th>
-                        <th class="next">>></th>
-                    </tr>
-                    <tr class="week-title">
-                        <th>日</th>
-                        <th>一</th>
-                        <th>二</th>
-                        <th>三</th>
-                        <th>四</th>
-                        <th>五</th>
-                        <th>六</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                </tbody>
-            </table> -->
-        </div>
+        <input type="text" id="start" class="easy-calender-input" style="margin-left: 100px;" />
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
         <script type="text/javascript" src="../js/utils/calender.js"></script>
         <script type="text/javascript">
             $(function(){
-                myCalender.setDaysPanelCont(2013,10);
+                $('#start').easyCalender();
             });
         </script>
     </body>

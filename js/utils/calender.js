@@ -120,6 +120,7 @@
             sRows = '<tbody>',
             prevYear = year,
             prevMonth = month - 1;
+        date = Number(date);
         if (!prevMonth) {
             prevYear = year - 1;
             prevMonth = 12;
@@ -139,20 +140,21 @@
 
                 if (i === 0 && j < thisMonthStartDay) {
                     // 前一个月
-                    sRows += '<td>' + (prevStartDay++) + '</td>';
+                    sRows += '<td class="prev-days">' + (prevStartDay++) + '</td>';
                 } else if (days < thisMonthOfDays) {
                     // 当前月
                     if (days + 1 === date) {
-                        sRows += '<td class="current">' + (++days) + '</td>';
+                        sRows += '<td class="current-days current">' + (++days) + '</td>';
                     } else {
-                        sRows += '<td>' + (++days) + '</td>';
+                        sRows += '<td class="current-days">' + (++days) + '</td>';
                     }
                 } else {
-                    sRows += '<td>' + (nextdays++) + '</td>';
+                    sRows += '<td class="next-days">' + (nextdays++) + '</td>';
                 }
             }
-            sRows += '</tbody></tr>';
+            sRows += '</tr>';
         }
+        sRows += '</tbody>';
         return sRows;
     };
     // 天天面板
@@ -245,11 +247,18 @@
         blurEvent: function(self) {
             // console.log('blur event');
             $('body').off('click').on('click', function(e) {
-                console.log($(e.target).parents('table').hasClass('.easy-calender-table'));
-                if (!$(e.target).parents('table').hasClass('.easy-calender-table')) {
+                if (!$(e.target).parents('table').hasClass('easy-calender-table')) {
                     self.calenderContainer.hide();
                 }
             });
+        },
+        // 日期格式化
+        formatInputDate: function(formatStr, dateObj) {
+            /*var formated = '';
+            switch (formatStr) {
+                case 'yyyy/mm/dd':
+                    formated =
+            }*/
         },
         inputEvent: function() {
             var self = this;
@@ -259,26 +268,16 @@
                 self.renderDateTable(e);
                 // here should bind all events of table calender
                 self.blurEvent(self);
-                this.daysCalender = self.calenderContainer.find('.calender-days');
-                this.monthsCalender = self.calenderContainer.find('.calender-months');
-                this.yearsCalender = self.calenderContainer.find('.calender-years');
-            })
-            /*self.dateInput.on('blur', function() {
-                var that = $(this),
-                    daysCalender = self.calenderContainer.find('.calender-days'),
-                    daysCalenderHead = daysCalender.find('thead .date-switch');
-                var currentYear = daysCalenderHead.data('year'),
-                    currentMonth = daysCalenderHead.data('month'),
-                    currentDate = daysCalender.find('tbody td.current').text();
-                
-                that.val(currentYear+'/'+currentMonth+'/'+currentDate);
-            });*/
+                self.daysCalender = self.calenderContainer.find('.calender-days');
+                self.monthsCalender = self.calenderContainer.find('.calender-months');
+                self.yearsCalender = self.calenderContainer.find('.calender-years');
+                self.daysEvent(self);
+                self.monthsEvent(self);
+            });
             return this;
         },
-        daysEvent: function() {
-            var self = this;
-            this.daysCalender.off('click').on('click', 'thead .date-title th', function() {
-                // self.blurEvent(self);
+        daysEvent: function(self) {
+            self.daysCalender.on('click', 'thead .date-title th', function() {
                 var that = $(this),
                     dateSwitch = that.siblings('.date-switch'),
 
@@ -286,26 +285,62 @@
                     thisYear = dateSwitch.data('year');
 
                 if (that.hasClass('prev')) {
-                    thisMonth--;
-                    if (thisMonth <= 0) {
-                        thisMonth = 12;
-                        thisYear -= 1;
-                    }
-                    self.calenderContainer.find('.calender-days').html(myCalender.setDaysPanelCont(thisYear, thisMonth));
+                    self.prevMonth(thisYear, thisMonth);
+                    self.calenderContainer.show();
                 } else if (that.hasClass('next')) {
-                    thisMonth++;
-                    if (thisMonth > 12) {
-                        thisMonth = 1;
-                        thisYear += 1;
-                    }
-                    self.calenderContainer.find('.calender-days').html(myCalender.setDaysPanelCont(thisYear, thisMonth));
+                    self.nextMonth(thisYear, thisMonth);
+                    self.calenderContainer.show();
                 }
             });
             // tbody事件绑定
-            this.daysCalender.on('click', 'table tbody td', function() {
-                self.calenderContainer.find('table tbody td').removeClass('current');
-                $(this).addClass('current');
+            self.daysCalender.on('click', 'table tbody td', function() {
+                var dateSwitch = $(this).parents('table').find('thead .date-switch'),
+                    thisMonth = dateSwitch.data('month'),
+                    thisYear = dateSwitch.data('year'),
+                    selectedDate = $(this).text(),
+                    prevMonthObj, nextMonthObj;
+                if ($(this).hasClass('prev-days')) {
+                    prevMonthObj = self.prevMonth(thisYear, thisMonth, selectedDate);
+                    self.calenderContainer.show();
+                    self.dateInput.val(prevMonthObj.year + '/' + prevMonthObj.month + '/' + selectedDate);
+                } else if ($(this).hasClass('next-days')) {
+                    nextMonthObj = self.nextMonth(thisYear, thisMonth, selectedDate);
+                    self.calenderContainer.show();
+                    self.dateInput.val(nextMonthObj.year + '/' + nextMonthObj.month + '/' + selectedDate);
+                } else {
+                    self.calenderContainer.find('table tbody td').removeClass('current');
+                    $(this).addClass('current');
+                    self.dateInput.val(thisYear + '/' + thisMonth + '/' + selectedDate);
+                }
             });
+        },
+        prevMonth: function(year, month, date) {
+            month--;
+            if (month <= 0) {
+                month = 12;
+                year -= 1;
+            }
+            this.daysCalender.html(myCalender.setDaysPanelCont(year, month, date));
+            return {
+                year: year,
+                month: month,
+                date: date
+            }
+            // this.calenderContainer.show();
+        },
+        nextMonth: function(year, month, date) {
+            month++;
+            if (month > 12) {
+                month = 1;
+                year += 1;
+            }
+            this.daysCalender.html(myCalender.setDaysPanelCont(year, month, date));
+            return {
+                year: year,
+                month: month,
+                date: date
+            }
+            // this.calenderContainer.show();
         },
         monthsEvent: function() {
 
@@ -325,12 +360,12 @@
                 ].join('');
                 $('body').append(tmp);
                 this.calenderContainer = $('.easy-calender');
+                $('.easy-calender').find('.calender-days').html(myCalender.setDaysPanelCont());
+                $('.easy-calender').find('.calender-months').html(myCalender.setMonthsPanelCont());
+                $('.easy-calender').find('.calender-years').html(myCalender.setYearsPanelCont());
             }
             this.setDateTablePosition(e);
-            console.log(myCalender.setDaysPanelCont());
-            $('.easy-calender').find('.calender-days').html(myCalender.setDaysPanelCont());
-            $('.easy-calender').find('.calender-months').html(myCalender.setMonthsPanelCont());
-            $('.easy-calender').find('.calender-years').html(myCalender.setYearsPanelCont());
+
             $('.easy-calender').show();
         },
         // 设置包含块的位置
@@ -376,6 +411,6 @@
 
     };
     $.fn[pluginName].defaults = {
-
+        'dateFormat': 'yyyy/mm/dd'
     };
 })(window, jQuery);

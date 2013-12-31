@@ -50,15 +50,6 @@
             this.inputEvent();
             return this;
         },
-        // 格式化年月日
-        formatDate: function(date, formatStr) {
-            var fomatedStr = '';
-            switch (formatStr) {
-                case 'yy/mm/dd':
-                    break;
-            }
-            return formated;
-        },
         // 获取当前年月日
         getNow: function() {
             var d = new Date();
@@ -261,26 +252,32 @@
             // 日历显示和隐藏
             me.dateInput.on('click', function(e) {
                 e.stopPropagation();
-                me.renderDateTable(e);
-                // here should bind all events of table calender
-                me.blurEvent.call(me);
-                me.daysCalender = me.calenderContainer.find('.calender-days');
-                me.monthsCalender = me.calenderContainer.find('.calender-months');
-                me.yearsCalender = me.calenderContainer.find('.calender-years');
-                me.daysEvent.call(me);
-                me.monthsEvent.call(me);
-                me.yearsEvent.call(me);
+                me.startRender();
             });
             return this;
+        },
+        startRender: function() {
+            var me = this;
+            me.renderDateTable();
+            // here should bind all events of table calender
+            me.blurEvent.call(me);
+            me.daysCalender = me.calenderContainer.find('.calender-days');
+            me.monthsCalender = me.calenderContainer.find('.calender-months');
+            me.yearsCalender = me.calenderContainer.find('.calender-years');
+            me.daysEvent.call(me);
+            me.monthsEvent.call(me);
+            me.yearsEvent.call(me);
         },
         daysEvent: function() {
             var me = this;
             me.daysCalender.on('click', 'thead .date-title th', function() {
                 var that = $(this),
-                    dateSwitch = that.siblings('.date-switch'),
+                    dateSwitch = that.siblings('.date-switch');
 
-                    thisMonth = dateSwitch.data('month'),
-                    thisYear = dateSwitch.data('year');
+                thisMonth = dateSwitch.data('month'),
+                thisYear = dateSwitch.data('year');
+                // thisMonth = me.calenderContainer.data().month;
+                // thisYear = me.calenderContainer.data().year;
 
                 if (that.hasClass('prev')) {
                     me.prevMonth(thisYear, thisMonth);
@@ -310,6 +307,7 @@
                 } else {
                     me.calenderContainer.find('table tbody td').removeClass('current');
                     $(this).addClass('current');
+                    // me.rememberDate(thisYear, thisMonth, selectedDate);
                     me.dateInput.val(me.formatInputDate(me.dateFormat, {
                         year: thisYear,
                         month: thisMonth,
@@ -324,6 +322,7 @@
                 month = 12;
                 year -= 1;
             }
+            // this.rememberDate(year, month, date);
             this.daysCalender.html(this.setDaysPanelCont(year, month, date));
             return {
                 year: year,
@@ -338,6 +337,7 @@
                 month = 1;
                 year += 1;
             }
+            // this.rememberDate(year, month, date);
             this.daysCalender.html(this.setDaysPanelCont(year, month, date));
             return {
                 year: year,
@@ -374,8 +374,17 @@
         yearsEvent: function() {
 
         },
+        rememberDate: function(year, month, date) {
+            var me = this;
+            dateData = this.calenderContainer.data({
+                year: year || me.getNow().year,
+                month: month || me.getNow().month,
+                date: date || me.getNow().date
+            });
+            return dateData;
+        },
         // 插入显示表格
-        renderDateTable: function(e) {
+        renderDateTable: function() {
             var tmp = [''];
             if (!$('.easy-calender').length) {
                 tmp = ['<div class="easy-calender">',
@@ -386,17 +395,18 @@
                 ].join('');
                 $('body').append(tmp);
                 this.calenderContainer = $('.easy-calender');
+                this.rememberDate();
                 this.calenderContainer.find('.calender-days').html(this.setDaysPanelCont());
                 this.calenderContainer.find('.calender-months').html(this.setMonthsPanelCont());
                 this.calenderContainer.find('.calender-years').html(this.setYearsPanelCont());
-                
+
             }
-            this.setDateTablePosition(e);
+            this.setDateTablePosition();
 
             $('.easy-calender').show().find('.calender-days').show().siblings('div').hide();
         },
         // 设置包含块的位置
-        setDateTablePosition: function(e) {
+        setDateTablePosition: function() {
             var pos = this.getDateInputPosition(),
                 model = this.getDateInputBoxModel();
             $('.easy-calender').css({

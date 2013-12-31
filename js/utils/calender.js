@@ -234,6 +234,7 @@
     my[constructorFunName] = function(dateText, options) {
         var settings = $.extend({}, $.fn[pluginName].defaults, options);
         this.dateInput = dateText;
+        this.dateFormat = settings.dateFormat;
         // 初始化
         this.init();
     };
@@ -244,40 +245,58 @@
             this.inputEvent();
             return this;
         },
-        blurEvent: function(self) {
-            // console.log('blur event');
+        blurEvent: function() {
+            var me = this;
             $('body').off('click').on('click', function(e) {
                 if (!$(e.target).parents('table').hasClass('easy-calender-table')) {
-                    self.calenderContainer.hide();
+                    me.calenderContainer.hide();
                 }
             });
         },
         // 日期格式化
         formatInputDate: function(formatStr, dateObj) {
-            /*var formated = '';
-            switch (formatStr) {
-                case 'yyyy/mm/dd':
-                    formated =
-            }*/
+            // dateObj={year:year,month:month,date:date}
+            // default format: yyyy/m/d
+            var formated = '',
+                conactChar = '';
+            formatStr = formatStr.toLowerCase();
+
+            if (formatStr.match(/yy/g).length === 1) {
+                dateObj.year += '';
+                dateObj.year = dateObj.year.substring(dateObj.year.length - 2);
+            }
+            if (formatStr.indexOf('mm') !== -1) {
+                (Number(dateObj.month) < 10) && (dateObj.month = '0' + dateObj.month);
+            }
+            if (formatStr.indexOf('dd') !== -1) {
+                (Number(dateObj.date) < 10) && (dateObj.date = '0' + dateObj.date);
+            }
+            if (formatStr.indexOf('/') !== -1) {
+                conactChar = '/';
+            } else if (formatStr.indexOf('-') !== -1) {
+                conactChar = '-';
+            }
+            return dateObj.year + conactChar + dateObj.month + conactChar + dateObj.date;
         },
         inputEvent: function() {
-            var self = this;
+            var me = this;
             // 日历显示和隐藏
-            self.dateInput.on('click', function(e) {
+            me.dateInput.on('click', function(e) {
                 e.stopPropagation();
-                self.renderDateTable(e);
+                me.renderDateTable(e);
                 // here should bind all events of table calender
-                self.blurEvent(self);
-                self.daysCalender = self.calenderContainer.find('.calender-days');
-                self.monthsCalender = self.calenderContainer.find('.calender-months');
-                self.yearsCalender = self.calenderContainer.find('.calender-years');
-                self.daysEvent(self);
-                self.monthsEvent(self);
+                me.blurEvent.call(me);
+                me.daysCalender = me.calenderContainer.find('.calender-days');
+                me.monthsCalender = me.calenderContainer.find('.calender-months');
+                me.yearsCalender = me.calenderContainer.find('.calender-years');
+                me.daysEvent.call(me);
+                me.monthsEvent.call(me);
             });
             return this;
         },
-        daysEvent: function(self) {
-            self.daysCalender.on('click', 'thead .date-title th', function() {
+        daysEvent: function() {
+            var me = this;
+            me.daysCalender.on('click', 'thead .date-title th', function() {
                 var that = $(this),
                     dateSwitch = that.siblings('.date-switch'),
 
@@ -285,32 +304,36 @@
                     thisYear = dateSwitch.data('year');
 
                 if (that.hasClass('prev')) {
-                    self.prevMonth(thisYear, thisMonth);
-                    self.calenderContainer.show();
+                    me.prevMonth(thisYear, thisMonth);
+                    me.calenderContainer.show();
                 } else if (that.hasClass('next')) {
-                    self.nextMonth(thisYear, thisMonth);
-                    self.calenderContainer.show();
+                    me.nextMonth(thisYear, thisMonth);
+                    me.calenderContainer.show();
                 }
             });
             // tbody事件绑定
-            self.daysCalender.on('click', 'table tbody td', function() {
+            me.daysCalender.on('click', 'table tbody td', function() {
                 var dateSwitch = $(this).parents('table').find('thead .date-switch'),
                     thisMonth = dateSwitch.data('month'),
                     thisYear = dateSwitch.data('year'),
                     selectedDate = $(this).text(),
                     prevMonthObj, nextMonthObj;
                 if ($(this).hasClass('prev-days')) {
-                    prevMonthObj = self.prevMonth(thisYear, thisMonth, selectedDate);
-                    self.calenderContainer.show();
-                    self.dateInput.val(prevMonthObj.year + '/' + prevMonthObj.month + '/' + selectedDate);
+                    prevMonthObj = me.prevMonth(thisYear, thisMonth, selectedDate);
+                    me.calenderContainer.show();
+                    me.dateInput.val(me.formatInputDate(me.dateFormat, prevMonthObj));
                 } else if ($(this).hasClass('next-days')) {
-                    nextMonthObj = self.nextMonth(thisYear, thisMonth, selectedDate);
-                    self.calenderContainer.show();
-                    self.dateInput.val(nextMonthObj.year + '/' + nextMonthObj.month + '/' + selectedDate);
+                    nextMonthObj = me.nextMonth(thisYear, thisMonth, selectedDate);
+                    me.calenderContainer.show();
+                    me.dateInput.val(me.formatInputDate(me.dateFormat, nextMonthObj));
                 } else {
-                    self.calenderContainer.find('table tbody td').removeClass('current');
+                    me.calenderContainer.find('table tbody td').removeClass('current');
                     $(this).addClass('current');
-                    self.dateInput.val(thisYear + '/' + thisMonth + '/' + selectedDate);
+                    me.dateInput.val(me.formatInputDate(me.dateFormat, {
+                        year: thisYear,
+                        month: thisMonth,
+                        date: selectedDate
+                    }));
                 }
             });
         },
@@ -411,6 +434,6 @@
 
     };
     $.fn[pluginName].defaults = {
-        'dateFormat': 'yyyy/mm/dd'
+        'dateFormat': 'yyyy/m/d'
     };
 })(window, jQuery);

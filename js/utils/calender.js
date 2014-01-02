@@ -12,7 +12,7 @@
         constructorFunName = 'EasyCalender',
         pluginName = 'easyCalender';
 
-    my[constructorFunName] = function(dateText, options) {
+    my[constructorFunName] = function(dateEle, options) {
         var settings = $.extend({}, $.fn[pluginName].defaults, options);
         this.tableTmp = [
             '<table class="easy-calender-table"><thead class="easy-calender-header">',
@@ -38,8 +38,10 @@
             '<th>六</th>',
             '</tr>'
         ];
-        this.dateInput = dateText;
+        this.type = settings.type;
+        this.dateInput = dateEle;
         this.dateFormat = settings.dateFormat;
+
         // 初始化
         this.init();
     };
@@ -47,7 +49,9 @@
         constructor: my[constructorFunName],
         // 滚动初始化
         init: function() {
-            this.inputEvent();
+            var me = this;
+            this.inputEvent().bodyEvent();
+            this.startRender();
             return this;
         },
         // 获取当前年月日
@@ -71,6 +75,44 @@
         // 获取每月天数
         getMonthDays: function(year, month) {
             return [31, (this.isLeapYear(year)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1];
+        },
+        // 获取当前月份面板中的日期对象
+        // 包括前一个月尾，当前月份，下一个月的开头
+        getPanelDates: function(year, month, date) {
+            // year,month,date需要是number类型
+            // 得考虑下，如何在调用传参的源头进行转换
+            var prevMonth = month - 1,
+                prevYear = year;
+            // 对前一个月的判断
+            if (!prevMonth) {
+                prevYear = year - 1;
+                prevMonth = 12;
+            }
+            // 获取前一个月，当前月份的天数
+            var prevMonthOfDays = this.getMonthDays(prevYear, prevMonth),
+                thisMonthOfDays = this.getMonthDays(year, month),
+                thisMonthStartDate = this.getMonthStartDay(year, month) ? this.getMonthStartDay(year, month) : 7, //获取本月是星期几，若是周日，则上个月的日期天数为7天
+                prevStartDate = prevMonthOfDays - thisMonthStartDate + 1; //前一个月的开始日子
+
+            var prevMonthDaysArr = [],
+                thisMonthDaysArr = [],
+                nextMonthDaysArr = [];
+            for (; prevStartDate <= prevMonthOfDays; prevStartDate++) {
+                prevMonthDaysArr.push(prevStartDate);
+            }
+            for (var i = 1; i <= thisMonthOfDays; i++) {
+                thisMonthDaysArr.push(i);
+            }
+            for (var i = 1, j = 42 - thisMonthOfDays - thisMonthStartDate; i <= j; i++) {
+                nextMonthDaysArr.push(i);
+            }
+            var dates = prevMonthDaysArr.concat(thisMonthDaysArr).concat(nextMonthDaysArr);
+            return {
+                prevLen: thisMonthStartDate,
+                thisLen: thisMonthOfDays,
+                nextLen: j,
+                dates: dates
+            }
         },
         // 渲染年份
         renderYears: function(year, month, date) {
@@ -120,7 +162,30 @@
         },
         // 渲染天
         renderMonthOfDays: function(year, month, date) {
-            var i,
+            var sRows = '<tbody>',
+                panelObj = this.getPanelDates(year, month, date),
+                dates = panelObj.dates,
+                pL = panelObj.prevLen,
+                tL = panelObj.thisLen + pL,
+                nFlag = 0; //判断该走哪个数组的标志
+            date = Number(date);
+            for (var i = 0; i < 6; i++) {
+                sRows += '<tr>';
+                for (var j = 0; j <= 6; j++) {
+                    nFlag = (i * 7) + j;
+                    if (nFlag < pL) {
+                        sRows += '<td class="prev-days">' + (dates[nFlag]) + '</td>';
+                    } else if (nFlag >= pL && nFlag <= tL - 1) {
+                        sRows += '<td class="current-days ' + (dates[nFlag] === date ? 'current' : '') + '">' + (dates[nFlag]) + '</td>';
+                    } else if (tL <= nFlag) {
+                        sRows += '<td class="next-days">' + (dates[nFlag]) + '</td>';
+                    }
+                }
+                sRows += '</tr>';
+            }
+            sRows += '</tbody>';
+            return sRows;
+            /*var i,
                 j,
                 days = 0, //本月开始日期
                 nextdays = 1, //下一个月的开始日期
@@ -162,7 +227,7 @@
                 sRows += '</tr>';
             }
             sRows += '</tbody>';
-            return sRows;
+            return sRows;*/
         },
         // 天天面板
         setDaysPanelCont: function(year, month, date) {
@@ -214,13 +279,44 @@
 
             return tablePanel;
         },
-        blurEvent: function() {
+        bodyEvent: function() {
             var me = this;
             $('body').off('click').on('click', function(e) {
-                if (!$(e.target).parents('table').hasClass('easy-calender-table')) {
-                    me.calenderContainer.hide();
-                }
+                me.blurEvent(e);
             });
+            return this;
+        },
+        blurEvent: function(e) {
+            var me = this,
+                $eTarget = $(e.target);
+            if ($eTarget.parents('table').hasClass('easy-calender-table') || $eTarget.hasClass('easy-calender-input')) {
+                me.calenderContainer.show();
+            } else {
+                me.calenderContainer.hide();
+            }
+            return this;
+        },
+        inputEvent: function() {
+            var me = this,
+                type = this.type;
+            // 日历显示和隐藏
+            switch (type) {
+                case 'textInput':
+                    me.dateInput.on('click', function(e) {
+                        e.stopPropagation();
+                        me.blurEvent.call(me, e);
+                    });
+                    break;
+                case 'range':
+                    break;
+                case 'component':
+                    break;
+                case 'none':
+                    break;
+                default:
+                    ;
+            }
+            return this;
         },
         // 日期格式化
         formatInputDate: function(formatStr, dateObj) {
@@ -247,20 +343,11 @@
             }
             return dateObj.year + conactChar + dateObj.month + conactChar + dateObj.date;
         },
-        inputEvent: function() {
-            var me = this;
-            // 日历显示和隐藏
-            me.dateInput.on('click', function(e) {
-                e.stopPropagation();
-                me.startRender();
-            });
-            return this;
-        },
         startRender: function() {
             var me = this;
             me.renderDateTable();
             // here should bind all events of table calender
-            me.blurEvent.call(me);
+            // me.blurEvent.call(me);
             me.daysCalender = me.calenderContainer.find('.calender-days');
             me.monthsCalender = me.calenderContainer.find('.calender-months');
             me.yearsCalender = me.calenderContainer.find('.calender-years');
@@ -272,10 +359,11 @@
             var me = this;
             me.daysCalender.on('click', 'thead .date-title th', function() {
                 var that = $(this),
-                    dateSwitch = that.siblings('.date-switch');
+                    dateSwitch = that.siblings('.date-switch'),
 
-                thisMonth = dateSwitch.data('month'),
-                thisYear = dateSwitch.data('year');
+                    thisMonth = dateSwitch.data('month'),
+                    thisYear = dateSwitch.data('year');
+                console.log(me.dateData);
                 // thisMonth = me.calenderContainer.data().month;
                 // thisYear = me.calenderContainer.data().year;
 
@@ -307,7 +395,7 @@
                 } else {
                     me.calenderContainer.find('table tbody td').removeClass('current');
                     $(this).addClass('current');
-                    // me.rememberDate(thisYear, thisMonth, selectedDate);
+                    me.rememberDate(thisYear, thisMonth, selectedDate);
                     me.dateInput.val(me.formatInputDate(me.dateFormat, {
                         year: thisYear,
                         month: thisMonth,
@@ -376,12 +464,11 @@
         },
         rememberDate: function(year, month, date) {
             var me = this;
-            dateData = this.calenderContainer.data({
+            this.dateData = {
                 year: year || me.getNow().year,
                 month: month || me.getNow().month,
                 date: date || me.getNow().date
-            });
-            return dateData;
+            };
         },
         // 插入显示表格
         renderDateTable: function() {
@@ -403,7 +490,7 @@
             }
             this.setDateTablePosition();
 
-            $('.easy-calender').show().find('.calender-days').show().siblings('div').hide();
+            this.calenderContainer.find('.calender-days').show().siblings('div').hide();
         },
         // 设置包含块的位置
         setDateTablePosition: function() {
@@ -448,6 +535,7 @@
 
     };
     $.fn[pluginName].defaults = {
+        'type': 'textInput', //日历类型，none|textInput|component|range ,分为纯日历格式，输入框格式（又分为带有开始和结束的组件格式）
         'dateFormat': 'yyyy/m/d'
     };
 })(window, jQuery);

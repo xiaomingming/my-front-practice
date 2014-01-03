@@ -127,25 +127,10 @@
                 thisMonthOfDays = this.u_getMonthDays(year, month),
                 thisMonthStartDate = this.u_getMonthStartDay(year, month) ? this.u_getMonthStartDay(year, month) : 7, //获取本月是星期几，若是周日，则上个月的日期天数为7天
                 prevStartDate = u_prevMonthOfDays - thisMonthStartDate + 1; //前一个月的开始日子
-
-            var u_prevMonthDaysArr = [],
-                thisMonthDaysArr = [],
-                u_nextMonthDaysArr = [];
-            for (; prevStartDate <= u_prevMonthOfDays; prevStartDate++) {
-                u_prevMonthDaysArr.push(prevStartDate);
-            }
-            for (var i = 1; i <= thisMonthOfDays; i++) {
-                thisMonthDaysArr.push(i);
-            }
-            for (var i = 1, j = 42 - thisMonthOfDays - thisMonthStartDate; i <= j; i++) {
-                u_nextMonthDaysArr.push(i);
-            }
-            var dates = u_prevMonthDaysArr.concat(thisMonthDaysArr).concat(u_nextMonthDaysArr);
             return {
-                prevLen: thisMonthStartDate,
-                thisLen: thisMonthOfDays,
-                nextLen: j,
-                dates: dates
+                pA: [prevStartDate, thisMonthStartDate], //开始日期及长度
+                tA: [1, thisMonthOfDays],
+                nA: [1, 42 - thisMonthStartDate - thisMonthOfDays]
             }
         },
         u_prevMonth: function(year, month, date) {
@@ -241,9 +226,15 @@
         v_renderMonthOfDays: function(year, month, date) {
             var sRows = '<tbody>',
                 panelObj = this.u_getPanelDates(year, month, date),
-                dates = panelObj.dates,
-                pL = panelObj.prevLen,
-                tL = panelObj.thisLen + pL,
+                pA = panelObj.pA,
+                pStartDate = pA[0],
+                pL = pA[1],
+                tA = panelObj.tA,
+                tStartDate = tA[0],
+                tL = tA[1],
+                nA = panelObj.nA,
+                nStartDate = nA[0],
+                nL = nA[1],
                 nFlag = 0; //判断该走哪个数组的标志
             date = Number(date);
             for (var i = 0; i < 6; i++) {
@@ -251,11 +242,11 @@
                 for (var j = 0; j <= 6; j++) {
                     nFlag = (i * 7) + j;
                     if (nFlag < pL) {
-                        sRows += '<td class="prev-days">' + (dates[nFlag]) + '</td>';
-                    } else if (nFlag >= pL && nFlag <= tL - 1) {
-                        sRows += '<td class="current-days ' + (dates[nFlag] === date ? 'current' : '') + '">' + (dates[nFlag]) + '</td>';
-                    } else if (tL <= nFlag) {
-                        sRows += '<td class="next-days">' + (dates[nFlag]) + '</td>';
+                        sRows += '<td class="prev-days">' + (pStartDate++) + '</td>';
+                    } else if (nFlag >= pL && nFlag <= pL + tL - 1) {
+                        sRows += '<td class="current-days ' + (tStartDate === date ? 'current' : '') + '">' + (tStartDate++) + '</td>';
+                    } else {
+                        sRows += '<td class="next-days">' + (nStartDate++) + '</td>';
                     }
                 }
                 sRows += '</tr>';

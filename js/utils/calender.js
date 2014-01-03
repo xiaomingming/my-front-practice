@@ -237,31 +237,8 @@
             tmp += '</tbody>';
             return tmp;
         },
-        // 渲染天
-        v_renderMonthOfDays: function(year, month, date) {
-            var sRows = '<tbody>',
-                panelObj = this.u_getPanelDates(year, month, date),
-                dates = panelObj.dates,
-                pL = panelObj.prevLen,
-                tL = panelObj.thisLen + pL,
-                nFlag = 0; //判断该走哪个数组的标志
-            date = Number(date);
-            for (var i = 0; i < 6; i++) {
-                sRows += '<tr>';
-                for (var j = 0; j <= 6; j++) {
-                    nFlag = (i * 7) + j;
-                    if (nFlag < pL) {
-                        sRows += '<td class="prev-days">' + (dates[nFlag]) + '</td>';
-                    } else if (nFlag >= pL && nFlag <= tL - 1) {
-                        sRows += '<td class="current-days ' + (dates[nFlag] === date ? 'current' : '') + '">' + (dates[nFlag]) + '</td>';
-                    } else if (tL <= nFlag) {
-                        sRows += '<td class="next-days">' + (dates[nFlag]) + '</td>';
-                    }
-                }
-                sRows += '</tr>';
-            }
-            sRows += '</tbody>';
-            return sRows;
+        // 早期的renderMonthOfDays方法，特点是效率高，缺点是没有分开逻辑层和渲染层
+        v_oldRenderMonthOfDays: function(year, month, date) {
             /*var i,
                 j,
                 days = 0, //本月开始日期
@@ -305,6 +282,32 @@
             }
             sRows += '</tbody>';
             return sRows;*/
+        },
+        // 渲染天
+        v_renderMonthOfDays: function(year, month, date) {
+            var sRows = '<tbody>',
+                panelObj = this.u_getPanelDates(year, month, date),
+                dates = panelObj.dates,
+                pL = panelObj.prevLen,
+                tL = panelObj.thisLen + pL,
+                nFlag = 0; //判断该走哪个数组的标志
+            date = Number(date);
+            for (var i = 0; i < 6; i++) {
+                sRows += '<tr>';
+                for (var j = 0; j <= 6; j++) {
+                    nFlag = (i * 7) + j;
+                    if (nFlag < pL) {
+                        sRows += '<td class="prev-days">' + (dates[nFlag]) + '</td>';
+                    } else if (nFlag >= pL && nFlag <= tL - 1) {
+                        sRows += '<td class="current-days ' + (dates[nFlag] === date ? 'current' : '') + '">' + (dates[nFlag]) + '</td>';
+                    } else if (tL <= nFlag) {
+                        sRows += '<td class="next-days">' + (dates[nFlag]) + '</td>';
+                    }
+                }
+                sRows += '</tr>';
+            }
+            sRows += '</tbody>';
+            return sRows;
         },
         // 天天面板
         v_setDaysPanelCont: function(year, month, date) {

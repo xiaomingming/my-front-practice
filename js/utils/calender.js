@@ -376,8 +376,7 @@
             // 头部事件绑定
             me.monthsCalender.on('click', 'thead th', function() {
                 var that = $(this),
-                    thisYear = that.parents('thead').find('.date-switch').data('year'),
-                    thisMonth = that.parents('table').find();
+                    thisYear = that.parents('thead').find('.date-switch').data('year');
                 if (that.hasClass('prev')) {
                     (thisYear > 0) && thisYear--;
                     me.monthsCalender.html(me.v_setMonthsPanelCont(thisYear));
@@ -386,21 +385,31 @@
                     me.monthsCalender.html(me.v_setMonthsPanelCont(thisYear));
                 } else if (that.hasClass('date-switch')) {
                     me.yearsCalender.html(me.v_setYearsPanelCont(thisYear));
+                    me.yearsCalender.show().siblings('div').hide();
                 }
             });
             // 体事件绑定
             me.monthsCalender.on('click', 'tbody td', function() {
                 var that = $(this),
                     thisMonth = that.data('month'),
-                    thisYear=that.parents('tbody').find('thead .date-switch').data('year');
+                    thisYear = that.parents('tbody').find('thead .date-switch').data('year');
                 that.parents('tbody').find('td').removeClass('current');
                 that.addClass('current');
-                me.daysCalender.html(me.v_setDaysPanelCont(thisYear,thisMonth));
+                me.daysCalender.html(me.v_setDaysPanelCont(thisYear, thisMonth));
                 me.daysCalender.show().siblings('div').hide();
             });
         },
         e_yearsEvent: function() {
-
+            var me = this;
+            var me = this;
+            // 头部事件绑定
+            me.yearsCalender.on('click', 'thead th', function() {
+                
+            });
+            // 体事件绑定
+            me.yearsCalender.on('click', 'tbody td', function() {
+                
+            });
         },
         rememberDate: function(year, month, date) {
             var me = this;

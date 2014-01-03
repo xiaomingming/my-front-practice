@@ -237,52 +237,6 @@
             tmp += '</tbody>';
             return tmp;
         },
-        // 早期的renderMonthOfDays方法，特点是效率高，缺点是没有分开逻辑层和渲染层
-        v_oldRenderMonthOfDays: function(year, month, date) {
-            /*var i,
-                j,
-                days = 0, //本月开始日期
-                nextdays = 1, //下一个月的开始日期
-                sRows = '<tbody>',
-                prevYear = year,
-                u_prevMonth = month - 1;
-            date = Number(date);
-            if (!u_prevMonth) {
-                prevYear = year - 1;
-                u_prevMonth = 12;
-            }
-            var u_prevMonthOfDays = this.u_getMonthDays(prevYear, u_prevMonth),
-                thisMonthOfDays = this.u_getMonthDays(year, month);
-
-            var thisMonthStartDay = this.u_getMonthStartDay(year, month) ? this.u_getMonthStartDay(year, month) : 7;
-
-            var prevStartDay = u_prevMonthOfDays - thisMonthStartDay + 1;
-            for (i = 0; i < 6; i++) {
-                sRows += '<tr>';
-                for (j = 0; j <= 6; j++) {
-                    // 先渲染前一个月的月末部分日期
-                    // 再渲染本月日期
-                    // 后渲染下一个月月初日期
-
-                    if (i === 0 && j < thisMonthStartDay) {
-                        // 前一个月
-                        sRows += '<td class="prev-days">' + (prevStartDay++) + '</td>';
-                    } else if (days < thisMonthOfDays) {
-                        // 当前月
-                        if (days + 1 === date) {
-                            sRows += '<td class="current-days current">' + (++days) + '</td>';
-                        } else {
-                            sRows += '<td class="current-days">' + (++days) + '</td>';
-                        }
-                    } else {
-                        sRows += '<td class="next-days">' + (nextdays++) + '</td>';
-                    }
-                }
-                sRows += '</tr>';
-            }
-            sRows += '</tbody>';
-            return sRows;*/
-        },
         // 渲染天
         v_renderMonthOfDays: function(year, month, date) {
             var sRows = '<tbody>',

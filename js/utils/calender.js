@@ -139,14 +139,12 @@
                 month = 12;
                 year -= 1;
             }
-            // this.rememberDate(year, month, date);
             this.daysCalender.html(this.v_setDaysPanelCont(year, month, date));
             return {
                 year: year,
                 month: month,
                 date: date
             }
-            // this.calenderContainer.show();
         },
         u_nextMonth: function(year, month, date) {
             month++;
@@ -154,14 +152,12 @@
                 month = 1;
                 year += 1;
             }
-            // this.rememberDate(year, month, date);
             this.daysCalender.html(this.v_setDaysPanelCont(year, month, date));
             return {
                 year: year,
                 month: month,
                 date: date
             }
-            // this.calenderContainer.show();
         },
         // 渲染start
         v_startRender: function() {
@@ -244,7 +240,7 @@
                     if (nFlag < pL) {
                         sRows += '<td class="prev-days">' + (pStartDate++) + '</td>';
                     } else if (nFlag >= pL && nFlag <= pL + tL - 1) {
-                        sRows += '<td class="current-days ' + (tStartDate === date ? 'current' : '') + '">' + (tStartDate++) + '</td>';
+                        sRows += '<td class="current-days' + (tStartDate === date ? ' current' : '') + '">' + (tStartDate++) + '</td>';
                     } else {
                         sRows += '<td class="next-days">' + (nStartDate++) + '</td>';
                     }
@@ -262,6 +258,7 @@
             year = year || this.u_getNow().year;
             month = month || this.u_getNow().month,
             date = date || this.u_getNow().date;
+
             var tablePanel = this.tableTmp[0];
             this.calenderHeaderTmp[2] = '<th colspan="5" class="date-switch" data-year="' + year + '" data-month="' + month + '" data-date="' + date + '">' + year + '/' + month + '</th>';
             tablePanel += this.calenderHeaderTmp.join('') + this.daysHeaderTmp.join('') + this.tableTmp[1];
@@ -282,7 +279,6 @@
         },
         // 年年面板
         v_setYearsPanelCont: function(year, month, date) {
-
             year = year || this.u_getNow().year;
             month = month || this.u_getNow().month,
             date = date || this.u_getNow().date;
@@ -305,11 +301,7 @@
         e_blurEvent: function(e) {
             var me = this,
                 $eTarget = $(e.target);
-            if ($eTarget.parents('table').hasClass('easy-calender-table') || $eTarget.hasClass('easy-calender-input')) {
-                me.calenderContainer.show();
-            } else {
-                me.calenderContainer.hide();
-            }
+            ($eTarget.parents('table').hasClass('easy-calender-table') || $eTarget.hasClass('easy-calender-input')) ? me.calenderContainer.show() : me.calenderContainer.hide();
             return this;
         },
         e_inputEvent: function() {
@@ -339,13 +331,8 @@
             me.daysCalender.on('click', 'thead .date-title th', function() {
                 var that = $(this),
                     dateSwitch = that.siblings('.date-switch'),
-
                     thisMonth = dateSwitch.data('month'),
                     thisYear = dateSwitch.data('year');
-                console.log(me.dateData);
-                // thisMonth = me.calenderContainer.data().month;
-                // thisYear = me.calenderContainer.data().year;
-
                 if (that.hasClass('prev')) {
                     me.u_prevMonth(thisYear, thisMonth);
                     me.calenderContainer.show();
@@ -358,6 +345,7 @@
             });
             // tbody事件绑定
             me.daysCalender.on('click', 'table tbody td', function() {
+                console.log('here');
                 var dateSwitch = $(this).parents('table').find('thead .date-switch'),
                     thisMonth = dateSwitch.data('month'),
                     thisYear = dateSwitch.data('year'),
@@ -403,9 +391,12 @@
             // 体事件绑定
             me.monthsCalender.on('click', 'tbody td', function() {
                 var that = $(this),
-                    thisMonth = that.text();
+                    thisMonth = that.data('month'),
+                    thisYear=that.parents('tbody').find('thead .date-switch').data('year');
                 that.parents('tbody').find('td').removeClass('current');
                 that.addClass('current');
+                me.daysCalender.html(me.v_setDaysPanelCont(thisYear,thisMonth));
+                me.daysCalender.show().siblings('div').hide();
             });
         },
         e_yearsEvent: function() {

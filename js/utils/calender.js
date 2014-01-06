@@ -143,7 +143,7 @@
                 month = 12;
                 year -= 1;
             }
-            this.daysCalender.html(this.v_setCalenderCont('days', year, month, date));
+            // this.daysCalender.html(this.v_setCalenderCont('days', year, month, date));
             return {
                 year: year,
                 month: month,
@@ -156,12 +156,18 @@
                 month = 1;
                 year += 1;
             }
-            this.daysCalender.html(this.v_setCalenderCont('days', year, month, date));
+            // this.daysCalender.html(this.v_setCalenderCont('days', year, month, date));
             return {
                 year: year,
                 month: month,
                 date: date
             }
+        },
+        u_prevYears: function(year) {
+            return year -= 10;
+        },
+        u_nextYears: function(year) {
+            return year += 10
         },
         // 渲染start
         v_startRender: function() {
@@ -188,8 +194,12 @@
             for (i = 0; i < 3; i++) {
                 tmp += '<tr>';
                 for (j = 0; j < 4; j++) {
-                    if (start === year) {
+                    if (i === 0 && j === 0) {
+                        tmp += '<td class="prev">' + (yearScope.start - 1) + '</td>';
+                    } else if (start === year) {
                         tmp += '<td class="current">' + (start++) + '</td>';
+                    } else if (i === 2 && j === 3) {
+                        tmp += '<td class="next">' + (yearScope.end + 1) + '</td>';
                     } else {
                         tmp += '<td>' + (start++) + '</td>';
                     }
@@ -242,11 +252,11 @@
                 for (var j = 0; j <= 6; j++) {
                     nFlag = (i * 7) + j;
                     if (nFlag < pL) {
-                        sRows += '<td class="prev-days">' + (pStartDate++) + '</td>';
+                        sRows += '<td class="prev">' + (pStartDate++) + '</td>';
                     } else if (nFlag >= pL && nFlag <= pL + tL - 1) {
                         sRows += '<td class="current-days' + (tStartDate === date ? ' current' : '') + '">' + (tStartDate++) + '</td>';
                     } else {
-                        sRows += '<td class="next-days">' + (nStartDate++) + '</td>';
+                        sRows += '<td class="next">' + (nStartDate++) + '</td>';
                     }
                 }
                 sRows += '</tr>';
@@ -256,10 +266,9 @@
         },
         // 设置日历html
         v_setCalenderCont: function(fFlag, year, month, date) {
-            year = year || this.u_getNow().year;
-            month = month || this.u_getNow().month,
-            date = date || this.u_getNow().date;
-
+            year = Number(year) || Number(this.u_getNow().year);
+            month = Number(month) || Number(this.u_getNow().month);
+            date = Number(date) || Number(this.u_getNow().date);
             var colspan = 2,
                 headOption = '',
                 weekHead = '',
@@ -293,8 +302,22 @@
             this.calenderHeaderTmp[2] = '<th colspan="' + colspan + '" class="date-switch" data-year="' + year + '" data-month="' + month + '" data-date="' + date + '">' + headOption + '</th>';
             tablePanel += this.calenderHeaderTmp.join('') + weekHead + this.tableTmp[1];
             tablePanel += this[renderMethod](year, month, date) + this.tableTmp[2];
-            console.log(this.calenderHeaderTmp[2]);
             return tablePanel;
+        },
+        // 控制年月日三个面板显示
+        v_calenderPanelShow: function(panel) {
+            switch (panel) {
+                case 'days':
+                    this.daysCalender.show().siblings('div').hide();
+                    break;
+                case 'months':
+                    this.monthsCalender.show().siblings('div').hide();
+                    break;
+                case 'years':
+                    this.yearsCalender.show().siblings('div').hide();
+                    break;
+            }
+            return this;
         },
         e_bodyEvent: function() {
             var me = this;
@@ -336,39 +359,42 @@
             var me = this;
             me.daysCalender.on('click', 'thead .date-title th', function() {
                 var that = $(this),
-                    dateSwitch = that.siblings('.date-switch'),
+                    dateSwitch = that.parents('thead').find('.date-switch'),
                     thisMonth = dateSwitch.data('month'),
-                    thisYear = dateSwitch.data('year');
+                    thisYear = dateSwitch.data('year'),
+                    u_prevMonthObj, u_nextMonthObj;
                 if (that.hasClass('prev')) {
-                    me.u_prevMonth(thisYear, thisMonth);
-                    me.calenderContainer.show();
+                    u_prevMonthObj = me.u_prevMonth(thisYear, thisMonth);
+                    me.daysCalender.html(me.v_setCalenderCont('days', u_prevMonthObj.year, u_prevMonthObj.month, u_prevMonthObj.date));
+                    me.v_calenderPanelShow('days');
                 } else if (that.hasClass('next')) {
-                    me.u_nextMonth(thisYear, thisMonth);
-                    me.calenderContainer.show();
+                    u_nextMonthObj = me.u_nextMonth(thisYear, thisMonth);
+                    me.daysCalender.html(me.v_setCalenderCont('days', u_nextMonthObj.year, u_nextMonthObj.month, u_nextMonthObj.date));
+                    me.v_calenderPanelShow('days');
                 } else if (that.hasClass('date-switch')) {
-                    me.calenderContainer.find('.calender-months').show().siblings('div').hide();
+                    me.monthsCalender.html(me.v_setCalenderCont('months', thisYear, thisMonth));
+                    me.v_calenderPanelShow('months');
                 }
+
             });
             // tbody事件绑定
             me.daysCalender.on('click', 'table tbody td', function() {
-                console.log('here');
                 var dateSwitch = $(this).parents('table').find('thead .date-switch'),
                     thisMonth = dateSwitch.data('month'),
                     thisYear = dateSwitch.data('year'),
                     selectedDate = $(this).text(),
                     u_prevMonthObj, u_nextMonthObj;
-                if ($(this).hasClass('prev-days')) {
+                if ($(this).hasClass('prev')) {
                     u_prevMonthObj = me.u_prevMonth(thisYear, thisMonth, selectedDate);
-                    me.calenderContainer.show();
+                    me.daysCalender.html(me.v_setCalenderCont('days', u_prevMonthObj.year, u_prevMonthObj.month, u_prevMonthObj.date));
                     me.dateInput.val(me.u_formatInputDate(me.dateFormat, u_prevMonthObj));
-                } else if ($(this).hasClass('next-days')) {
+                } else if ($(this).hasClass('next')) {
                     u_nextMonthObj = me.u_nextMonth(thisYear, thisMonth, selectedDate);
-                    me.calenderContainer.show();
+                    me.daysCalender.html(me.v_setCalenderCont('days', u_nextMonthObj.year, u_nextMonthObj.month, u_nextMonthObj.date));
                     me.dateInput.val(me.u_formatInputDate(me.dateFormat, u_nextMonthObj));
                 } else {
                     me.calenderContainer.find('table tbody td').removeClass('current');
                     $(this).addClass('current');
-                    me.rememberDate(thisYear, thisMonth, selectedDate);
                     me.dateInput.val(me.u_formatInputDate(me.dateFormat, {
                         year: thisYear,
                         month: thisMonth,
@@ -376,6 +402,7 @@
                     }));
                 }
             });
+            me.v_calenderPanelShow('days');
         },
         e_monthsEvent: function() {
             var me = this;
@@ -385,36 +412,67 @@
                     thisYear = that.parents('thead').find('.date-switch').data('year');
                 if (that.hasClass('prev')) {
                     (thisYear > 0) && thisYear--;
-                    me.monthsCalender.html(me.v_setCalenderCont('months',thisYear));
+                    me.monthsCalender.html(me.v_setCalenderCont('months', thisYear));
                 } else if (that.hasClass('next')) {
                     thisYear++;
-                    me.monthsCalender.html(me.v_setCalenderCont('months',thisYear));
+                    me.monthsCalender.html(me.v_setCalenderCont('months', thisYear));
                 } else if (that.hasClass('date-switch')) {
-                    me.yearsCalender.html(me.v_setCalenderCont('years',thisYear));
-                    me.yearsCalender.show().siblings('div').hide();
+                    me.yearsCalender.html(me.v_setCalenderCont('years', thisYear));
                 }
+                me.v_calenderPanelShow('years');
             });
             // 体事件绑定
             me.monthsCalender.on('click', 'tbody td', function() {
                 var that = $(this),
                     thisMonth = that.data('month'),
-                    thisYear = that.parents('tbody').find('thead .date-switch').data('year');
+                    thisYear = that.parents('table').find('.date-switch').data('year');
                 that.parents('tbody').find('td').removeClass('current');
                 that.addClass('current');
                 me.daysCalender.html(me.v_setCalenderCont('days', thisYear, thisMonth));
-                me.daysCalender.show().siblings('div').hide();
+                me.v_calenderPanelShow('days');
             });
         },
         e_yearsEvent: function() {
             var me = this;
-            var me = this;
             // 头部事件绑定
             me.yearsCalender.on('click', 'thead th', function() {
-
+                var that = $(this),
+                    dateSwitch = that.siblings('.date-switch'),
+                    thisMonth = dateSwitch.data('month'),
+                    thisYear = dateSwitch.data('year'),
+                    u_prevMonthObj, u_nextMonthObj;
+                if (that.hasClass('prev')) {
+                    thisYear -= 10;
+                    me.yearsCalender.html(me.v_setCalenderCont('years', thisYear, thisMonth));
+                    me.v_calenderPanelShow('years');
+                } else if (that.hasClass('next')) {
+                    thisYear += 10;
+                    me.yearsCalender.html(me.v_setCalenderCont('years', thisYear, thisMonth)).show();
+                    me.v_calenderPanelShow('years');
+                } else if (that.hasClass('date-switch')) {
+                    // me.calenderContainer.find('.calender-months').show().siblings('div').hide();
+                }
             });
             // 体事件绑定
             me.yearsCalender.on('click', 'tbody td', function() {
-
+                var dateSwitch = $(this).parents('table').find('thead .date-switch'),
+                    thisMonth = dateSwitch.data('month'),
+                    thisYear = Number($(this).text()),
+                    u_prevMonthObj, u_nextMonthObj;
+                if ($(this).hasClass('prev')) {
+                    thisYear -= 10;
+                    me.yearsCalender.html(me.v_setCalenderCont('years', thisYear, thisMonth));
+                    me.v_calenderPanelShow('months');
+                } else if ($(this).hasClass('next')) {
+                    thisYear += 10;
+                    me.yearsCalender.html(me.v_setCalenderCont('years', thisYear, thisMonth));
+                    me.v_calenderPanelShow('months');
+                } else {
+                    me.calenderContainer.find('table tbody td').removeClass('current');
+                    $(this).addClass('current');
+                    me.monthsCalender.html(me.v_setCalenderCont('months', thisYear, thisMonth));
+                    me.v_calenderPanelShow('months');
+                }
             });
         },
         rememberDate: function(year, month, date) {
@@ -437,14 +495,11 @@
                 ].join('');
                 $('body').append(tmp);
                 this.calenderContainer = $('.easy-calender');
-                this.rememberDate();
                 this.calenderContainer.find('.calender-days').html(this.v_setCalenderCont('days'));
                 this.calenderContainer.find('.calender-months').html(this.v_setCalenderCont('months'));
                 this.calenderContainer.find('.calender-years').html(this.v_setCalenderCont('years'));
-
             }
             this.v_setDateTablePosition();
-
             this.calenderContainer.find('.calender-days').show().siblings('div').hide();
         },
         // 设置包含块的位置

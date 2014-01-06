@@ -143,7 +143,6 @@
                 month = 12;
                 year -= 1;
             }
-            // this.daysCalender.html(this.v_setCalenderCont('days', year, month, date));
             return {
                 year: year,
                 month: month,
@@ -156,7 +155,6 @@
                 month = 1;
                 year += 1;
             }
-            // this.daysCalender.html(this.v_setCalenderCont('days', year, month, date));
             return {
                 year: year,
                 month: month,
@@ -184,24 +182,22 @@
         },
         // 渲染年份
         v_renderYears: function(year, month, date) {
-            year = year || this.u_getNow().year;
-            month = month || this.u_getNow().month,
-            date = date || this.u_getNow().date;
-
             var tmp = '<tbody>',
                 i, j, yearScope = this.u_getYearsScope(year),
-                start = yearScope.start - 1;
+                start = yearScope.start;
             for (i = 0; i < 3; i++) {
                 tmp += '<tr>';
                 for (j = 0; j < 4; j++) {
                     if (i === 0 && j === 0) {
                         tmp += '<td class="prev">' + (yearScope.start - 1) + '</td>';
-                    } else if (start === year) {
-                        tmp += '<td class="current">' + (start++) + '</td>';
                     } else if (i === 2 && j === 3) {
                         tmp += '<td class="next">' + (yearScope.end + 1) + '</td>';
                     } else {
-                        tmp += '<td>' + (start++) + '</td>';
+                        if (start === year) {
+                            tmp += '<td class="current">' + (start++) + '</td>';
+                        } else {
+                            tmp += '<td>' + (start++) + '</td>';
+                        }
                     }
                 }
                 tmp += '</tr>';
@@ -283,16 +279,12 @@
                     renderMethod = 'v_renderMonthOfDays';
                     break;
                 case 'months':
-                    // colspan = 2;
                     headOption = year;
-                    weekHead = '';
                     renderMethod = 'v_renderMonths';
                     break;
                 case 'years':
                     yearScope = this.u_getYearsScope(year);
-                    // colspan = 2;
                     headOption = yearScope.start + '-' + yearScope.end;
-                    weekHead = '';
                     renderMethod = 'v_renderYears';
                     break;
                 default:
@@ -400,9 +392,10 @@
                         month: thisMonth,
                         date: selectedDate
                     }));
+                    me.v_calenderPanelShow('days');
                 }
             });
-            me.v_calenderPanelShow('days');
+            
         },
         e_monthsEvent: function() {
             var me = this;
@@ -413,13 +406,16 @@
                 if (that.hasClass('prev')) {
                     (thisYear > 0) && thisYear--;
                     me.monthsCalender.html(me.v_setCalenderCont('months', thisYear));
+                    me.v_calenderPanelShow('months');
                 } else if (that.hasClass('next')) {
                     thisYear++;
                     me.monthsCalender.html(me.v_setCalenderCont('months', thisYear));
+                    me.v_calenderPanelShow('months');
                 } else if (that.hasClass('date-switch')) {
                     me.yearsCalender.html(me.v_setCalenderCont('years', thisYear));
+                    me.v_calenderPanelShow('years');
                 }
-                me.v_calenderPanelShow('years');
+                
             });
             // 体事件绑定
             me.monthsCalender.on('click', 'tbody td', function() {
@@ -460,13 +456,11 @@
                     thisYear = Number($(this).text()),
                     u_prevMonthObj, u_nextMonthObj;
                 if ($(this).hasClass('prev')) {
-                    thisYear -= 10;
                     me.yearsCalender.html(me.v_setCalenderCont('years', thisYear, thisMonth));
-                    me.v_calenderPanelShow('months');
+                    me.v_calenderPanelShow('years');
                 } else if ($(this).hasClass('next')) {
-                    thisYear += 10;
                     me.yearsCalender.html(me.v_setCalenderCont('years', thisYear, thisMonth));
-                    me.v_calenderPanelShow('months');
+                    me.v_calenderPanelShow('years');
                 } else {
                     me.calenderContainer.find('table tbody td').removeClass('current');
                     $(this).addClass('current');

@@ -14,6 +14,9 @@
 
     my[constructorFunName] = function(dateEle, options) {
         var settings = $.extend({}, $.fn[pluginName].defaults, options);
+        // 周和月配置需要遵循固定的顺序
+        this.weekConfig = settings.weekConfig;
+        this.monthsMap = settings.monthsMap;
         this.tableTmp = [
             '<table class="easy-calender-table"><thead class="easy-calender-header">',
             '</thead>',
@@ -26,16 +29,17 @@
             '<th class="next">>></th>',
             '</tr>'
         ];
+
         // 天天头部模板
         this.daysHeaderTmp = [
             '<tr class="week-title">',
-            '<th>日</th>',
-            '<th>一</th>',
-            '<th>二</th>',
-            '<th>三</th>',
-            '<th>四</th>',
-            '<th>五</th>',
-            '<th>六</th>',
+            '<th>' + this.weekConfig[0] + '</th>',
+            '<th>' + this.weekConfig[1] + '</th>',
+            '<th>' + this.weekConfig[2] + '</th>',
+            '<th>' + this.weekConfig[3] + '</th>',
+            '<th>' + this.weekConfig[4] + '</th>',
+            '<th>' + this.weekConfig[5] + '</th>',
+            '<th>' + this.weekConfig[6] + '</th>',
             '</tr>'
         ];
         this.type = settings.type;
@@ -139,7 +143,7 @@
                 month = 12;
                 year -= 1;
             }
-            this.daysCalender.html(this.v_setDaysPanelCont(year, month, date));
+            this.daysCalender.html(this.v_setCalenderCont('days', year, month, date));
             return {
                 year: year,
                 month: month,
@@ -152,7 +156,7 @@
                 month = 1;
                 year += 1;
             }
-            this.daysCalender.html(this.v_setDaysPanelCont(year, month, date));
+            this.daysCalender.html(this.v_setCalenderCont('days', year, month, date));
             return {
                 year: year,
                 month: month,
@@ -199,7 +203,7 @@
         v_renderMonths: function(year, month, date) {
             var currentMonth;
             var tmp = '<tbody>',
-                i, j, monthsMap = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+                i, j;
             if (!month) {
                 month = new Date().getMonth() + 1;
             }
@@ -208,9 +212,9 @@
                 for (j = 0; j < 4; j++) {
                     currentMonth = 4 * i + (j + 1);
                     if (((i * 4) + j + 1) === month) {
-                        tmp += '<td class="current" data-month="' + currentMonth + '">' + monthsMap[(i * 4) + j] + '</td>';
+                        tmp += '<td class="current" data-month="' + currentMonth + '">' + this.monthsMap[(i * 4) + j] + '</td>';
                     } else {
-                        tmp += '<td data-month="' + currentMonth + '">' + monthsMap[(i * 4) + j] + '</td>';
+                        tmp += '<td data-month="' + currentMonth + '">' + this.monthsMap[(i * 4) + j] + '</td>';
                     }
                 }
                 tmp += '</str>';
@@ -250,45 +254,46 @@
             sRows += '</tbody>';
             return sRows;
         },
-        // 天天面板
-        v_setDaysPanelCont: function(year, month, date) {
-            var prev = month,
-                next = month;
-
+        // 设置日历html
+        v_setCalenderCont: function(fFlag, year, month, date) {
             year = year || this.u_getNow().year;
             month = month || this.u_getNow().month,
             date = date || this.u_getNow().date;
 
+            var colspan = 2,
+                headOption = '',
+                weekHead = '',
+                yearScope,
+                renderMethod;
+
+            switch (fFlag) {
+                case 'days':
+                    colspan = 5;
+                    headOption = year + '/' + month;
+                    weekHead = this.daysHeaderTmp.join('');
+                    renderMethod = 'v_renderMonthOfDays';
+                    break;
+                case 'months':
+                    // colspan = 2;
+                    headOption = year;
+                    weekHead = '';
+                    renderMethod = 'v_renderMonths';
+                    break;
+                case 'years':
+                    yearScope = this.u_getYearsScope(year);
+                    // colspan = 2;
+                    headOption = yearScope.start + '-' + yearScope.end;
+                    weekHead = '';
+                    renderMethod = 'v_renderYears';
+                    break;
+                default:
+                    ;
+            }
             var tablePanel = this.tableTmp[0];
-            this.calenderHeaderTmp[2] = '<th colspan="5" class="date-switch" data-year="' + year + '" data-month="' + month + '" data-date="' + date + '">' + year + '/' + month + '</th>';
-            tablePanel += this.calenderHeaderTmp.join('') + this.daysHeaderTmp.join('') + this.tableTmp[1];
-            tablePanel += this.v_renderMonthOfDays(year, month, date) + this.tableTmp[2];
-            return tablePanel;
-        },
-        // 月月面板
-        v_setMonthsPanelCont: function(year, month, date) {
-            year = year || this.u_getNow().year;
-            month = month || this.u_getNow().month,
-            date = date || this.u_getNow().date;
-
-            var tablePanel = this.tableTmp[0];
-            this.calenderHeaderTmp[2] = '<th colspan="2" class="date-switch" data-year="' + year + '" data-month="' + month + '" data-date="' + date + '">' + year + '</th>';
-            tablePanel += this.calenderHeaderTmp.join('') + this.tableTmp[1];
-            tablePanel += this.v_renderMonths(year, month, date) + this.tableTmp[2];
-            return tablePanel;
-        },
-        // 年年面板
-        v_setYearsPanelCont: function(year, month, date) {
-            year = year || this.u_getNow().year;
-            month = month || this.u_getNow().month,
-            date = date || this.u_getNow().date;
-
-            var tablePanel = this.tableTmp[0],
-                yearScope = this.u_getYearsScope(year);
-            this.calenderHeaderTmp[2] = '<th colspan="2" class="date-switch" data-year="' + year + '" data-month="' + month + '" data-date="' + date + '">' + yearScope.start + '-' + yearScope.end + '</th>';
-            tablePanel += this.calenderHeaderTmp.join('') + this.tableTmp[1];
-            tablePanel += this.v_renderYears(year, month, date) + this.tableTmp[2];
-
+            this.calenderHeaderTmp[2] = '<th colspan="' + colspan + '" class="date-switch" data-year="' + year + '" data-month="' + month + '" data-date="' + date + '">' + headOption + '</th>';
+            tablePanel += this.calenderHeaderTmp.join('') + weekHead + this.tableTmp[1];
+            tablePanel += this[renderMethod](year, month, date) + this.tableTmp[2];
+            console.log(this.calenderHeaderTmp[2]);
             return tablePanel;
         },
         e_bodyEvent: function() {
@@ -313,6 +318,7 @@
                     me.dateInput.on('click', function(e) {
                         e.stopPropagation();
                         me.e_blurEvent.call(me, e);
+                        me.daysCalender.show().siblings('div').hide();
                     });
                     break;
                 case 'range':
@@ -379,12 +385,12 @@
                     thisYear = that.parents('thead').find('.date-switch').data('year');
                 if (that.hasClass('prev')) {
                     (thisYear > 0) && thisYear--;
-                    me.monthsCalender.html(me.v_setMonthsPanelCont(thisYear));
+                    me.monthsCalender.html(me.v_setCalenderCont('months',thisYear));
                 } else if (that.hasClass('next')) {
                     thisYear++;
-                    me.monthsCalender.html(me.v_setMonthsPanelCont(thisYear));
+                    me.monthsCalender.html(me.v_setCalenderCont('months',thisYear));
                 } else if (that.hasClass('date-switch')) {
-                    me.yearsCalender.html(me.v_setYearsPanelCont(thisYear));
+                    me.yearsCalender.html(me.v_setCalenderCont('years',thisYear));
                     me.yearsCalender.show().siblings('div').hide();
                 }
             });
@@ -395,7 +401,7 @@
                     thisYear = that.parents('tbody').find('thead .date-switch').data('year');
                 that.parents('tbody').find('td').removeClass('current');
                 that.addClass('current');
-                me.daysCalender.html(me.v_setDaysPanelCont(thisYear, thisMonth));
+                me.daysCalender.html(me.v_setCalenderCont('days', thisYear, thisMonth));
                 me.daysCalender.show().siblings('div').hide();
             });
         },
@@ -404,11 +410,11 @@
             var me = this;
             // 头部事件绑定
             me.yearsCalender.on('click', 'thead th', function() {
-                
+
             });
             // 体事件绑定
             me.yearsCalender.on('click', 'tbody td', function() {
-                
+
             });
         },
         rememberDate: function(year, month, date) {
@@ -432,9 +438,9 @@
                 $('body').append(tmp);
                 this.calenderContainer = $('.easy-calender');
                 this.rememberDate();
-                this.calenderContainer.find('.calender-days').html(this.v_setDaysPanelCont());
-                this.calenderContainer.find('.calender-months').html(this.v_setMonthsPanelCont());
-                this.calenderContainer.find('.calender-years').html(this.v_setYearsPanelCont());
+                this.calenderContainer.find('.calender-days').html(this.v_setCalenderCont('days'));
+                this.calenderContainer.find('.calender-months').html(this.v_setCalenderCont('months'));
+                this.calenderContainer.find('.calender-years').html(this.v_setCalenderCont('years'));
 
             }
             this.v_setDateTablePosition();
@@ -485,6 +491,8 @@
     };
     $.fn[pluginName].defaults = {
         'type': 'textInput', //日历类型，none|textInput|component|range ,分为纯日历格式，输入框格式（又分为带有开始和结束的组件格式）
-        'dateFormat': 'yyyy/m/d'
+        'dateFormat': 'yyyy/m/d',
+        'weekConfig': ['日', '一', '二', '三', '四', '五', '六'],
+        'monthsMap': ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
     };
 })(window, jQuery);

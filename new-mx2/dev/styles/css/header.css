@@ -1,0 +1,69 @@
+/* 
+* author: leweiming
+* header.css
+*/
+.gb-header {
+  width: 100%;
+}
+.gb-header .inner {
+  width: 1200px;
+  height: 82px;
+  margin: 0 auto;
+  background: #fff;
+}
+.gb-header .inner h1.logo {
+  float: left;
+  margin-top: 18px;
+}
+.gb-header .inner h1.logo a {
+  display: block;
+  width: 144px ;
+  height: 46px;
+  overflow: hidden;
+  text-indent: -9999em;
+  background-image: url(../images/logo.png) no-repeat;
+}
+.gb-header .nav {
+  float: left;
+  margin: 30px 0 0 55px;
+}
+.gb-header .nav li {
+  float: left;
+  margin-right: 47px;
+  overflow: hidden;
+  font-size: 16px;
+  white-space: nowrap;
+}
+.gb-header .nav li a {
+  padding: 2px 0;
+  line-height: 28px;
+  color: #333;
+}
+.gb-header .nav li a:hover,
+.gb-header .nav li a.current {
+  color: #31c0a4;
+  text-decoration: none;
+  border-bottom: 2px solid #31c0a4;
+}
+.gb-header .login {
+  float: right;
+  margin-top: 36px;
+}
+.gb-header .login a {
+  display: inline-block;
+  height: 20px;
+  margin-right: 10px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 20px;
+  color: #888;
+}
+.gb-header .login a.login-link {
+  padding-left: 20px;
+  background-image: url(../images/login-bg.png) no-repeat;
+}
+.gb-header .login a.register {
+  padding-left: 10px;
+  background-image: url(../images/login-bg.png) 0 -26px no-repeat;
+}
+/*# sourceMappingURL=lala.map */

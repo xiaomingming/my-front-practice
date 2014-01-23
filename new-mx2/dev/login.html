@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8>
+<title>登录</title>
+<link rel=stylesheet href=styles/reset.css>
+<link rel=stylesheet href=styles/header.css>
+<link rel=stylesheet href=styles/easyValidator.css>
+<link rel=stylesheet href=styles/footer.css>
+<style type=text/css>
+.reg-log-module { padding: 40px 0 100px; margin-bottom: 20px; border-top: 1px solid #cacaca; }
+.reg-log-module .form-infor { width: 650px; border-right: 1px dashed #ccc; }
+.form-item input.text, .form-item input.passowrd { width: 280px; }
+.submit-container { position: relative; width: 480px; }
+.reg-qq-login { position: absolute; left: 298px; top: 10px; }
+.reg-qq-login a { color: orange; padding: 0 6px; }
+.reg-qq-login a img { display: inline; }
+.rem-login { padding: 10px 0 10px 147px; }
+.register-link { padding: 10px 0 0 147px; }
+.rem-login input { margin-right: 10px; vertical-align: middle; }
+.rem-login label { position: relative; top: 2px; }
+.rem-login .forget-pwd { position: relative; top: 2px; color: orange; margin-left: 26px; text-decoration: underline; }
+.register-link a { padding: 0 6px; color: #31c0a4; }
+.register-link a:hover { background: #31c0a4; color: #fff; text-decoration: none; }
+.rem-login .register-link { margin-left: 60px; }
+.qr-code { position: absolute; width: 160px; left: 800px; top: 50px; text-align: center; }
+.qr-code p { margin-top: 10px; }
+.qr-code img { display: inline-block; text-align: center; border: 1px solid #31c0a4; }
+.form-item .error { display: none; }
+</style>
+</head>
+<body>
+<header class=gb-header>
+    <div class=inner>
+        <h1 class=logo><a href=#>moxiu</a></h1>
+        <nav class=nav>
+            <ul>
+                <li><a href=#>首页</a></li>
+                <li><a href=#>精品主题</a></li>
+                <li><a href=#>制作主题</a></li>
+                <li><a href=#>更新日志</a></li>
+                <li><a href=#>帮助说明</a></li>
+                <li><a href=#>官方论坛</a></li>
+                <li><a href=#>官方微博</a></li>
+            </ul>
+        </nav>
+        <div class=login><a href=# class=login-link>登录</a> <a href=# class=register>注册</a></div>
+    </div>
+</header>
+<div class="w1200 clearfix pr">
+    <div id=J-login-module class=reg-log-module>
+        <div class=easy-validator>
+            <form action="?do=main" class=form>
+                <div class=form-infor>
+                    <div class=form-item>
+                        <label for=login-username><strong class=required-tag>*</strong> 用户名:</label>
+                        <input type=text id=login-username class="text user-name">
+                        <div class=error></div>
+                    </div>
+                    <div class=form-item>
+                        <label for=login-pwd><strong class=required-tag>*</strong> 密码:</label>
+                        <input type=password id=login-pwd class="pwd passowrd">
+                        <div class=error></div>
+                    </div>
+                    <p class=rem-login>
+                        <input type=checkbox name=remember-login id=remember-login>
+                        <label for=remember-login>下次自动登录</label>
+                        <a href=# class=forget-pwd>忘记密码</a></p>
+                    <p class=register-link>想要<a href=#>注册</a> 魔秀账号，就请猛戳</p>
+                    <div class="form-item submit-container">
+                        <input type=submit class=form-submit value=登录>
+                        <p class=reg-qq-login>或使用<a href="http://www.moxiu.com//uc/index.php?do=User.Qq.Connect&amp;forward=http://dasai.moxiu.com/?do=main"><img src=images/qq-logo.png alt=qq登录></a></p>
+                    </div>
+                </div>
+                <div class=qr-code><img width=107 src="http://www.moxiu.com/?do=About.Qrcode">
+                    <p>扫描二维码，下载安卓客户端</p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<footer class=gb-footer>
+    <div class=inner>
+        <ul class=help>
+            <li><a href=#>关于魔秀</a></li>
+            <li><a href=#>魔秀合作</a></li>
+            <li><a href=#>招贤纳士</a></li>
+            <li><a href=#>招贤纳士</a></li>
+            <li><a href=#>版权声明</a></li>
+            <li><a href=#>网站地图</a></li>
+            <li><a href=#>友情链接</a></li>
+        </ul>
+        <address>
+        ©2010 魔秀 京ICP证080590号 京网文[2012]0007-006号 京公网安备110105006728号 营业执照
+        </address>
+        <div class=contact-us>
+            <ul>
+                <li class=wx>
+                    <p>关注微信：<br>
+                        moxiu520</p>
+                </li>
+                <li class=sina>
+                    <p>关注：<br>
+                        <a href=#>魔秀网</a></p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</footer>
+</body>
+<script type=text/javascript src=js/libs/jquery-1.8.2.js></script><script type=text/javascript>/*验证用户登录*/
+        $(function() {
+            /*验证初始化*/
+            var userName = $('#login-username'),
+                pwd = $('#login-pwd'),
+                userNameMsg = userName.parents('.form-item').find('.error'),
+                pwdMsg = pwd.parents('.form-item').find('.error');
+
+            var isUserNameCorrect = function() {
+                if ($.trim(userName.val()) === '') {
+                    userNameMsg.text('用户名输入不能为空').show();
+                    return false;
+                }
+                userNameMsg.text('').hide();
+                return true;
+            };
+            var isPwdCorrect = function() {
+                if ($.trim(pwd.val()) === '') {
+                    pwdMsg.text('密码输入不能为空').show();
+                    return false;
+                }
+                pwdMsg.text('').hide();
+                return true;
+            };
+
+            userName.blur(isUserNameCorrect);
+            pwd.blur(isPwdCorrect);
+
+            // 提交验证
+            $('#J-login-module form').find('.form-submit').on('click', function(e) {
+                e.preventDefault();
+                isUserNameCorrect();
+                isPwdCorrect();
+                if (isUserNameCorrect() && isPwdCorrect()) {
+                    var actionURL = $('#J-login-module form').attr('action');
+                    $.post( actionURL , {
+                        'username': userName.val(),
+                        'password': pwd.val()
+                    }, function(data) {
+                        if (data.code === 200) {
+                            //$('#J-login-module form').get(0).submit();
+                            var originHref = window.location.href;
+                            gotoHref = (originHref.indexOf('Returnurl=') !== -1) ? originHref.split('Returnurl=')[1] : '/';
+                            window.location.href = decodeURIComponent(gotoHref);
+                        } else if (data.code === 414) {
+                            pwdMsg.text(data.message).show();
+                        } else if (data.code === 403) {
+                            userNameMsg.text(data.message).show();
+                        }
+                    });
+                }
+            });
+        });</script>
+</html>

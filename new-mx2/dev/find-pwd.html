@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8>
+<title>找回密码</title>
+<link rel=stylesheet href=styles/reset.css>
+<link rel=stylesheet href=styles/header.css>
+<link rel=stylesheet href=styles/easyValidator.css>
+<link rel=stylesheet href=styles/footer.css>
+<style type=text/css>
+.find-pwd-form { padding: 40px 0 100px 148px; margin-bottom: 20px; border-top: 1px solid #cacaca; }
+.find-pwd-form label { cursor: pointer; }
+.find-pwd-form h2 { font-weight: normal; font-size: 16px; color: #666; padding-left: 10px; border-left: 2px solid #44a689; }
+.form-item1 { /*margin-left: 147px;*/ }
+.form-item1 p { display: inline-block; *display: inline;
+*zoom: 1;
+color: #666; padding: 10px 20px 0 0; }
+.find-pwd-form .form-item .form-submit { margin-left: 0; }
+.form-item .error, .form-item .tips { _display:none; /*诡异的IE6 bug，明明设置了隐藏的*/ }
+.success-email { height: 300px; line-height: 300px; text-align: center; }
+.success-email a { color: orange; padding: 0 6px; }
+</style>
+</head>
+<body>
+<header class=gb-header>
+    <div class=inner>
+        <h1 class=logo><a href=#>moxiu</a></h1>
+        <nav class=nav>
+            <ul>
+                <li><a href=#>首页</a></li>
+                <li><a href=#>精品主题</a></li>
+                <li><a href=#>制作主题</a></li>
+                <li><a href=#>更新日志</a></li>
+                <li><a href=#>帮助说明</a></li>
+                <li><a href=#>官方论坛</a></li>
+                <li><a href=#>官方微博</a></li>
+            </ul>
+        </nav>
+        <div class=login><a href=# class=login-link>登录</a> <a href=# class=register>注册</a></div>
+    </div>
+</header>
+<div class="w1200 clearfix pr">
+    <div class="easy-validator find-pwd-form">
+        <h2>找回密码</h2>
+        <form action=http://www.baidu.com method=post id=find-pwd-form>
+            <div class=form-item1>
+                <p>
+                    <input type=radio id=u-email name=v-find-pwd checked>
+                    <label for=u-email>验证邮箱找密码</label>
+                </p>
+            </div>
+            <div class=form-item>
+                <input type=text class=text id=email-call-text>
+                <div class=error></div>
+            </div>
+            <div class=form-item>
+                <input type=submit class=form-submit value=提交>
+            </div>
+        </form>
+    </div>
+</div>
+<footer class=gb-footer>
+    <div class=inner>
+        <ul class=help>
+            <li><a href=#>关于魔秀</a></li>
+            <li><a href=#>魔秀合作</a></li>
+            <li><a href=#>招贤纳士</a></li>
+            <li><a href=#>招贤纳士</a></li>
+            <li><a href=#>版权声明</a></li>
+            <li><a href=#>网站地图</a></li>
+            <li><a href=#>友情链接</a></li>
+        </ul>
+        <address>
+        ©2010 魔秀 京ICP证080590号 京网文[2012]0007-006号 京公网安备110105006728号 营业执照
+        </address>
+        <div class=contact-us>
+            <ul>
+                <li class=wx>
+                    <p>关注微信：<br>
+                        moxiu520</p>
+                </li>
+                <li class=sina>
+                    <p>关注：<br>
+                        <a href=#>魔秀网</a></p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</footer>
+</body>
+<script type="text/javascript src=js/libs/jquery-1.8.2.js"></script>
+<script type=text/javascript>
+        /*
+         * 找回密码验证
+         */
+        $(function() {
+            // 验证模式，包括邮件，移动电话
+            var patterns = {
+                email: function(text) {
+                    return /^(?:[a-z0-9]+[_\-+.]?)*[a-z0-9]+@(?:([a-z0-9]+-?)*[a-z0-9]+.)+([a-z]{2,})+$/i.test(text);
+                },
+                mobile: function(text) {
+                    return /^1[3-9]\d{9}$/.test(text);
+                }
+            };
+            // 验证回调
+            var validateCallback = function(patternsResult, tipsContainer, tips) {
+                if (!patternsResult) {
+                    tipsContainer.text(tips).show();
+                    return false;
+                } else {
+                    tipsContainer.text('').hide();
+                    return true;
+                }
+            };
+            // 表单验证错误数
+            var errorFlag = false;
+            // 获取dom
+            var $validateFiled = $('#email-call-text'),
+                $uCall = $('#u-call'),
+                $uEmail = $('#u-email'),
+                $tipsContainer = $validateFiled.parents('.form-item').find('.error');
+            // 验证初始化
+            var validateEmailCallText = function() {
+                var vText = $.trim($validateFiled.val());
+                if ($('#u-call').attr('checked') === 'checked') {
+                    errorFlag = (!validateCallback(patterns.mobile(vText), $tipsContainer, '请输入你注册时的手机号码')) ? false : true;
+                } else if ($('#u-email').attr('checked') === 'checked') {
+                    errorFlag = (!validateCallback(patterns.email(vText), $tipsContainer, '请输入你注册时的邮箱账号')) ? false : true;
+                }
+            };
+            // 表单提交
+            $('#find-pwd-form').on('submit', function(e) {
+                e.preventDefault();
+                if (errorFlag) {
+                    $.post('/?do=User.Forget',{'email':$('#email-call-text').val()},function(data){
+                        if(data.code===200){
+                            var findResultTmp=['<p class="success-email">邮件已发送成功，请点击</p>','<a href="'+data.emailLink+'">'+data.email+'</a>','中的地址，修改密码！'].join('');
+                            $('#find-pwd-form').html(findResultTmp);
+                        }else {
+                            $tipsContainer.text(data.message);
+                        }
+                    });
+                }
+            });
+            // 事件绑定
+            $validateFiled.on('blur', validateEmailCallText);
+            $uCall.on('click', validateEmailCallText);
+            $uEmail.on('click', validateEmailCallText);
+        });</script>
+</html>

@@ -1,0 +1,73 @@
+.user-box .cont { margin-bottom: 40px; color: #666666;  border-style: solid; border-width: 0 1px 2px 1px; border-color: #fff #eee #dfdfdf #eee; font-size: 14px; }
+.user-box .cont h3 { font-weight: normal; color: #3c3c3c; font-size: 25px; padding-top: 10px; line-height: 72px; }
+.user-title { height:57px ; line-height: 57px; background: #8fd7ca; color: #fff; font-size: 27px; padding-left: 22px; font-weight: normal; }
+.user-score-info { height: 240px; margin: 40px 0; background: #f5f5f5; }
+.user-rank-wrap { background: #dbc5c5; width: 230px; height: 240px; color: #fff; }
+.user-rank-wrap .user-img { text-align: center; padding-top: 13px;  }
+.user-rank-wrap .user-img img { display: inline-block; width: 110px; height: 110px; border-radius: 110px; padding: 4px; background: #fff;}
+.user-rank-wrap h2 {margin-bottom: 14px; font-size: 14px; text-align: center; font-weight: normal; width: 230px; overflow: hidden; white-space: nowrap; text-overflow:ellipsis; }
+.user-rank-wrap p { padding-left: 22px; font-size: 15px; }
+.user-rank-wrap .rank span { border-radius: 4px; background: #f39c11; 
+    padding: 0 6px; line-height: 20px; color: #fff; }
+.user-rank-bar { position:relative; margin-left: 68px; margin-top: 60px; }
+.user-rank-bar .pos { position: relative; height: 72px; }
+.user-rank-bar .user-pos { position: absolute; left: 0; top: -7px; width: 84px ; height: 79px; background-image: url(../images/score.png); _background-image: url(../images/score_IE6.png); background-position: 0 0; background-repeat: no-repeat; }
+.user-rank-bar .flag { display:block; margin-left: 750px; width: 54px; height: 72px; background-image: url(../images/flag.png); _background-image: url(../images/flag_IE6.png); background-position: 0 0; background-repeat: no-repeat; }
+.user-rank-bar .all-step { width: 756px; height: 30px; background: #c6c6c6; border-radius: 6px; overflow: hidden; }
+.user-rank-bar .active-step { width: 400px; color: #fff; background: #31c0a4; border-radius: 6px 0 0 6px; }
+.user-rank-bar .all-step li { float: left; width: 126px; height: 30px; border-right: 2px solid #fff; }
+.user-rank-bar .all-step li span { display: block;  width: 126px;  height: 30px; line-height: 30px; background: #c6c6c6; color: #fff; text-align: right; overflow: hidden; }
+.user-rank-bar .all-step li span.active-status { background: #31c0a4;}
+.user-rank-bar .all-step .last-child { border: 0; width: 126px; }
+.rank-scores-list { margin-top: 8px; }
+.rank-scores-list li { float: left; width: 126px; color: #757575; font-size: 16px; }
+.rank-scores-list li .scores { font-size: 12px; color: #999; }
+.rank-scores-list li .scores span { color: #f39c11; }
+.scores-introduce .cont .cont-item1 { padding-left: 52px; }
+.scores-introduce .cont .cont-item1 p { line-height: 25px; }
+.scores-introduce .cont .task ol { width: 1098px; height: 180px; background-image: url(../images/score-step.png); background-repeat: no-repeat; background-position: 0 0; }
+.scores-introduce .cont .task li { width: 274px; display: block; text-indent: -9999em; overflow: hidden;  }
+.active-task { color: #7f7f7f; font-size: 14px; }
+.active-task h3 { padding-left: 52px; }
+.active-task h4 { color: #333333; font-size: 20px; font-weight: normal; text-align: center; line-height: 34px; margin-bottom: 10px; }
+.active-task-item .inner { width: 1188px; margin-left: 6px; _border-top:1px solid #eee; }
+.active-task-item .inner .desc { text-align: center; line-height: 22px; }
+.active-task-item .inner .pub-theme { margin-left: 50px; }
+.active-task-item .inner li { width: 396px; height: 250px;  float: left; border-width: 1px 0 0 1px; border-style: solid; border-color: #eee;  margin:-1px 0 0px -1px; }
+.active-task-item .inner li b { display: block; width: 192px; height: 152px; margin: 0 auto; background-image: url(../images/task-sp.png); _background-image: url(../images/task-sp-IE6.png); background-repeat: no-repeat; }
+.active-task-item .inner .fourth-child,.active-task-item .inner .first-child { border-left: 0; }
+.active-task-item .inner .first-child b { background-position: 0 0; }
+.active-task-item .inner .second-child b { background-position: -192px 0; }
+.active-task-item .inner .third-child b { background-position: -384px 0; }
+.active-task-item .inner .fourth-child b { background-position: 0 -152px; }
+.active-task-item .inner .fiveth-child b { background-position: -192px -152px; }
+.active-task-item .inner .sixth-child b { background-position: -384px -152px; }
+.user-score-info .upgrade { font-size: 22px; color: #666; overflow: hidden; zoom:1; padding-top: 68px; }
+.user-score-info .upgrade p { float: left; width:310px ; height: 114px; border-right: 1px solid #d0d0d0; text-indent: 80px; }
+.user-score-info .upgrade p span { display: block; padding-top: 12px; }
+.user-score-info .upgrade strong { color: #18b5b0; font-size: 35px; display: block; }
+.upgrade-btn { float: left; margin: 38px 0 0 56px; _display:inline; width: 232px; height: 53px; line-height: 53px; text-align: center; color: #fff; font-size: 14px; border-radius: 6px; background: #f39c11; }
+.upgrade-btn:hover,.upgrade-btn:active { text-decoration: none; background: #f3aa35; }
+
+/*礼品兑换*/
+
+.convert-box .cont { padding-top: 26px; }
+.convert-cont { padding-top: 32px; }
+.convert-cont-item { display: none; }
+.convert-tab { margin-left: 52px; }
+.convert-tab a { float: left; width: 114px; height: 44px; margin-right: -1px; border: 1px solid #ddd; line-height: 46px; text-align: center; color: #666; font-size: 16px; }
+.convert-tab a:hover,.convert-tab .current { background: #3aaaa7; color: #fff; text-decoration: none; }
+.convert-btn { display: block; width: 60px; height: 25px; line-height: 25px; text-align: center; color: #fff; font-size: 12px; }
+.convert-btn:hover { text-decoration: none; }
+.convert-disabled { background: #d0d0d0; cursor: text; }
+.convert-abled { background: #f39c11; }
+.convert-abled:hover { background: #f3aa35; }
+.convert-task { background: #f59696; }
+.convert-task:hover { background: #f4aaaa; }
+/* 礼品列表 */
+.presents-list { width: 1092px; overflow: hidden; margin: 0 auto; }
+.presents-list ul { overflow: hidden; zoom: 1; margin-right: -48px; }
+.presents-list ul .presents-item { float: left; width: 170px; height: 248px; padding: 5px; margin:0 48px 40px 0; background: #f5f5f5; }
+.presents-list ul .presents-item h3 { font-size: 16px; color: #666; line-height: 18px; padding:10px 0;} 
+.presents-list ul .presents-item .convert-desc { position: relative; height: 36px; line-height: 18px; font-size: 12px; color: #909090;  }
+.presents-list .convert-btn { position: absolute; right: 0; top: 0px; margin-top: 6px; }

@@ -3,7 +3,9 @@
  * gmail:xmlovecss 艾特 gmail dot com
  * 简单的日历插件
  * 个人练习
- * example:
+ * 缺少支持：日期禁止
+ * range功能完善，日期区间限制
+ * keyboard上下左右组合
  */
 
 ;
@@ -354,14 +356,14 @@
                     dateSwitch = that.parents('thead').find('.date-switch'),
                     thisMonth = dateSwitch.data('month'),
                     thisYear = dateSwitch.data('year'),
-                    u_prevMonthObj, u_nextMonthObj;
+                    dateData;
                 if (that.hasClass('prev')) {
-                    u_prevMonthObj = me.u_prevMonth(thisYear, thisMonth);
-                    me.daysCalender.html(me.v_setCalenderCont('days', u_prevMonthObj.year, u_prevMonthObj.month, u_prevMonthObj.date));
+                    dateData = me.u_prevMonth(thisYear, thisMonth);
+                    me.daysCalender.html(me.v_setCalenderCont('days', dateData.year, dateData.month, dateData.date));
                     me.v_calenderPanelShow('days');
                 } else if (that.hasClass('next')) {
-                    u_nextMonthObj = me.u_nextMonth(thisYear, thisMonth);
-                    me.daysCalender.html(me.v_setCalenderCont('days', u_nextMonthObj.year, u_nextMonthObj.month, u_nextMonthObj.date));
+                    dateData = me.u_nextMonth(thisYear, thisMonth);
+                    me.daysCalender.html(me.v_setCalenderCont('days', dateData.year, dateData.month, dateData.date));
                     me.v_calenderPanelShow('days');
                 } else if (that.hasClass('date-switch')) {
                     me.monthsCalender.html(me.v_setCalenderCont('months', thisYear, thisMonth));
@@ -375,14 +377,14 @@
                     thisMonth = dateSwitch.data('month'),
                     thisYear = dateSwitch.data('year'),
                     selectedDate = $(this).text(),
-                    u_prevMonthObj, u_nextMonthObj;
+                    dateData;
                 if ($(this).hasClass('prev')) {
-                    u_prevMonthObj = me.u_prevMonth(thisYear, thisMonth, selectedDate);
-                    me.daysCalender.html(me.v_setCalenderCont('days', u_prevMonthObj.year, u_prevMonthObj.month, u_prevMonthObj.date));
+                    dateData = me.u_prevMonth(thisYear, thisMonth, selectedDate);
+                    me.daysCalender.html(me.v_setCalenderCont('days', dateData.year, dateData.month, dateData.date));
                     me.dateInput.val(me.u_formatInputDate(me.dateFormat, u_prevMonthObj));
                 } else if ($(this).hasClass('next')) {
-                    u_nextMonthObj = me.u_nextMonth(thisYear, thisMonth, selectedDate);
-                    me.daysCalender.html(me.v_setCalenderCont('days', u_nextMonthObj.year, u_nextMonthObj.month, u_nextMonthObj.date));
+                    dateData = me.u_nextMonth(thisYear, thisMonth, selectedDate);
+                    me.daysCalender.html(me.v_setCalenderCont('days', dateData.year, dateData.month, dateData.date));
                     me.dateInput.val(me.u_formatInputDate(me.dateFormat, u_nextMonthObj));
                 } else {
                     me.calenderContainer.find('table tbody td').removeClass('current');
@@ -446,7 +448,6 @@
                     me.yearsCalender.html(me.v_setCalenderCont('years', thisYear, thisMonth)).show();
                     me.v_calenderPanelShow('years');
                 } else if (that.hasClass('date-switch')) {
-                    // me.calenderContainer.find('.calender-months').show().siblings('div').hide();
                 }
             });
             // 体事件绑定

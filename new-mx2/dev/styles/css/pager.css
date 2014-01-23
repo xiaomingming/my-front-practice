@@ -1,0 +1,50 @@
+/* pager.css 分页样式 */
+.gb-pager {
+  padding: 60px 0;
+  font-size: 0;
+  text-align: center;
+  /*hack for inline-block extra height*/
+}
+.gb-pager .p-inner {
+  display: inline-block;
+
+  *display: inline;
+  *zoom: 1;
+}
+/*禁止按钮请用span包含*/
+.gb-pager .p-inner a,
+.gb-pager .p-inner span {
+  float: left;
+  height: 50px;
+  padding: 0 20px;
+  margin: 0 1px;
+  font-size: 16px;
+  line-height: 50px;
+  color: #999;
+  background: #f0f1f1;
+}
+.gb-pager .p-inner a.current,
+.gb-pager .p-inner a:hover {
+  color: #fff;
+  text-decoration: none;
+  background: #31c0a4;
+  transition: .3s all ease-in .02s;
+}
+.gb-pager .p-inner .prev,
+.gb-pager .p-inner .next {
+  width: 50px;
+  padding: 0;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  background: #c7c7c7;
+}
+.gb-pager .p-inner span.prev,
+.gb-pager .p-inner span.next {
+  background: #f0f1f1;
+}
+.gb-pager .p-inner .skip {
+  line-height: 40px;
+  /*修正行高位置*/
+}
+/*# sourceMappingURL=lala.map */

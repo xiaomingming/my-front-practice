@@ -1,0 +1,110 @@
+.update-header {
+  overflow: hidden;
+  border-top: 1px solid #cacaca;
+
+  *zoom: 1;
+}
+.update-header h2 {
+  float: left;
+  height: 31px;
+  padding: 26px 0 30px 0;
+  font-size: 21px;
+  font-weight: normal;
+  line-height: 31px;
+  color: #000;
+}
+.update-header .update-tab {
+  float: right;
+  margin-top: 33px;
+}
+.update-header .update-tab a {
+  float: left;
+  height: 26px;
+  padding: 0 10px;
+  font-size: 14px;
+  line-height: 26px;
+  color: #333;
+  border-radius: 2px;
+}
+.update-header .update-tab span {
+  float: left;
+  margin: 0 10px;
+  line-height: 26px;
+}
+.update-header .update-tab a:hover,
+.update-header .update-tab a.current {
+  color: #fff;
+  text-decoration: none;
+  background: #6acebb;
+}
+/*更新列表*/
+.update-bd {
+  color: #666;
+}
+.update-bd h4 {
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 22px;
+  color: #333;
+  text-indent: -6px;
+}
+.update-bd .no-result {
+  height: 300px;
+  margin-bottom: 20px;
+  line-height: 300px;
+  text-align: center;
+  border: 1px solid #aaa;
+}
+.update-item-bd {
+  padding: 6px 0 10px 6px;
+}
+.update-item header {
+  position: relative;
+  height: 29px;
+  line-height: 29px;
+}
+.update-item header strong {
+  padding: 0 6px;
+  color: orange;
+}
+.update-item header h3 {
+  position: absolute;
+  left: 0;
+  z-index: 2;
+  max-width: 50%;
+  height: 28px;
+  overflow: hidden;
+  font-size: 16px;
+  line-height: 28px;
+  color: #1caa8f;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-bottom: 1px solid #31c0a4;
+}
+.update-item header time {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  height: 28px;
+  padding-right: 10px;
+  line-height: 28px;
+  text-align: right;
+  border-bottom: 1px solid #d9d9d9;
+}
+.update-item ol {
+  margin: 0 0 0 12px;
+
+  *padding-left: 6px;
+}
+.update-item ol li {
+  line-height: 2;
+  list-style-type: decimal;
+}
+.update-item ol li a {
+  color: orange;
+}
+.update-item p {
+  line-height: 2;
+}
+/*# sourceMappingURL=lala.map */

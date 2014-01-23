@@ -1,0 +1,112 @@
+/*  
+* author: leweiming
+* index.css
+*/
+.gb-tab { position: relative; }
+/*tab内容*/
+.gb-tab .tab-cont { height: 538px; }
+.gb-tab .tab-cont .tab-cont-item { position: absolute; display: none; z-index: 1; width: 100%; height: 538px; border-width: 1px 0; border-style: solid; border-color: #eee; background-repeat: no-repeat; background-position: center center; }
+.gb-tab .tab-cont .list-inner { position: relative; width: 1200px; height: 538px; margin: 0 auto; }
+.gb-tab .tab-cont .index1 { background-image: url(../images/index1.jpg); }
+.gb-tab .tab-cont .index2 { background-image: url(../images/index2.jpg); }
+.gb-tab .tab-cont .index3 { background-image: url(../images/index3.jpg); }
+.gb-tab .tab-cont .index4 { background-image: url(../images/index4.jpg); }
+.gb-tab .tab-cont .index1 h2 { display: block; text-indent: -9999em; overflow: hidden; }
+.gb-tab .tab-cont .index1 .update-list { position: absolute; left: 628px; top: 156px; z-index: 2; width: 560px; height: 160px; color: #fff; font-size: 17px; }
+.gb-tab .tab-cont .index1 .update-list ol { margin: 0 0 0 12px; *padding-left: 14px; }
+.gb-tab .tab-cont .index1 .update-list li { text-shadow: 1px 1px #888; list-style-type: decimal; line-height: 1.6; }
+.gb-tab .tab-cont .index3 .diy-theme-center { position: absolute; right: 185px; bottom: 90px; width: 348px; height: 104px; color: #fff; font-size: 36px; text-align: center; line-height: 104px; text-indent: -9999em; overflow: hidden;  }
+.gb-tab .tab-cont .download-btn { position: absolute; width: 294px; height: 66px; padding: 17px 0;  right: 114px; bottom: 66px; }
+.gb-tab .tab-cont .download-btn:hover { text-decoration: none; }
+.gb-tab .tab-cont .download-btn p { color: #fff;  text-align: center; }
+.gb-tab .tab-cont .download-btn .free { font-size: 26px; /*line-height: 50px;*/ font-weight: normal; text-align: center; }
+.gb-tab .tab-cont .download-btn .version { font-size: 14px; /*line-height: 50px;*/ }
+.gb-tab .tab-cont .download-btn .version span { padding: 0 12px; }
+.gb-tab .tab-cont li.current { display: block; }
+/*免费主题*/
+.theme-slice-list { position: relative; width: 1180px; height: 488px; margin: 24px auto; /*padding: 0 10px;*/ }
+.theme-slice-list .theme-slice-item { position: absolute; width: 160px; height: 156px; overflow: hidden; border: 1px solid transparent; _border: 0; }
+.theme-slice-list .theme-slice-item:hover { -webkit-transform:rotate(-5deg) translateZ(0); -moz-transform:rotate(-5deg) translateZ(0); transform:rotate(-5deg) translateZ(0); }
+.theme-slice-list .item1 { left: 0; top: 0; }
+.theme-slice-list .item2 { height: 322px; left: 0; top: 166px; }
+.theme-slice-list .item3 { left: 170px; top: 0; }
+.theme-slice-list .item4 { left: 170px; top: 166px; }
+.theme-slice-list .item5 { left: 170px; top: 332px; }
+.theme-slice-list .item6 { left: 340px; top: 0; }
+.theme-slice-list .item7 { left: 510px; top: 0; }
+.theme-slice-list .item8 { width: 330px; left: 340px; top: 166px; }
+.theme-slice-list .item9 { left: 340px; top: 332px; }
+.theme-slice-list .item10 { left: 510px; top: 332px; }
+.theme-slice-list .item11 { width: 330px; height: 322px; left: 680px; top: 0; }
+.theme-slice-list .item12 { left: 680px; top: 332px; }
+.theme-slice-list .item13 { left: 850px; top: 332px; }
+.theme-slice-list .item14 { height: 322px; left: 1020px; top: 0; }
+.theme-slice-list .item15 { left: 1020px; top: 332px; }
+/* 明星排名 */
+.designer-star-list { width: 1200px; height: 504px; margin: 30px auto 0 auto; overflow: hidden; color: #fff; }
+.ds-list-inner { margin: 0 -73px 0 58px; overflow: hidden; _zoom: 1; }
+.designer-star { float: left; width: 312px; height: 504px; margin-right: 71px; }
+.designer-star .bd ul { overflow: hidden; zoom: 1; }
+.designer-star .bd ul .star-works-item { float: left; }
+.designer-star .hd { position: relative; height: 208px; }
+.designer-star .hd p { position: absolute; }
+.designer-star .hd a { color: #fff; }
+.designer-star .hd strong { font-weight: normal; }
+.designer-star .hd .author-name { width: 182px; left: 126px; top: 80px; font-size: 29px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.designer-star .hd .design-number,.designer-star .hd .download-number { width: 170px; left: 140px; top: 143px; font-size: 16px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.designer-star .hd .download-number { top: 174px; }
+.designer-star .hd .author-img { width: 112px; height: 112px; padding: 7px; overflow: hidden; z-index: 1; border-radius: 126px; background: #fff; }
+.designer-star .hd .author-img a { display: block; background: #fff; width: 112px; height: 112px; overflow: hidden; border-radius: 112px; }
+.designer-star .bd { padding-top: 20px; text-align: center; }
+.designer-star .bd ul { display: inline-block; *display: inline; *zoom: 1; margin-right: -10px; overflow: hidden; }
+.designer-star .bd .star-works-item { margin-right: 10px; }
+.designer-star .bd .star-works-item a { display: block; width: 128px; height: 212px; padding: 4px; background: #fff; }
+.designer-star .bd .star-works-item a:hover { border: 1px solid #aaa; padding: 3px; }
+.designer-star .bd .star-works-item .desc { width: 136px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 15px; line-height: 20px; padding: 16px 0; }
+/*tab导航*/
+.gb-tab .tab-pager { height: 80px; text-align: center; background: #f3f3f3; border-width: 1px 0 1px 0; border-color: #dddbdb; border-style: solid; }
+.gb-tab .tab-pager ul { padding-left: 2px; display: inline-block; *display: inline; *zoom: 1; width: 1200px; margin: 0 auto; background: #f3f3f3 url(../images/tab-line.png) 0 center no-repeat; }
+.gb-tab .tab-pager li { float: left; width: 300px; background: url(../images/tab-line.png) right center no-repeat; }
+.gb-tab .tab-pager>ul>li { position: relative; /*hack for IE6,do not support this attribute*/ }
+.gb-tab .tab-pager li a { display: block; width: 298px; _width: 297px; height: 80px; line-height: 80px; text-align: center; font-size: 20px; color: #888; }
+.index-tab-icon {  display: inline-block; _display: none; position: relative; *top: 0; background-image: url(../images/index-tab-icon.png); background-repeat: no-repeat; }
+.gb-tab .tab-pager .tab1 .index-tab-icon { width: 26px; height: 20px; top: 2px; padding-right: 6px; background-position: 0 0; }
+.gb-tab .tab-pager .current .tab1 .index-tab-icon { background-position: -43px 0; }
+
+.gb-tab .tab-pager .tab2 .index-tab-icon { width: 31px; height: 31px; top: 4px; padding-right: 4px; background-position: 0 -30px; }
+.gb-tab .tab-pager .current .tab2 .index-tab-icon { background-position: -43px -30px; }
+
+.gb-tab .tab-pager .tab3 .index-tab-icon { width: 32px; height: 32px; top: 8px; padding-right: 6px; background-position: 0 -71px; }
+.gb-tab .tab-pager .current .tab3 .index-tab-icon { background-position: -43px -71px; }
+
+.gb-tab .tab-pager .tab4 .index-tab-icon { width: 27px; height: 25px; top: 6px; padding-right: 6px; background-position: 0 -113px; }
+.gb-tab .tab-pager .current .tab4 .index-tab-icon { background-position: -43px -113px; }
+
+.gb-tab .tab-pager li a:hover,.gb-tab .tab-pager li.current a { text-decoration: none; background-color: #ecebe7; color: #656565; border: none;  }
+.gb-tab .tab-pager li.current a,.gb-tab .tab-pager li a:hover { width: 298px; _width: 297px; height: 78px; border-bottom: 2px solid #31c0a4; }
+/* 二维码位置 */
+.index-erwei { position: absolute; left: 616px; bottom: 66px; }
+/* 
+* 特性介绍    
+*/
+.introduce { /*padding:0 10px; width: 1160px;*/ margin: 68px auto 45px auto; overflow: hidden; *zoom: 1; }
+.introduce ul { margin-right: -220px; overflow: hidden; *zoom: 1; }
+.introduce ul li { float: left; width: 470px; height: 136px;  margin: 0 220px 56px 0; overflow: hidden; font-size: 14px; }
+.introduce ul li .bg { float: left; width: 123px; height: 123px; margin-right: 46px; background-image: url(../images/introduce.png); background-repeat: no-repeat; }
+.introduce ul li h3 { line-height: 56px; font-size: 32px; color: #777; font-weight: normal; }
+.introduce ul li.list-item1 .bg { background-position: 0 0; }
+.introduce ul li.list-item2 .bg { background-position: -154px 0; }
+.introduce ul li.list-item3 .bg { background-position: 0 -133px; }
+.introduce ul li.list-item4 .bg { background-position: -154px -133px; }
+.introduce ul li.list-item5 .bg { background-position: 0 -266px; }
+.introduce ul li.list-item6 .bg { background-position: -154px -266px; }
+/* 
+* 主题推荐
+ */
+.index-theme { padding: 0 10px; margin-bottom: 114px; }
+.index-theme .show-list { width: 1180px; }
+.index-theme .show-list ul { margin: 0 -40px -30px 0; }
+.index-theme .show-list .list-item { width: 192px; height: 320px; border: 1px solid #e4e4e4; margin: 0 40px 30px 0; padding: 5px; overflow: hidden;  }
+.index-theme .show-list .list-item .img { width: 192px; height: 320px; background: url(../images/big-ready-img.jpg) center center no-repeat; }
+.index-theme .show-list .list-item .shilter {  width: 198px; height: 326px; }
+.index-theme .show-list .list-item .desc { width: 204px; height: 332px; line-height: 332px; font-size: 16px; }

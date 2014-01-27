@@ -1,18 +1,3 @@
-// 路径配置
-require.config({
-    baseUrl: 'js/',
-    paths: {
-        'jquery': 'libs/jquery-1.8.2',
-        'easyDialog': 'utils/easyDialog'
-    }
-});
-// 非AMD模块配置
-requirejs.config({
-    baseUrl: 'js/',
-    shim: {
-        'easyDialog': ['jquery']
-    }
-});
 // tab切换
 require(['jquery'], function($) {
     $(function() {
@@ -29,20 +14,34 @@ require(['jquery'], function($) {
 require(['jquery', 'easyDialog'], function($, dialog) {
     // 此处尚未进行积分和升级的配置
     $(function() {
+        var $upgradeBtn = $('#upgrade-btn'),
+            level = $upgradeBtn.data('level'),
+            reach = $upgradeBtn.data('reach'),
+            need = $upgradeBtn.data('need');
+        if (reach < need) {
+            $upgradeBtn.attr('disabled', 'disabled').addClass('upgrade-disabled');
+            return false;
+        }
         var updateDialog = function() {
-            var $upgradeBtn = $('#upgrade-btn'),
-                level = $upgradeBtn.data('level'),
-                scores = $upgradeBtn.data('scores');
             $('#upgrade-dialog').easyDialog({
                 'cWidth': 460,
                 'cHeight': 204,
                 'dTitle': '',
-                dContentTmp: '<p class="tip">是否消耗<span class="t1">' + scores + '</span>积分，升级至<span class="t1">' + level + '</span></p>',
+                'dContentTmp': '<p class="tip">是否消耗<span class="t1">' + need + '</span>积分，升级至<span class="t1">Lv' + level + '</span></p>',
                 'dCloseTxt': '×',
                 'dOKVal': '确定升级',
-                OK: function() {
+                'OK': function() {
                     var target = window.location.href;
-                    window.location.href = target;
+                    // 发送请求
+                    $.post('/th/json.php?do=User.Upgrade.Upgrade', {})
+                        .done(function(data) {
+                            if (data.data === 200) {
+                                window.location.href = target;
+                            }
+                        }).fail(function(err) {
+
+                        });
+
                 }
             });
         };
@@ -50,7 +49,7 @@ require(['jquery', 'easyDialog'], function($, dialog) {
     });
 });
 // 兑换配置
-require(['jquery', 'easyDialog'], function($, dialog) {
+/*require(['jquery', 'easyDialog'], function($, dialog) {
     $(function() {
         var getRewardDialog = function(opts) {
             $('#get-reward-dialog').easyDialog({
@@ -74,13 +73,17 @@ require(['jquery', 'easyDialog'], function($, dialog) {
                 'dOKVal': '确定兑换',
                 OK: function() {
                     // 确认回调
-                    var uName=encodeURIComponent($('#user-name').val()),
-                    uCall=$('#user-call').val(),
-                    uAddress=encodeURIComponent($('#user-address').val());
+                    var uName = encodeURIComponent($('#user-name').val()),
+                        uCall = $('#user-call').val(),
+                        uAddress = encodeURIComponent($('#user-address').val());
                     // console.log(uName,uCall,uAddress);
-                    $.get(opts.action,{name:uName,call:uCall,address:uAddress}).done(function(data){
+                    $.get(opts.action, {
+                        name: uName,
+                        call: uCall,
+                        address: uAddress
+                    }).done(function(data) {
                         alert('success');
-                    }).fail(function(data){
+                    }).fail(function(data) {
                         alert('failed');
                     });
                 }
@@ -98,4 +101,4 @@ require(['jquery', 'easyDialog'], function($, dialog) {
         };
         getReward();
     });
-});
+});*/

@@ -44,49 +44,11 @@
             <p class="rank">我的当前等级：<span>Lv14</span></p>
             <p class="scores">我的积分：<span>2658</span></p>
         </div>
-        <div id="user-rank-bar" class="user-rank-bar fl">
+        <div id="user-rank-bar" class="user-rank-bar fl" data-level="2" data-scores="200">
             <div class="pos">
                 <span class="flag"></span>
                 <span class="user-pos"></span>
             </div>
-            <ul class="all-step" data-scores="1560">
-                <li><span></span></li>
-                <li><span></span></li>
-                <li><span></span></li>
-                <li><span></span></li>
-                <li><span></span></li>
-                <li class="last-child"><span></span></li>
-            </ul>
-            <ul class="rank-scores-list clearfix">
-                <li>
-                    <p class="rank">LV0</p>
-                    <p class="scores">(<span>0</span>)</p>
-                </li>
-                <li>
-                    <p class="rank">LV5</p>
-                    <p class="scores">(<span>300</span>)</p>
-                </li>
-                <li>
-                    <p class="rank">LV10</p>
-                    <p class="scores">(<span>1500</span>)</p>
-                </li>
-                <li>
-                    <p class="rank">LV15</p>
-                    <p class="scores">(<span>6000</span>)</p>
-                </li>
-                <li>
-                    <p class="rank">LV20</p>
-                    <p class="scores">(<span>12000</span>)</p>
-                </li>
-                <li>
-                    <p class="rank">LV25</p>
-                    <p class="scores">(<span>16000</span>)</p>
-                </li>
-                <li>
-                    <p class="rank">LV30</p>
-                    <p class="scores">(<span>35000</span>)</p>
-                </li>
-            </ul>
         </div>
     </div>
     <div class="scores-introduce user-box">
@@ -178,5 +140,7 @@
     </div>
 </footer>
 </body>
-<script type="text/javascript" data-main="js/app/score-intro.js" src="js/libs/require.js"></script>
+<script type="text/javascript" src="js/libs/require.js"></script>
+<script type="text/javascript" src="js/requirejs-config.js"></script>
+<script type="text/javascript" src="js/app/score-intro.js"></script>
 </html>

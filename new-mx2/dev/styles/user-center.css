@@ -2,7 +2,7 @@
 .user-box .cont h3 { font-weight: normal; color: #3c3c3c; font-size: 25px; padding-top: 10px; line-height: 72px; }
 .user-title { height:57px ; line-height: 57px; background: #8fd7ca; color: #fff; font-size: 27px; padding-left: 22px; font-weight: normal; }
 .user-score-info { height: 240px; margin: 40px 0; background: #f5f5f5; }
-.user-rank-wrap { background: #dbc5c5; width: 230px; height: 240px; color: #fff; }
+.user-rank-wrap {  width: 230px; height: 240px; color: #fff; background: #dbc5c5;}
 .user-rank-wrap .user-img { text-align: center; padding-top: 13px;  }
 .user-rank-wrap .user-img img { display: inline-block; width: 110px; height: 110px; border-radius: 110px; padding: 4px; background: #fff;}
 .user-rank-wrap h2 {margin-bottom: 14px; font-size: 14px; text-align: center; font-weight: normal; width: 230px; overflow: hidden; white-space: nowrap; text-overflow:ellipsis; }
@@ -12,15 +12,15 @@
 .user-rank-bar { position:relative; margin-left: 68px; margin-top: 60px; }
 .user-rank-bar .pos { position: relative; height: 72px; }
 .user-rank-bar .user-pos { position: absolute; left: 0; top: -7px; width: 84px ; height: 79px; background-image: url(../images/score.png); _background-image: url(../images/score_IE6.png); background-position: 0 0; background-repeat: no-repeat; }
-.user-rank-bar .flag { display:block; margin-left: 750px; width: 54px; height: 72px; background-image: url(../images/flag.png); _background-image: url(../images/flag_IE6.png); background-position: 0 0; background-repeat: no-repeat; }
-.user-rank-bar .all-step { width: 756px; height: 30px; background: #c6c6c6; border-radius: 6px; overflow: hidden; }
+.user-rank-bar .flag { position: absolute; right: 74px;  width: 54px; height: 72px; background-image: url(../images/flag.png); _background-image: url(../images/flag_IE6.png); background-position: 0 0; background-repeat: no-repeat; }
+.user-rank-bar .all-step { height: 30px;  border-radius: 6px; }
 .user-rank-bar .active-step { width: 400px; color: #fff; background: #31c0a4; border-radius: 6px 0 0 6px; }
-.user-rank-bar .all-step li { float: left; width: 126px; height: 30px; border-right: 2px solid #fff; }
-.user-rank-bar .all-step li span { display: block;  width: 126px;  height: 30px; line-height: 30px; background: #c6c6c6; color: #fff; text-align: right; overflow: hidden; }
+.user-rank-bar .all-step li { float: left; height: 30px; border-right: 2px solid #fff; background: #c6c6c6; }
+.user-rank-bar .all-step li span { display: block; height: 30px; line-height: 30px; background: #c6c6c6; color: #fff; text-align: right; overflow: hidden; }
 .user-rank-bar .all-step li span.active-status { background: #31c0a4;}
-.user-rank-bar .all-step .last-child { border: 0; width: 126px; }
+.user-rank-bar .all-step .last-child { border: 0; border-radius: 6px; }
 .rank-scores-list { margin-top: 8px; }
-.rank-scores-list li { float: left; width: 126px; color: #757575; font-size: 16px; }
+.rank-scores-list li { float: left; color: #757575; font-size: 16px; }
 .rank-scores-list li .scores { font-size: 12px; color: #999; }
 .rank-scores-list li .scores span { color: #f39c11; }
 .scores-introduce .cont .cont-item1 { padding-left: 52px; }
@@ -47,7 +47,9 @@
 .user-score-info .upgrade p span { display: block; padding-top: 12px; }
 .user-score-info .upgrade strong { color: #18b5b0; font-size: 35px; display: block; }
 .upgrade-btn { float: left; margin: 38px 0 0 56px; _display:inline; width: 232px; height: 53px; line-height: 53px; text-align: center; color: #fff; font-size: 14px; border-radius: 6px; background: #f39c11; }
+.upgrade-disabled { background: #ccc; cursor: text; }
 .upgrade-btn:hover,.upgrade-btn:active { text-decoration: none; background: #f3aa35; }
+.upgrade-disabled:hover { background: #ccc; }
 
 /*礼品兑换*/
 

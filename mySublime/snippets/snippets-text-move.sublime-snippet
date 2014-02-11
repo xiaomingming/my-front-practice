@@ -1,0 +1,9 @@
+<snippet>
+    <content><![CDATA[
+display: block; text-indent: -9999em; overflow: hidden; 
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>text-move</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.css,text.html</scope>
+</snippet>

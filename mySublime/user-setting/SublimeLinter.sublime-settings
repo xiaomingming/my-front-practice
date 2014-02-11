@@ -1,0 +1,68 @@
+{
+    "sublimelinter": "save-only",
+    "sublimelinter_popup_errors_on_save": true,
+    "sublimelinter_executable_map": {
+        "javascript": "D:/Program Files/nodejs/node.exe",
+        "css": "D:/Program Files/nodejs/node.exe"
+    },
+    "jshint_options": {
+        "strict": false,
+        "window": true,
+        "jQuery": true,
+        "$": true,
+        "module": true,
+        "grunt": true,
+        "global": true,
+        "document": true,
+        "console": true,
+        "setTimeout": true,
+        "setInterval": true,
+        "quotmark": "single", //只能使用单引号
+        "noarg": true,
+        "noempty": true, //不允许使用空语句块{}
+        "eqeqeq": true, //!==和===检查
+        "undef": true,
+        "curly": true, //值为true时，不能省略循环和条件语句后的大括号
+        "forin": true, //for in hasOwnPropery检查
+        "devel": true,
+        "jquery": true,
+        "browser": true,
+        "wsh": true,
+        "evil": true,
+        "unused": "vars", //形参和变量未使用检查
+        "latedef": true //先定义变量，后使用
+    },
+    "csslint_options": {
+        "adjoining-classes": "warning",
+        "box-model": true,
+        "box-sizing": "warning",
+        "compatible-vendor-prefixes": "warning",
+        "display-property-grouping": true,
+        "duplicate-background-images": "warning",
+        "duplicate-properties": true,
+        "empty-rules": true,
+        "errors": true,
+        "fallback-colors": "warning",
+        "floats": "warning",
+        "font-faces": "warning",
+        "font-sizes": "warning",
+        "gradients": "warning",
+        "ids": "warning",
+        "import": "warning",
+        "important": "warning",
+        "known-properties": true,
+        "outline-none": "warning",
+        "overqualified-elements": "warning",
+        "qualified-headings": "warning",
+        "regex-selectors": "warning",
+        "rules-count": "warning",
+        "shorthand": "warning",
+        "star-property-hack": "warning",
+        "text-indent": "warning",
+        "underscore-property-hack": "warning",
+        "unique-headings": "warning",
+        "universal-selector": "warning",
+        "vendor-prefix": true,
+        "zero-units": "warning"
+    }
+}

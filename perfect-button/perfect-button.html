@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>css button</title>
+<style type="text/css">
+* { margin:0; padding:0; }
+body { font:12px/1.5 "宋体"; }
+input, button { border:0 none; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; box-sizing: content-box; }
+a { text-decoration:none; }
+.test_wrapper { margin: 40px;}
+.btn { display: block; padding: 4px 15px; background: orange; border-radius: 3px; color: #fff; margin: 10px; cursor: pointer; }
+a.btn { display: inline-block; }
+/*--for firefox button input box model bug of 6px--*/
+.btn input, .btn button { -moz-padding-start: 0; -moz-padding-end: 9px; }
+/*--for IE6 and IE8--*/
+.btn button , .btn input { overflow: visible; }
+</style>
+</head>
+<body>
+    <div class="test_wrapper">
+        <button class="btn">登录</button>
+        <button class="btn">退出我的账户</button>
+        <a href="#" class="btn">登录</a>
+        <a href="#" class="btn">退出我的账户</a>
+        <input type="submit" class="btn" value="login" />
+    </div>
+</body>
+</html>
+

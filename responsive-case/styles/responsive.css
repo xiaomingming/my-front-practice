@@ -1,0 +1,17 @@
+@media only screen and (max-width: 480px) {
+    #header>nav { float: none; }
+    #header .login { float: none; margin-bottom: 10px; }
+    #header .login>form>div { float: none; margin-bottom: 10px; }
+    #sider { float: none; width: auto; margin-bottom: 20px; }
+    #sider>ul { overflow: hidden; width: auto; font-size: 16px; }
+    #sider>ul>li { float: left; border-bottom: none; }
+    #sider>ul>li>a:hover { background: #333; color: #fff; }
+    #main { margin: 0; border-top: 1px solid #ddd; }
+    #footer>nav { text-align: left; }
+    #footer>nav>ul>li { display: block; margin-bottom: 6px; }
+    #footer p { text-align: left; padding-left: 10px; }
+  }
+  @media only screen and (max-width: 320px){
+    #sider>ul { font-size: 14px; }
+    #sider>ul>li { display: block;  float: none; }
+  }

@@ -1,0 +1,40 @@
+  *{ margin: 0; padding: 0; }
+  header,nav,footer { display: block; }
+  ul { list-style: none outside none; }
+  a { text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a img { border: 0; }
+  img { max-width: 100%; }
+  body { font: 12px/1.5 arial;  background: #eee; color: #333; }
+  #header { border-radius: 3px; border-bottom: 1px solid #ddd; padding: 10px 0; }
+  #header:after { display: block; content: ''; height: 0; font-size: 0; visibility: hidden; clear: both; }
+  #header>nav { float: left; font-size: 16px; }
+  #header>nav>ul { width: 100%; overflow: hidden; }
+  #header>nav>ul>li { float: left; }
+  #header>nav>ul>li>a { display: block; padding: 0 6px; color: #333; }
+  #header>nav>ul>li>a:hover { text-decoration: underline; }
+  #header .login { float: right; margin: 0 20px 0 10px; }
+  #header .login form { font-size: 14px; }
+  #header .login form>div { float: left; margin-right: 20px; }
+  #header .login form>div>label { display: block; float: left; width:4em; }
+  #header .login form>input { float: left; width: 40px; height: 20px; border: 1px solid #ddd; border-radius: 3px; background: orange; color: #fff; }
+  #content { padding-top: 20px; overflow: hidden; border-top: 1px solid #fff; }
+  #content:after { display: block; content: '.'; clear: both; height: 0; font-size: 0; visibility: hidden; }
+  #sider { float: left; width: 200px; }
+  #sider>ul { border: 1px solid #ccc; border-radius: 6px; font-size: 18px; background: #fafafa; }
+  #sider>ul>li { border-bottom: 1px solid #ccc; }
+  #sider>ul>li:last-child { border-bottom: 0; }
+  #sider>ul>li>a { display: block; line-height: 2; padding: 0 10px; color: #555; }
+
+  #sider>ul>li>a:hover { color: #f00; text-decoration: none; }
+  #main { background: #fff; margin-left: 220px; padding: 10px; border-radius: 3px; font-size: 14px; }
+  #footer { margin-top: 20px; font-size: 14px; border-top: 1px solid #ddd; }
+  #footer:before { display: block; content: ''; border-top: 1px solid #fff; overflow: hidden; }
+  #footer>nav { text-align: center; margin-top: 10px; font-size: 16px; }
+  #footer>nav>ul { display: inline-block; }
+  #footer>nav>ul>li { display: inline-block; margin-right: 10px; }
+  #footer>nav>ul>li>a { display: block; padding: 0 8px; color: #666; }
+  #footer p { text-align: center; margin: 10px 0; }
+  .article-list>ul>li { margin-bottom: 10px; }
+  .article-list>ul>li>h1 { font-weight: normal; line-height: 2; }
+  .article-list>ul>li>p { text-indent: 2em; }

@@ -1,0 +1,220 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>my resume</title>
+<style type="text/css">
+*{ margin: 0; padding: 0; }
+body { font: 12px/1.5 "微软雅黑",arial; color: #333; }
+ul,ol { list-style: none; }
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrapper { width: 960px; margin: 0 auto; }
+#my-header {  position: fixed; top: 0; left: 0; right: 0; height: 39px; line-height: 39px; background: #eee;  text-align: center; border-bottom: 1px solid #ddd;  }
+#module-list { margin-top: 40px; }
+#module-list>ul { margin-bottom: 10px; }
+#module-list>ul:after { display: block; content: '.'; clear: both; visibility: hidden; height: 0; }
+#module-list>ul>li { padding: 10px; font-size: 14px; }
+#module-list>ul>li>h2 { padding: 6px 20px; margin-bottom: 10px; font-size: 16px; border-radius: 6px; }
+#module-list>ul>li>ul,#module-list>ul>li>ol { padding: 0 20px; border-radius: 3px; overflow: hidden; }
+#module-list>ul>li>ul>li, #module-list>ul>li>ol>li {
+  line-height: 2;
+}
+#module-list>ul>li>ul>li>ol {
+  margin-bottom: 10px;
+}
+#module-list>ul>li>ul>li>ol>li {
+}
+#module-list>ul>li>ul>li>ol:hover {
+}
+#module-list>ul>li.personal-information { width: 620px; float: left; background: #b91d47; color: #fff; }
+#module-list>ul>li.personal-information>ul>li { display: inline-block; line-height: 2; width: 200px;  }
+#module-list>ul>li.contact-me { width: 290px; float: right; background: #ffc40d; color: #333; }
+#module-list>ul>li.contact-me>ul>li {
+  white-space: nowrap;
+  word-wrap: break-word;
+}
+#module-list>ul>li.contact-me a { color: #333; }
+#module-list>ul>li.contact-me a:hover { text-decoration: underline; }
+#module-list>ul>li.skills { width: 680px; float: right;  background: #eaeaea; }
+#module-list>ul>li.develop-tools { width: 230px; height: 214px; float: left; background: #00a8ec; color: #fff;  }
+#module-list>ul>li.experience { position: relative; float: left; width: 940px; background: #eee; background: rgba(238,238,238,0.5);  }
+#module-list>ul>li.experience>h2 { color: #333; }
+#module-list>ul>li.experience>ul>li:nth-child(1)>ol>li { margin-bottom: 10px; }
+#module-list>ul>li.experience>ul>li:nth-child(1) { float: left; width: 600px; padding: 10px;  background: #7fcbe5; }
+#module-list>ul>li.experience>ul>li:nth-child(2),#module-list>ul>li.experience>ul>li:nth-child(3) { 
+  float: right;
+  width: 250px;
+  padding: 10px;
+  background: #43b51f;
+  color: #fff;
+}
+#module-list>ul>li.experience>ul>li:nth-child(2) {
+  height: 160px;
+}
+#module-list>ul>li.experience>ul>li:nth-child(3) {
+  height: 140px;
+  margin-top: 10px;
+}
+#module-list>ul>li.myself-introduce { float: left; width: 940px; background: #da532c; color: #fff; }
+#module-list a { color: #333; }
+#module-list a:hover { color: #7e3878; }
+/*
+*metro UI style
+*/
+/*background color*/
+.metrouicss .bg-color-blue {
+  background-color: #2d89ef !important;
+}
+.metrouicss .bg-color-blueLight {
+  background-color: #eff4ff !important;
+}
+.metrouicss .bg-color-blueDark {
+  background-color: #2b5797 !important;
+}
+.metrouicss .bg-color-green {
+  background-color: #00a300 !important;
+}
+.metrouicss .bg-color-greenLight {
+  background-color: #99b433 !important;
+}
+.metrouicss .bg-color-greenDark {
+  background-color: #1e7145 !important;
+}
+.metrouicss .bg-color-red {
+  background-color: #b91d47 !important;
+}
+.metrouicss .bg-color-yellow {
+  background-color: #ffc40d !important;
+}
+.metrouicss .bg-color-orange {
+  background-color: orange !important;
+}
+.metrouicss .bg-color-orangeDark {
+  background-color: #da532c !important;
+}
+.metrouicss .bg-color-pink {
+  background-color: #9f00a7 !important;
+}
+.metrouicss .bg-color-pinkDark {
+  background-color: #7e3878 !important;
+}
+.metrouicss .bg-color-purple {
+  background-color: #603cba !important;
+}
+.metrouicss .bg-color-darken {
+  background-color: #1d1d1d !important;
+}
+/*changed*/
+.metrouicss .bg-color-lighten {
+  background-color: #85d7EC !important;
+}
+.metrouicss .bg-color-white {
+  background-color: #ffffff !important;
+}
+.metrouicss .bg-color-grayDark {
+  background-color: #525252 !important;
+}
+.metrouicss .bg-color-magenta {
+  background-color: #ff0097 !important;
+}
+.metrouicss .bg-color-teal {
+  background-color: #00aba9 !important;
+}
+.metrouicss .bg-color-redLight {
+  background-color: #ee1111 !important;
+}
+</style>
+</head>
+
+<body>
+<div class="wrapper metrouicss">
+  <header id="my-header">
+      <h1>乐伟明的简历</h1>
+  </header>
+  <div id="module-list">
+      <ul>
+            <li class="personal-information">
+              <h2>个人信息</h2>
+              <ul>
+                <li>姓名：<span>乐伟明</span></li>
+                <li>性别：<span>男</span></li>
+                <li>出生日期：<span>1988年1月7日</span></li>
+                <li>居 住 地：<span>西安-雁塔区</span></li>
+                <li>学历：<span>本科</span></li>
+                <li>专业：<span>信息与计算科学</span></li>
+                <li>英语等级：<span>CET4</span></li>
+                <li>工作年限：<span>两年</span></li>
+                <li>目前年薪：<span>6万人民币</span></li>
+              </ul>
+            </li>
+            <li class="contact-me">
+              <h2>联系我</h2>
+              <ul>
+                <li>电子邮件：<span>lwm8817@126.com</span></li>
+                <li>手机：<span>15619402557</span></li>
+                <li>QQ：<span>524009538</span></li>
+                <li>blog：<span><a href="http://www.cnblogs.com/my_front_research/">博客园博客</a></span></li>
+                <li>github：<span><a href="http://www.github.com/xiaomingming/">xiaomingming</a></span></li>
+              </ul>
+            </li>
+          </ul>
+          <ul>
+            <li class="skills">
+              <h2>掌握技能</h2>
+              <ol>
+                <li>对html语义有自己的理解，熟练使用css，喜欢css模块化，沉醉于使用简洁可扩展的html和css构建漂亮的界面；</li>
+                <li>崇尚渐进增强的前端设计，与UE，UI探讨良好的交互设计，并将此实施于具体项目中； </li>
+                <li>与后端约定json数据格式，实现前后端交互； </li>
+                <li>熟悉javascript基本语法，熟练使用jquery库，seajs，关注js模块化，目前正在学习MVC库Backbone.js; </li>
+                <li>了解scrum 敏捷软件开发，了解git代码管理工具的使用</li>
+              </ol>
+            </li>
+            <li class="develop-tools">
+              <h2>常用工具</h2>
+              <ul>
+                <li>ps+Dw Cs5+sublimeText2</li>
+                <li>IETester+Firebug+chrome 开发者工具</li>
+                <li>wampserver+fiddler2</li>
+                <li>git代码提交工具</li>
+              </ul>
+            </li>
+          </ul>
+          <ul>
+            <li class="experience">
+              <h2>工作经验</h2>
+              <ul>
+                <li>
+                  <ol>
+                    <li><time>2013年3月至今</time>,<span class="description">在好耶playdata从事前端开发，负责前端选型，使用bootstrap框架，juqery库构建界面及交互，seaj管理前端js依赖，并与UE及UI探讨并确定界面及交互细节；</span></li>
+                    <li><time>2012年4月至2013年2月</time>,<span class="description">在好耶<a href="mediamax.allyes.com/">mediamax</a>项目从事前端开发工作，包括频道管理，广告位管理，买卖关系管理，首页等。负责界面html+css总体搭建，js组件选择，与后端进行数据格式约定，平台维护，前端优化方案，以及前端规范的订制；</span></li>
+                     <li><time>2011年10月至2012年3月</time>,<span class="description">在好耶 <a href="www.allyesapp.com">A3</a>项目从事前端开发，包括前端html+css，js规范制定，与后端约定数据接口，UI界面制作及交互讨论，界面维护，学习并遵循scrum敏捷软件开发流程；</span></li>
+                  </ol>
+                </li>
+                <li>
+                  <ol>
+                    <li><time>2011/7--2011/9</time>,<span class="description">在深圳米墙贸易有限公司西安分公司从事前端开发，负责houseable.com和ndscardzone.com两个垂直站点页面的前端制作，后期bug维护，与后端人员进行前后端的交互。</span></li>
+                  </ol>
+                </li>
+                <li>
+                  <ol>
+                    <li><time>2010/7--2010/12</time>,<span class="description">在东莞万博网络科技有限公司从事前端开发，xhtm+css布局及页面重构工作； 了解php smarty模板，与后台php开发人员进行合作。</span></li>
+                  </ol>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <ul>
+            <li class="myself-introduce">
+              <h2>个人介绍</h2>
+              <ul>
+                <li>喜欢css，喜欢语义化，喜欢cs1.6游戏</li>
+                <li>逛知乎，逛github，偶尔去stackoverflow，在jsfiddle上经常放demo</li>
+                <li>好吃，喜欢美好的事物，不限于美女</li>
+              </ul>
+            </li>
+        </ul>  
+  </div>
+</div>
+</body>
+</html>

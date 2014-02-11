@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Backbone.js test</title>
+  <style type="text/css">
+  </style>
+</head>
+
+<body>
+<a href="#!/hello">click me!</a>
+<script src="../libs/jquery.js"></script>
+<script src="../libs/underscore.js"></script>
+<script src="../libs/backbone.js"></script>
+<script src="../libs/juicer.js"></script>
+<script type="text/javascript">
+$(function(){
+  // 一个和服务器端的交互
+  var App={
+    Models:{},
+    Views:{},
+    Routers:{
+
+    },
+    initialize:function(){
+      Backbone.history.start();
+    }
+  };
+  App.Models.hello= Backbone.Model.extend({
+    defaults:{
+      name:'xiao pi hai'
+    },
+    url:function(){
+      return '../fake/hello.php';
+    }
+  });
+  App.Views.hello= Backbone.View.extend({
+    el: $('body'),
+    initialize:function(options){
+      this.on('change',this.render);
+      this.model=this.options.model;
+    },
+    render:function(){
+      var message=this.model.toJSON().name;
+      $(this.el).append('<p>'+message+'</p>');
+      return this;
+    }
+  });
+  App.Routers.routes= Backbone.Router.extend({
+    routes:{
+      '!/hello':'hello'
+    },
+    hello:function(){
+      var helloModel=new App.Models.hello;
+      helloModel.fetch({
+        success:function(model){
+          var helloView=new App.Views.hello({
+            model:model
+          });
+          helloView.trigger('change');
+        }
+      });
+    }
+  });
+  new App.Routers.routes();
+  App.initialize();
+});
+</script>
+  </body>
+</html>

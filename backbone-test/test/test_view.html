@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Backbone.js test</title>
+  <style type="text/css">
+  #container { line-height: 20px; display: inline-block; }
+  button { border: 1px solid #eee; color: #333; width: 120px; height: 40px; border-radius: 6px; }
+  button.active { background: #fff; color: orange; border: 1px solid orange; }
+  </style>
+</head>
+
+<body>
+<button>click me</button>
+<div id="container"></div>
+<script src="../libs/jquery.js"></script>
+<script src="../libs/underscore.js"></script>
+<script src="../libs/backbone.js"></script>
+<script type="text/javascript">
+$(function(){
+  // 这个示例不好的地方在于，把count这个无关的数据放到了model中
+  // 就当是个测试吧
+  var ListView=Backbone.View.extend({
+    el:$('body'),
+    container:$('#container'),
+    initialize:function(){
+      console.log('---ok,start---');
+      _.bindAll(this,'render','showInformation');
+      this.counter=0;
+      return this.render();
+    },
+    events:{
+      'click button':'showInformation'
+    },
+    render:function(){
+      return this;
+    },
+    gethtml:function(){
+      var model=this.model,
+      title=model.get('title'),
+      describe=model.get('describe');
+      return '<span>'+model.get('title')+model.get('describe')+'</span>';
+    },
+    showInformation:function(e){
+      var self=$(e.currentTarget),
+      model=this.model;
+      self.addClass('active');
+      this.counter++;
+      this.container.html('<p>'+this.gethtml()+'<span style="font-size:20px; color:orange; font-weight:bold;">'+this.counter+'</span></p>');
+      return this;
+    }
+  });
+  var ListModel=new Backbone.Model({
+    title:'test:',
+    describe:'hello,world!',
+    count:0
+  });
+  var listView= new ListView({
+    model:ListModel
+  });
+});
+</script>
+  </body>
+</html>

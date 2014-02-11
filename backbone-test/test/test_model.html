@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Backbone.js test</title>
+  <style type="text/css">
+  button { border: 1px solid #eee; color: #333; width: 120px; height: 40px; border-radius: 6px; cursor: pointer; border: 1px solid orange; font-size: 14px; }
+  button.active { background: #fff; color: orange; border: 1px solid orange; }
+  </style>
+</head>
+<body>
+<script src="../libs/jquery.js"></script>
+<script src="../libs/underscore.js"></script>
+<script src="../libs/backbone.js"></script>
+<script type="text/javascript">
+(function($){
+   // 每个新增的item
+   var Item = Backbone.Model.extend({
+     defaults: {
+       part1: 'hello',
+       part2: 'world'
+     }
+   });
+   
+   var List = Backbone.Collection.extend({
+     model: Item
+   });
+   // 每个item html渲染
+   var ItemView = Backbone.View.extend({
+     tagName: 'li', // name of (orphan) root tag in this.el
+     initialize: function(){
+       _.bindAll(this, 'render'); // every function that uses 'this' as the current object should be in here
+       return this.render();
+     },
+     render: function(){
+       $(this.el).html('<span>'+this.model.get('part1')+' '+this.model.get('part2')+'</span>');
+       return this; // for chainable calls, like .render().el
+     }
+   });
+   // 最终的view操作
+   var ListView = Backbone.View.extend({
+     el: $('body'), // el attaches to existing element
+     events: {
+       'click button#add': 'addItem'
+     },
+     initialize: function(){
+      console.log('view initialize');
+       _.bindAll(this, 'render', 'addItem', 'appendItem'); // every function that uses 'this' as the current object should be in here
+       
+       this.collection = new List();
+       //
+       this.collection.bind('add', this.appendItem); // collection event binder
+ 
+       this.counter = 0;
+       return this.render();
+     },
+     render: function(){
+      console.log('view render');
+       var self = this;
+       $(this.el).append("<button id='add'>Add list item</button>");
+       $(this.el).append("<ul></ul>");
+       // 插入每个item
+       // _(this.collection.models).each(function(item){ 
+       // // in case collection is not empty
+       //   console.log('jinru');
+       //   self.appendItem(item);
+       // }, this);
+       return this;
+     },
+     addItem: function(){
+      console.log('view addItem');
+       this.counter++;
+       // 创建modle实例
+       var item = new Item();
+       // 更改属性
+       item.set({
+         part2: item.get('part2') + this.counter // modify item defaults
+       });
+       // 添加到collection 层,这个时候会触发add 
+       // 也就是调用 this.collection.bind('add', this.appendItem);
+       this.collection.add(item);
+       // console.log(this.collection);
+     },
+     appendItem: function(item){
+       var itemView = new ItemView({
+         model: item
+       });
+       console.log('-----------------');
+       $('ul', this.el).append(itemView.el);
+       // console.log(itemView.render());
+     }
+   });
+ 
+   var listView = new ListView();      
+ })(jQuery);
+</script>
+  </body>
+</html>

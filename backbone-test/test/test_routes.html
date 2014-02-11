@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>backbone router</title>
+  <style type="text/css">
+  * { margin: 0; padding: 0; }
+  body { width: 960px; margin: 10px auto; color: #333; background: #eee; font: 12px/1.5 arial; }
+  a { color: #666; }
+  a:hover { text-decoration: none; }
+  h1 { font-size: 18px; text-align: center; }
+  h1+i { display: block; border-width: 1px 0; border-style: solid; border-color: #666 transparent #fff transparent; }
+  p { font-size: 18px; background: orange; color: #fff; border-radius: 6px; line-height: 2; padding-left: 10px; margin: 10px 0; }
+  ul { list-style: none; }
+  ul>li { white-space: nowrap; word-break: break-all; word-wrap: break-word; font-size: 16px; }
+  ul>li>a { display: block; line-height: 2; text-indent: 10px; }
+  ul>li>a:hover { background: #333; color: #fff; border-radius: 3px; }
+  </style>
+</head>
+
+<body>
+  <h1>routes test</h1>
+  <i></i>
+  <p>please click these:</p>
+  <ul>
+    <li><a href="#!/lalallala" title="#!/lalallala">route 1</a></li>
+    <li><a href="#!/test/kkk" title="#!/test/kkk">route 2</a></li>
+    <li><a href="#!/test/users/123" title="#!/test/users/123">route 3</a></li>
+  </ul>
+<script src="../libs/jquery.js"></script>
+<script src="../libs/underscore.js"></script>
+<script src="../libs/backbone.js"></script>
+<script type="text/javascript">
+'use strict';
+var Router = Backbone.Router.extend({
+    routes: {
+        '!/test/:bar': 'action1',
+        '!/test/users/:id':'action2',
+        '!/*action': 'default'
+    },
+    default: function (action) {
+        console.log('default action:'+action);
+    },
+    action1:function(bar){
+      console.log(bar);
+    },
+    action2: function (id) {
+        console.log( id );
+    }
+});
+new Router();
+Backbone.history.start();
+</script>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Backbone.js test</title>
+  <style type="text/css">
+  button { border: 1px solid #eee; color: #333; width: 120px; height: 40px; border-radius: 6px; cursor: pointer; border: 1px solid orange; font-size: 14px; }
+  button.active { background: #fff; color: orange; border: 1px solid orange; }
+  </style>
+</head>
+<body>
+<script src="../libs/jquery.js"></script>
+<script src="../libs/underscore.js"></script>
+<script src="../libs/backbone.js"></script>
+<script type="text/javascript">
+var Item=Backbone.Model.extend({
+  defaults:{
+    name:'xiaoming',
+    age:24
+  },
+  initialize:function(){
+    console.log('model initializing~~~');
+  }
+});
+var ItemView=Backbone.View.extend({
+  el:'body',
+  initialize:function(){
+    return this.render();
+  },
+  render:function(){
+    var button='<button>click me</button>';
+    $(this.el).append(button);
+
+    this.collection=new Items();
+    this.collection.on('add',this.showAddIformation);
+    return this;
+  },
+  events:{
+    'click button':'addItem'
+  },
+  addItem:function(){
+    var item=new Item();
+    item.set({
+      name:'xiaoming'+Math.ceil(20*Math.random()),
+      age:Math.round(20+10*Math.random())
+    });
+    this.collection.add(item);
+  },
+  showAddIformation:function(item){
+    alert('name:'+item.get('name')+',age:'+item.get('age'));
+  }
+});
+// new ItemView();
+var Items=Backbone.Collection.extend({
+  model:Item
+});
+new ItemView();
+</script>
+</body>
+</html>

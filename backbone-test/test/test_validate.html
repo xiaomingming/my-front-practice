@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Backbone.js test</title>
+</head>
+
+<body>
+<script src="../libs/jquery.js"></script>
+<script src="../libs/underscore.js"></script>
+<script src="../libs/backbone.js"></script>
+<script type="text/javascript">
+$(function(){
+  // 官方示例
+  var Chapter = Backbone.Model.extend({
+    validate: function(attrs, options) {
+      console.log(options);
+      if (attrs.end < attrs.start) {
+        return "can't end before it starts";
+      }
+    },
+    initialize:function(){
+      this.on('change',function(){
+        alert('changed');
+      });
+      //error已经被摒弃，使用invalid触发事件
+      this.on('invalid',function(model,error){
+        alert(error);
+      });
+    }
+  });
+
+  var one = new Chapter({
+    title : "Chapter One: The Beginning"
+  });
+  one.save({
+    start: 15,
+    end:   10
+  });
+});
+</script>
+</body>
+</html>

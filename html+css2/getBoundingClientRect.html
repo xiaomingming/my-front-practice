@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; margin:100px; }
+            ul { list-style: none; }
+            /* .test { position: relative; padding: 20px; border: 1px solid red; }
+            .box { display: block; width: 100px; height: 100px; border:10px solid #333; } */
+        </style>
+    </head>
+    <body>
+        <!-- <div class="test">
+            <span class="box">hahahaha</span>
+        </div> -->
+        <div style="width: 300px; border-color:blue;border-style:solid; border-width:1;">
+            <span>Short span. </span>
+            <span id="long" style="background:orange;">Long span that wraps withing this div.</span>
+        </div>
+
+        <div id="box" style="position: absolute; border-color: red;border-width: 1; border-style: solid; z-index: 10">
+        </div>
+
+        <script>
+            var box = document.getElementById("box");
+            var long = document.getElementById("long");
+            box.style.left = long.offsetLeft + document.body.scrollLeft + "px";
+            box.style.top = long.offsetTop + document.body.scrollTop + "px";
+            console.log(box.style.left,box.style.top);
+            box.style.width = long.offsetWidth + "px";
+            box.style.height = long.offsetHeight + "px";
+        </script> 
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript">
+            // var box=document.querySelector('.box');
+            // console.log(box.getBoundingClientRect());
+            // console.log(box.offsetLeft,box.offsetTop);
+            getBoundingClientRect()
+        </script>
+    </body>
+</html>

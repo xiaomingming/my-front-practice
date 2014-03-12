@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>测试循环中的事件</title>
+        <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+            #item-list li { border: 1px solid #333; line-height: 2; cursor: pointer; font-size: 16px; }
+        </style>
+    </head>
+    <body>
+        <div class="test">
+            <ul id="item-list">
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+                <li>4</li>
+            </ul>
+        </div>
+        <script>
+            window.onload=function(){
+                /*var itemLists=document.querySelectorAll('#item-list>li');
+                console.log(itemLists);
+                for(var i=0,j=itemLists.length;i<j;i++){
+                    (function(i){
+                        itemLists[i].addEventListener('click',function(e){
+                        console.log(i);
+                    },false);
+                    })(i);
+                }*/
+                [].slice.call(document.querySelectorAll('#item-list>li')).forEach(function(val,i){
+                    val.addEventListener('click',function(){
+                        console.log(i);
+                    });
+                });
+                [1,2,3,4,5,6].forEach(function(val,i){
+                    setTimeout(function(){
+                        console.log(i);
+                    },1000);
+                });
+            };
+        </script>
+    </body>
+</html>

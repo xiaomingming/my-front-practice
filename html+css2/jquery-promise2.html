@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>测试</title>
+        <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+        </style>
+    </head>
+    <body>
+        <div class="test">
+            <h1>一个deferred测试</h1>
+            <p>请查看控制台信息</p>
+        </div>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(function(){
+                var defCallback=function(a){
+                    var def=$.Deferred();
+                    setTimeout(function(){
+                        if(a<2){
+                            def.reject('reject');
+                        }else if(a===2){
+                            def.resolve('resolve');
+                        }else {
+                            def.notify('progress...');
+                        }
+                    },3000);
+                    return def;
+                };
+                var res=function(r){
+                    console.log(r);
+                };
+                $.when(defCallback(2))
+                .progress(res)
+                .done(res)
+                .fail(res);
+            });
+        </script>
+    </body>
+</html>

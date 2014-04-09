@@ -1,5 +1,0 @@
-.user-center-bar { background: #a5ddd3; height: 60px; overflow: hidden; font-size: 20px; }
-.user-center-bar a { color: #fff; }
-.user-center-bar .tab { overflow: hidden; zoom: 1;  }
-.user-center-bar .tab a { float: left; height: 60px; line-height: 60px; padding:0 46px; background: #a5ddd3;}
-.user-center-bar .tab a.current { color: #31c0a4; border-top: 2px solid #31c0a4; height: 58px; line-height: 58px; text-decoration: none; background: #fff; }

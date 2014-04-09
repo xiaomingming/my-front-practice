@@ -4,17 +4,25 @@
 <meta charset="utf-8">
 <title>css3 transform</title>
 <style type="text/css">
-body, html { margin:0; padding:0; }
-body { font:12px/1.5 arial; margin:20px 0 0 20px; }
-#wrap { display:inline-block; border-width:2px; border-color:orange blue green silver; border-style:solid; }
-#test { width:100px; height:100px; line-height:100px; text-align:center; border-width:2px; border-color:orange blue green silver; border-style:solid; -webkit-transform:rotate(60deg); font-weight:bold; }
-#test:hover { background:#eee; }
+
 </style>
 </head>
 
 <body>
-<div id="wrap">
-    <div id="test">.</div>
-</div>
+    <div class="wrapper">
+        <section>
+            <h1>rotate</h1>
+            <div class="wrap">
+                <div id="test1" class="test">.</div>
+            </div>
+        </section>
+        <section>
+            <h1>skew</h1>
+            <div class="wrap">
+                <div id="test2" class="test">.</div>
+            </div>
+        </section>
+    </div>
+    
 </body>
 </html>

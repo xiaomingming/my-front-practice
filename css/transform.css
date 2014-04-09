@@ -1,0 +1,49 @@
+@charset "UTF-8";
+/* 定义transform */
+body, html {
+  padding: 0;
+  margin: 0;
+}
+
+section {
+  display: block;
+}
+
+body {
+  margin: 20px 0 0 20px;
+  font: 12px/1.5 arial;
+}
+
+.wrapper {
+  width: 960px;
+  margin: 0 auto;
+}
+.wrapper section {
+  margin-bottom: 30px;
+}
+
+.wrap {
+  display: inline-block;
+  border-color: orange blue green silver;
+  border-style: solid;
+  border-width: 2px;
+}
+
+.test {
+  width: 100px;
+  height: 100px;
+  font-weight: bold;
+  line-height: 100px;
+  text-align: center;
+  border-color: orange blue green silver;
+  border-style: solid;
+  border-width: 2px;
+}
+
+.test1:hover {
+  background: #eee;
+}
+
+#test1 {
+  width: 200px;
+}

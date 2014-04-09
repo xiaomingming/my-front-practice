@@ -1,0 +1,66 @@
+@charset "UTF-8";
+/* 定义transform */
+// @function transform($method,$num) {
+//     @if $method==rotate {
+//         transform:rotate($num);
+//         -webkit-transform:rotate($num);
+//         -moz-transform:rotate($num);
+//     }@else if $method==skew {
+//         transform:skew($num);
+//         -webkit-transform:skew($num);
+//         -moz-transform:skew($num);
+//     }@else if $method==scale {
+//         transform:scale($num);
+//         -webkit-transform:scale($num);
+//         -moz-transform:scale($num);
+//     }
+// }
+@function test($a){
+    @if $a=='rotate' {
+        color:red;
+    }   
+}
+body, html { 
+    margin:0; 
+    padding:0; 
+}
+section { 
+    display: block; 
+}
+body { 
+    font:12px/1.5 arial; 
+    margin:20px 0 0 20px; 
+}
+.wrapper { 
+    width: 960px; 
+    margin: 0 auto; 
+    section {
+        margin-bottom: 30px;
+    }
+}
+.wrap { 
+    display:inline-block; 
+    border-width:2px; 
+    border-color:orange blue green silver; 
+    border-style:solid; 
+}
+.test { 
+    width:100px; 
+    height:100px; 
+    line-height:100px; 
+    text-align:center; 
+    border-width:2px; 
+    border-color:orange blue green silver; 
+    border-style:solid;  
+    font-weight:bold; 
+}
+.test1:hover { 
+    background:#eee; 
+}
+#test1 { 
+    test('rotate');
+    // transform(rotate,60deg); 
+}
+#test2 { 
+    // transform(skew,60deg); 
+}

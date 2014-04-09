@@ -10,25 +10,25 @@ body {
   background: #1d1d1d;
 }
 .text-rest-state {
-  color: #ffffff;
+  color: #fff;
 }
 .text-rest2-state {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, .6);
 }
 .text-hover-state {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, .8);
 }
 .text-pressed-state {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, .4);
 }
 .link-text {
   color: #9466ff;
 }
 .link-text:hover {
-  color: rgba(148, 102, 255, 0.8);
+  color: rgba(148, 102, 255, .8);
 }
 .link-text:active {
-  color: rgba(148, 102, 255, 0.6);
+  color: rgba(148, 102, 255, .6);
 }
 h1,
 h2,
@@ -36,7 +36,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: #ffffff;
+  color: #fff;
 }
 h1:hover,
 h2:hover,
@@ -44,7 +44,7 @@ h3:hover,
 h4:hover,
 h5:hover,
 h6:hover {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, .8);
 }
 h1:active,
 h2:active,
@@ -52,7 +52,7 @@ h3:active,
 h4:active,
 h5:active,
 h6:active {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, .4);
 }
 a,
 .link {
@@ -60,11 +60,11 @@ a,
 }
 a:hover,
 .link:hover {
-  color: rgba(148, 102, 255, 0.8);
+  color: rgba(148, 102, 255, .8);
 }
 a:active,
 .link:active {
-  color: rgba(148, 102, 255, 0.6);
+  color: rgba(148, 102, 255, .6);
 }
 .page .page-header .page-header-content .user-login .name {
   color: #fff;

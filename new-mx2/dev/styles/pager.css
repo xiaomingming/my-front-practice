@@ -1,9 +1,0 @@
-/* pager.css 分页样式 */
-.gb-pager { padding: 40px 0; text-align: center; font-size: 0; /*hack for inline-block extra height*/ }
-.gb-pager .mxpage { display: inline-block; *display: inline; *zoom: 1;  }
-/*禁止按钮请用span包含*/
-.gb-pager .mxpage a ,.gb-pager .mxpage span { float: left; height: 50px; line-height: 50px; padding: 0 20px;  color: #999; background: #f0f1f1; font-size: 16px; margin: 0 1px;  }
-.gb-pager .mxpage .mxpage_cur, .gb-pager .mxpage a:hover { background: #31c0a4; color: #fff; text-decoration: none; transition: 0.3s all ease-in 0.02s; }
-.gb-pager .mxpage .prev,.gb-pager .mxpage .next { width: 50px; padding: 0; text-align: center; color: #fff; background: #c7c7c7; font-weight: bold; }
-.gb-pager .mxpage span.prev_available,.gb-pager .mxpage span.next_available { background: #f0f1f1; }
-.gb-pager .mxpage .mxpage_omiss { line-height: 40px; /*修正行高位置*/}

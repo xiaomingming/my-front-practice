@@ -7,12 +7,12 @@
 * { margin:0; padding:0; }
 /*基类样式*/
 h1 { font-size:18px; color:green; line-height:2; }
-.box { display:-webkit-box; display:-moz-box; width:960px; border:2px solid orange; }
-.box>div { width:300px; height:60px; margin:10px; background:#666; color:#fff; text-align:center; }
+.box { display:-webkit-box; display:-moz-box; width:100%; /*border:2px solid orange;*/ }
+.box>div { width:33%; height:60px; margin:0.1%; background:#666; color:#fff; text-align:center; }
 .box>div h1 { line-height:60px; color:#fff; }
 /*扩展类样式*/
 #wrap1 { -webkit-box-orient: vertical; }
-#wrap2 { -webkit-box-orient:vertical; }
+#wrap2 { -webkit-box-orient: horizontal; }
 #wrap3 { -webkit-box-orient: inline-axis; }
 #wrap4 { -webkit-box-orient:block-axis; }
 </style>

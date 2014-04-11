@@ -1,0 +1,42 @@
+@import 'compass/css3';
+div {
+    background-color:#f6f6f6;
+    padding:2px 5px;
+    position:relative;
+    height:16px;
+    >ul{
+        // display:none;
+        visibility:hidden;
+        list-style-type:none;
+        margin:0px;
+        padding:2px 10px;
+        width:200px;
+        border:2px solid red;
+        background-color:#eeeeee;
+        opacity:0;
+        @include transition(visibility 0s linear 3s,opacity 3s linear,width 3s ease);
+    }
+    &:hover>ul {
+        width:400px;
+        visibility:visible;
+        opacity:1;
+        color:orange;
+        // @include transition-delay(0s);
+    }
+}
+.btn { 
+    height:30px; 
+    padding:0 10px; 
+    border-radius:3px; 
+    border:1px solid #eee; 
+    cursor:pointer; 
+    background:#333;
+    color:#fff;
+    @include single-transition(opacity,3s,linear,0.1s);
+    @include border-radius(5px);
+    &:hover {
+        opacity:0;
+    }
+}
+
+

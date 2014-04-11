@@ -1,0 +1,55 @@
+/* line 2, ../sass/animate1.scss */
+div {
+  background-color: #f6f6f6;
+  padding: 2px 5px;
+  position: relative;
+  height: 16px;
+}
+/* line 7, ../sass/animate1.scss */
+div > ul {
+  visibility: hidden;
+  list-style-type: none;
+  margin: 0px;
+  padding: 2px 10px;
+  width: 200px;
+  border: 2px solid red;
+  background-color: #eeeeee;
+  opacity: 0;
+  -webkit-transition: visibility 0s linear, opacity 3s linear, width 3s ease;
+  -webkit-transition-delay: 3s, 0s, 0s;
+  -moz-transition: visibility 0s linear 3s, opacity 3s linear, width 3s ease;
+  -o-transition: visibility 0s linear 3s, opacity 3s linear, width 3s ease;
+  transition: visibility 0s linear 3s, opacity 3s linear, width 3s ease;
+}
+/* line 19, ../sass/animate1.scss */
+div:hover > ul {
+  width: 400px;
+  visibility: visible;
+  opacity: 1;
+  color: orange;
+}
+
+/* line 27, ../sass/animate1.scss */
+.btn {
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 3px;
+  border: 1px solid #eee;
+  cursor: pointer;
+  background: #333;
+  color: #fff;
+  -webkit-transition: opacity 3s linear;
+  -webkit-transition-delay: 0.1s;
+  -moz-transition: opacity 3s linear 0.1s;
+  -o-transition: opacity 3s linear 0.1s;
+  transition: opacity 3s linear 0.1s;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+/* line 37, ../sass/animate1.scss */
+.btn:hover {
+  opacity: 0;
+}

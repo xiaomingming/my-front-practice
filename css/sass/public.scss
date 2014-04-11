@@ -1,0 +1,40 @@
+@charset "UTF-8";
+/* 定义transform */
+
+// rotate
+@mixin tf-rotate ($deg){
+    transform:rotate($deg);
+    -webkit-transform:rotate($deg);
+    -moz-transform:rotate($deg);
+}
+// skew
+@mixin tf-skew ($deg){
+    transform:skew($deg);
+    -webkit-transform:skew($deg);
+    -moz-transform:skew($deg);
+}
+// scale
+@mixin tf-scale ($deg){
+    transform:scale($deg);
+    -webkit-transform:scale($deg);
+    -moz-transform:scale($deg);
+}
+// translate
+@mixin tf-translate ($x,$y){
+    // if($x)
+    transform:translate($x,$y);
+    -webkit-transform:translate($x,$y);
+    -moz-transform:translate($x,$y);
+}
+// box-shadow
+@mixin box-shadow($top, $left, $blur, $color, $inset:"") {
+  -webkit-box-shadow:$top $left $blur #{$color} #{$inset};
+  -moz-box-shadow:$top $left $blur $color #{$inset};
+  box-shadow:$top $left $blur $color #{$inset};
+}
+// transition
+@mixin transition($property,$duration,$timing,$delay) {
+  -webkit-transition:$property $duration $timing $delay;
+  -moz-transition:$property $duration $timing $delay;
+  transition:$property $duration $timing $delay;
+}

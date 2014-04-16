@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="description" content="" />
+        <meta name="keywords" content=""/>
+        <title>测试</title>
+        <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="../compassTest/css/transition2.css">
+    </head>
+    <body>
+        <div class="content">
+            <header>
+                <h1><a href="#" id="btn" class="normal">click me</a></h1>
+            </header>
+            <div class="cont">
+                <div id="cont1"><h1>内容一</h1></div>
+                <div id="cont2"><h1>内容二</h1></div>
+            </div>
+        </div>
+        
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(function(){
+                var status1=function(){
+                    $('#cont1').addClass('transition');
+                    $('#cont2').addClass('transition');
+                };
+                var status2=function(){
+                    $('#cont1').removeClass('transition');
+                    $('#cont2').removeClass('transition');
+                };
+                $('#btn').on('click',function(){
+                    
+                    var self=$(this);
+                    self.toggleClass('normal');
+                    if(self.hasClass('normal')){
+                        status2();
+                    }else {
+                        status1();
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

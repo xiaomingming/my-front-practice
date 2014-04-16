@@ -39,12 +39,15 @@ body {
 }
 #test1 { 
     @include tf-rotate(60deg);
+    // 更改基点
+    // @include tf-origin(0,0);
 }
 #test2 { 
     @include tf-skew(60deg);
 }
 #test3 { 
-    @include tf-scale(0.5);
+    @include tf-origin(0,-108px);
+    @include tf-scale(0.5,0.5);
 }
 #test4 { 
     @include box-shadow(2px,2px,2px,#333);
@@ -52,4 +55,13 @@ body {
 }
 #test4:hover {
     @include tf-translate(100px,200px);
+}
+#test5 {
+    @include transition(all,2s,ease-in);
+}
+#test5:hover {
+    -webkit-transform:translate(100px,20px) scale(0.5,0.5) rotate(360deg) skew(-20deg);
+    // @include tf-translate(100px,20px);
+    // @include tf-scale(0.5,0.5);
+    // @include tf-rotate(120deg);
 }

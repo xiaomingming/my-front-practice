@@ -21,7 +21,7 @@ div > ul {
   -o-transition: visibility 0s linear 3s, opacity 3s linear, width 3s ease;
   transition: visibility 0s linear 3s, opacity 3s linear, width 3s ease;
 }
-/* line 19, ../sass/animate1.scss */
+/* line 18, ../sass/animate1.scss */
 div:hover > ul {
   width: 400px;
   visibility: visible;
@@ -29,7 +29,7 @@ div:hover > ul {
   color: orange;
 }
 
-/* line 27, ../sass/animate1.scss */
+/* line 26, ../sass/animate1.scss */
 .btn {
   height: 30px;
   padding: 0 10px;
@@ -49,7 +49,7 @@ div:hover > ul {
   -o-border-radius: 5px;
   border-radius: 5px;
 }
-/* line 37, ../sass/animate1.scss */
+/* line 36, ../sass/animate1.scss */
 .btn:hover {
   opacity: 0;
 }

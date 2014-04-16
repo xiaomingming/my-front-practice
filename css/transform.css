@@ -19,8 +19,12 @@ body { font: 12px/1.5 arial; margin: 20px 0 0 20px; }
 
 #test2 { transform: skew(60deg); -webkit-transform: skew(60deg); -moz-transform: skew(60deg); }
 
-#test3 { transform: scale(0.5); -webkit-transform: scale(0.5); -moz-transform: scale(0.5); }
+#test3 { -moz-transform-origin: 0 -108px; -webkit-transform-origin: 0 -108px; -o-transform-origin: 0 -108px; -ms-transform-origin: 0 -108px; transform-origin: 0 -108px; transform: scale(0.5, 0.5); -webkit-transform: scale(0.5, 0.5); -moz-transform: scale(0.5, 0.5); }
 
 #test4 { -webkit-box-shadow: 2px 2px 2px #333333 ; -moz-box-shadow: 2px 2px 2px #333333 ; box-shadow: 2px 2px 2px #333333 ; -webkit-transition: all 1s linear 0.1s; -moz-transition: all 1s linear 0.1s; transition: all 1s linear 0.1s; }
 
 #test4:hover { transform: translate(100px, 200px); -webkit-transform: translate(100px, 200px); -moz-transform: translate(100px, 200px); }
+
+#test5 { -webkit-transition: all 2s ease-in 0; -moz-transition: all 2s ease-in 0; transition: all 2s ease-in 0; }
+
+#test5:hover { -webkit-transform: translate(100px, 20px) scale(0.5, 0.5) rotate(360deg) skew(-20deg); }

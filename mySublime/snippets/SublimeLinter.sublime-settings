@@ -1,0 +1,61 @@
+{
+    "sublimelinter": "save-only",
+    "sublimelinter_popup_errors_on_save": true,
+    "sublimelinter_executable_map": {
+        "javascript": "D:/Program Files/nodejs/node.exe",
+        "css": "D:/Program Files/nodejs/node.exe"
+    },
+    "jshint_options": {
+        "strict": false,
+        "expr":true,// && 语句忽略
+        "quotmark": "single", //只能使用单引号
+        "noarg": true,
+        "noempty": true, //不允许使用空语句块{}
+        "eqeqeq": true, //!==和===检查
+        "undef": true,
+        "curly": true, //值为true时，不能省略循环和条件语句后的大括号
+        "forin": true, //for in hasOwnPropery检查
+        "devel": true,
+        "jquery": true,
+        "browser": true,
+        "wsh": true,
+        "evil": true,
+        "newcap":true,
+        "unused": "vars", //形参和变量未使用检查
+        "latedef": true, //先定义变量，后使用
+        "globals": {
+            "grunt": true,
+            "require":true,
+            "requirejs":true,
+            "define":true,
+            "module": true,
+            "window": true,
+            "jQuery": true,
+            "$": true,
+            "global": true,
+            "document": true,
+            "console": true,
+            "setTimeout": true,
+            "setInterval": true
+        }
+    },
+    "csslint_options": {
+        "adjoining-classes": false,
+        "box-sizing": false,
+        "box-model": false,
+        "compatible-vendor-prefixes": false,
+        "floats": false,
+        "font-sizes": false,
+        "gradients": false,
+        "important": false,
+        "known-properties": false,
+        "outline-none": false,
+        "qualified-headings": false,
+        "regex-selectors": false,
+        "shorthand": false,
+        "text-indent": false,
+        "unique-headings": false,
+        "universal-selector": false,
+        "unqualified-attributes": false
+    }
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>测试</title>
+    <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font: 12px/1.5 arail;
+        }
+        ul {
+            list-style: none;
+        }
+        .icon-lists {
+            overflow: hidden;
+            background: #f7f7f7;
+            padding: 40px;
+        }
+        .icon-lists .box {
+            float: left;
+            margin-right: 10px;
+        }
+        .box {
+            position: relative;
+            width: 46px;
+            height: 46px;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .box i,.box .info {
+            display: block;
+            width: 46px;
+            height: 46px;
+            border-radius: 46px;
+        }
+        .box .shadow {
+            position: absolute;
+            top: 0;
+            z-index: 10;
+            border-radius: 0;
+            background: url(http://xiaomingming.qiniudn.com/shadow.png) no-repeat;
+        }
+        .box .icon {
+            position: absolute;
+            top: 0;
+            line-height: 46px;
+            text-align: center;
+            background: #eee;
+            color: #333;
+            font-size: 14px;
+            
+        }
+        .box .info {
+            position: absolute;
+            top: 46px;
+            z-index: 2;
+            background: orange;
+            color: #fff;
+            text-align: center;
+            line-height: 46px;
+            -webkit-transition:top .2s ease-in;
+            -moz-transition:top .2s ease-in;
+            transition:top .2s ease-in;
+        }
+        .box:hover>.info {
+            top:0;
+        }
+    </style>
+</head>
+
+<body>
+    <ul class="icon-lists">
+        <li class="box">
+            <i class="shadow"></i>
+            <i class="icon">A</i>
+            <div class="info">服装</div>
+        </li>
+        <li class="box">
+            <i class="shadow"></i>
+            <i class="icon">B</i>
+            <div class="info">鞋包</div>
+        </li>
+        <li class="box">
+            <i class="shadow"></i>
+            <i class="icon">C</i>
+            <div class="info">配饰</div>
+        </li>
+        <li class="box">
+            <i class="shadow"></i>
+            <i class="icon">D</i>
+            <div class="info">运动</div>
+        </li>
+    </ul>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(function(){
+        /*var inconAnimate=function(wrapper){
+                wrapper.on('mouseover','.box',function(){
+                    $(this).find('.info').stop(true,true).animate({
+                        top:'0'
+                    },200).promise();
+                }).on('mouseout','.box',function(){
+                    $(this).find('.info').stop(true,true).animate({
+                        top:'46px'
+                    },200).promise();
+                });
+            };*/
+        // inconAnimate($('.icon-lists'));
+
+        // if('transition' in document.body.style){
+        //     alert('support transition');
+        // }else {
+        //     alert('does not support transition');
+            
+        // }
+     
+    });
+    </script>
+</body>
+
+</html>

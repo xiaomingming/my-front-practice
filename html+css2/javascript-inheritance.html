@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="description" content="" />
+        <meta name="keywords" content=""/>
+        <title>测试</title>
+        <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <style>
+            * { margin: 0; padding: 0; }
+            body { font: 12px/1.5 arail; }
+            ul { list-style: none; }
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript">
+            // 寄生组合继承
+            var object=function(obj){
+                var F=function(){};
+                F.prototype=obj;
+                return new F();
+            };
+            var inheritPrototype=function(sub,superType){
+                var proto=object(superType.prototype);
+                proto.constructor=sub;
+                sub.prototype=proto;
+            };
+            // 超类
+            function Super(name){
+                this.name=name;
+            }
+            // 子类
+            function Sub(name,age){
+                Super.call(this,name);
+                this.age=age;
+            }
+            inheritPrototype(Sub,Super);
+            Sub.prototype.sayAge=function(){
+                alert(this.age);
+            };
+        </script>
+        <script type="text/javascript">
+            function setName(o){
+                o.name='xiaoha';
+                console.log(o.m());
+                o={};
+                console.log(o1.m());
+                o.name='hulalal';
+            };
+            var o1={};
+            o1.m=function(){
+                return this.name;
+            };
+            setName(o1);
+        </script>
+        <script type="text/javascript">
+            var A=function(){
+                return A.prototype;
+            };
+            A.prototype.name='xiaomi';
+            A.prototype.m1=function(){
+                return this.name;
+            };
+            A.prototype.m2=function(){
+                return [].slice.call(arguments);
+            };
+        </script>
+        <script type="text/javascript">
+            var B=function(selector){
+                this.selector=selector;
+                return new B.prototype.init();
+            };
+            B.prototype={
+                init:function(){
+                    return this;
+                },
+                m1:function(){
+                    return this.name;
+                },
+                name:'xihahah'
+            };
+            // B.prototype.init=function(){
+            //     this.name='xxx';
+            //     return this;
+            // };
+
+            // B.prototype.name='xiaomi';
+            // B.prototype.m1=function(){
+            //     return this.name;
+            // };
+            // B.prototype.m2=function(){
+            //     return [].slice.call(arguments);
+            // };
+            // B.prototype.init.prototype=B.prototype;
+        </script>
+        <script type="text/javascript">
+          var f=function(n){
+            if(n<1){
+                return 1;
+            }else {
+                return n*f(n-1);
+            }
+          };
+          var f1=f;
+          f=null;
+          f1(6);//挂了，找不到
+        </script>
+    </body>
+</html> 

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="description" content="" />
+        <meta name="keywords" content=""/>
+        <title>测试</title>
+        <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+            <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+              /*width: 1200px;*/
+              display: flex;
+              flex-direction: row;
+              flex-wrap:nowrap;
+            }
+
+            .row {
+              flex: 1;
+              /*min-width: 200px;*/
+              background-color: lightblue;
+              border: 1px solid #ccc;
+            }
+            .row:nth-child(1){
+
+            }
+            .container .item {
+                /*flex:1;*/
+                height: 200px;
+                background: #eee;
+            }
+            .container .item+.item {
+                margin-right: 10px;
+            }
+            .item:nth-child(1) {
+                -webkit-order:10;
+                flex:45%;
+            }
+            .item:nth-child(2) {
+                -webkit-order:1;
+                flex:50%;
+            }
+            .item:nth-child(3) {
+                -webkit-order:3;
+                width: 500px;
+                margin: 10px;
+            }
+            </style>
+    </head>
+    <body>
+        <div class="container">
+          <div class="row">1</div>
+          <div class="row">2</div>
+          <div class="row">3</div>
+        </div>
+        <div class="container">
+            <div class="item">1</div>
+            <div class="item">2</div>
+            <div class="item">3</div>
+        </div>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript">
+
+        </script>
+    </body>
+</html>

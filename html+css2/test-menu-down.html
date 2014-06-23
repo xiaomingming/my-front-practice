@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>测试</title>
+    <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font: 12px/1.5 arail;
+        }
+        ul {
+            list-style: none;
+        }
+        .animateEle1 {
+            background: #000;
+            color: #fff;
+        }
+        .animateEle2 {
+            border: 2px solid orange;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="animateEle1">11111111111111111111111111111111</div>
+    <div class="animateEle2">22222222222222222222222222222222</div>
+    <div class="animateEle3">33333333333333333333333333333333</div>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
+    <script type="text/javascript">
+        /*$(function(){
+                $('.menu-list').on('mouseenter',function(){
+                    var menuH=$(this).find('.hover').outerHeight(true),
+                    listH=$(this).find('.menu-down-conter').outerHeight(true),
+                    totalH=menuH+listH;
+                    $(this).css('height',totalH+'px').find('.menu-down-conter').stop(true,true).slideDown(800);
+                }).on('mouseleave',function(e){
+                    var menuH=$(this).find('.hover').outerHeight(true);
+                    $(this).css('height',menuH+'px');
+                    $(this).find('.menu-down-conter').stop(true,true).slideUp(100);
+                });
+            });*/
+        /*var wait = function(){
+                var dtd = $.Deferred();
+                var tasks = function(){
+            　　     alert("执行完毕！");
+            　　     dtd.resolve(); // 改变deferred对象的执行状态
+            　　 };
+            　　 setTimeout(tasks,5000);
+            　　 return dtd.promise();
+            };
+
+            $.when(wait())
+            .done(function(){ alert("哈哈，成功了！"); })
+            .fail(function(){ alert("出错啦！"); });*/
+
+         // $('.menu-box').animate({width: '50px'}, "slow");
+        /*$('.animateEle').animate({
+    opacity:'.5'
+}, 3000,function(){
+    $('.animateEle2').animate({
+        width:'+=10px'
+    },'slow',function(){
+        // 这样太伤了
+        $('.animateEle3').animate({
+            height:'0'
+        },1000);
+    });
+});*/
+        $(function() {
+            var animate1 = function() {
+                return $('.animateEle1').animate({
+                    opacity: '.2'
+                }, 4000).promise();
+            };
+            var animate2 = function() {
+                return $('.animateEle2').animate({
+                    width: '100px'
+                }, 2000).promise();
+            };
+            var animate3 = function() {
+                return $('.animateEle3').animate({
+                    height: '0'
+                }, 2000).promise();
+            }
+            $.when(animate1()).then(animate2()).then(animate3());
+
+            var box = $('#box');
+            box.promise().done(function(ele) {
+                console.log(ele); //jQuery box
+            });
+            var dfd = function() {
+                return $.post('/', {});
+            };
+            dfd().progress(function() {
+                console.log('lalalal');
+            }).done(function(data) {
+                console.log('请求成功');
+            }).fail(function() {
+                console.log('请求错误');
+            })
+
+
+var wait = function(ms) {
+    var dtd = $.Deferred();
+    setTimeout(dtd.resolve, ms);
+    // setTimeout(dtd.reject, ms);
+    // setTimeout(dtd.notify, ms);
+    return dtd; //此处也可以直接返回dtd
+};
+
+wait(2500).reject().fail(function(){
+    console.log('失败了...............');
+});
+// wait(2500).done(function() {
+//     console.log('haha,师太，你可让老衲久等了');
+// }).fail(function() {
+//     console.log('失败了');
+// }).progress(function(res) {
+//     console.log('等待中...');
+// });
+        });
+    </script>
+</body>
+
+</html>

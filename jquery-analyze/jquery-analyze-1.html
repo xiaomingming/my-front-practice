@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="description" content="" />
+        <meta name="keywords" content=""/>
+        <title>jquery链式结构分析</title>
+        <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <script type="text/javascript">
+            (function(){
+                var Jq=function(){
+                    return Jq.prototype.init(); 
+                };
+                Jq.prototype = {
+                    constructor:Jq,
+                    init:function(){
+                        console.log(this===Jq.prototype);
+                        return this;
+                    }
+                };
+                console.log(Jq());
+            })();
+            var F1=function(opts){
+                for (var i in opts){
+                    if (opts.hasOwnProperty(i)){
+                        this[i]=opts[i];
+                    }
+                }
+            };
+            F1.prototype={
+                constructor:F1,
+                getName:function(){
+                    return this.name;
+                },
+                getAge:function(){
+                    return this.age;
+                }
+            };
+            var F2=function(opts){
+                F1.call(this,opts);
+            };
+            F2.prototype=F1.prototype;
+            F2.prototype.constructor=F2;
+            // 若要扩展，只能在其原型上进行扩展，不能重置其prototype为空对象上，如
+            // F2.prototype={
+            //     constructor:F2,
+            //     getSex:function(){
+            //         return this.sex;
+            //     }
+            // };
+            F2.prototype.getSex=function(){
+                return this.sex;
+            };
+            F2.prototype.age=24;
+            // var f1=new F1('xiaoming',23);
+            var f2=new F2({'name':'xiaoming','age':23,'sex':'man'});
+            f2.getSex();
+        </script>
+        <script type="text/javascript">
+            var Person=function(x){
+                this.name=x;
+            };
+            Person.prototype.name='xiaoqiang';
+            Person.prototype.age=23;
+            Person.prototype.sayName=function(){
+                return this.name;
+            };
+            var person1=new Person();
+            var person2=new Person();
+            person1.sayName();
+            person2.sayName();
+            // alert(person1.sayName===person2.sayName);//true
+            console.log(Object.keys(person1));//name
+            console.log(Object.keys(Person.prototype));//["name", "age", "sayName"] 
+            console.log(Object.getOwnPropertyNames(person1));//name
+            console.log(Object.getOwnPropertyNames(Person.prototype))//["constructor", "name", "age", "sayName"] 
+        </script>
+        <script type="text/javascript">
+            var P=function(name){
+                this.name=name;
+                if(typeof this.sayName!=='function'){
+                    P.prototype.sayName=function(){
+                        return this.name;
+                    };
+                }
+            };
+            var p1=new P('xiaoqiang');
+            console.log(p1.sayName());
+            P.prototype.sayName=function(){
+                alert(this.name);
+            };
+            p1.sayName();
+            var p2=new P('xxxxx');
+            p2.sayName();
+        </script>
+        <script type="text/javascript">
+            var Super=function(name){
+                this.sname='super';
+            };
+            Super.prototype.getSuperName=function(){
+                return this.sname;
+            };
+            var Sub=function(name){
+                this.name='sub';
+                // this.age=age;
+            };
+            
+            Sub.prototype=new Super();
+            Sub.prototype.getSubName=function(){
+                return this.name;
+            };
+            var s=new Sub('xiaoqiang',22);
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>测试</title>
+    <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font: 12px/1.5 arail;
+        }
+        ul {
+            list-style: none;
+        }
+        .box {
+            position: relative;
+            width: 46px;
+            height: 46px;
+            overflow: hidden;
+            margin: 40px;
+            z-index: 1;
+        }
+        .box i,.box .info {
+            display: block;
+            width: 46px;
+            height: 46px;
+            border-radius: 46px;
+        }
+        .box .shadow {
+            position: absolute;
+            top: 0;
+            z-index: 10;
+            border-radius: 0;
+            background: url(images/shadow.png) no-repeat;
+        }
+        .box .icon {
+            position: absolute;
+            top: 0;
+            line-height: 46px;
+            text-align: center;
+            background: #eee;
+            color: #333;
+            font-size: 14px;
+            
+        }
+        @-webkit-keyframes mybox {
+            0% {
+                bottom: -70px;
+            }
+            25%{
+                bottom: -50px;
+            }
+            75% {
+                bottom: -25px;
+            }
+            100% {
+                bottom: 0;
+            }
+        }
+        .box .info {
+            position: absolute;
+            top: 46px;
+            z-index: 2;
+            background: orange;
+            color: #fff;
+            text-align: center;
+            line-height: 46px;
+            /*-webkit-transition:all .2s ease-in;*/
+            /*-webkit-animation-name:mybox;
+            -webkit-animation-duration:1s;
+            -webkit-animation-direction:normal;
+            -webkit-animation-iteration-count:infinite;
+            -webkit-animation-timing-function:ease-in;
+            -webkit-animation-play-state:running;*/
+        }
+        .box:hover>.info {
+            /*height: 46px;*/
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <i class="shadow"></i>
+        <i class="icon">icon</i>
+        <div class="info">视频</div>
+    </div>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(function(){
+        $('.box').hover(function(){
+            $('.info').animate({
+                top:'0'
+            },300).promise();
+        },function(){
+            $('.info').animate({
+                top:'46px'
+            },300).promise();
+        });
+    });
+    </script>
+</body>
+
+</html>

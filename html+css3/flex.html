@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>测试</title>
+    <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    <style>
+        /* Demo by Christian Krammer, @Chris_Krammer, www.css3files.com */
+        /* Official specifications: http://www.w3.org/TR/css3-flexbox/ */
+        /* New syntax of Flexible box layout module (flexbox) */
+        .flexbox {
+            display: -webkit-flex;
+            /* Further values: -webkit-inline-flex, then it's an inline element */
+            -webkit-flex-direction: row;
+            /* Alignment (in this case from left to right. row = default value). Further values: column (top to bottom), row-reverse (right to left), column-reverse (bottom to top) */
+            /* -webkit-flex-flow: row; */
+            /* Same as -webkit-flex-direction, but it's a shorthand for both -webkit-flex-direction und -webkit-flex-wrap (see .flexbox6) */
+            height: 100px;
+            background: lightgrey;
+        }
+        .flexbox .item {
+            background: darkgrey;
+        }
+        .flexbox1 .item {
+            background: red
+        }
+        .flexbox1 .item + .item {
+            margin-left: 10px
+        }
+        .flexbox1 .item1 {
+            width: 200px
+        }
+        .flexbox1 .item2 {
+            -webkit-flex: 1
+        }
+        /* States that the middle element is assigned the remaining space. Doesn't have to be stated. In this case the elements are simply displayed in sequence.  */
+        .flexbox1 .item3 {
+            width: 150px
+        }
+        .flexbox2 .item {
+            background: green;
+            height: 100px
+        }
+        .flexbox2 .item + .item {
+            margin-left: 10px
+        }
+        .flexbox2 .item1 {
+            -webkit-flex: 1
+        }
+        /* The first and the second element take up the 1/4 of the available space */
+        .flexbox2 .item2 {
+            -webkit-flex: 1
+        }
+        .flexbox2 .item3 {
+            -webkit-flex: 2
+        }
+        /* The third element takes up 2/4 */
+        .flexbox3 {
+            -webkit-flex-direction: column;
+            width: 100px;
+            height: 300px;
+        }
+        .flexbox3 .item {
+            background: blue
+        }
+        .flexbox3 .item + .item {
+            margin-top: 10px
+        }
+        .flexbox3 .item1 {
+            -webkit-flex: 1
+        }
+        /* The first and the third element take tp 1/10 of the space */
+        .flexbox3 .item2 {
+            -webkit-flex: 8
+        }
+        /* The second one takes up 8/10 */
+        .flexbox3 .item3 {
+            -webkit-flex: 1
+        }
+        .flexbox4 {
+            -webkit-justify-content: flex-end;
+            /* Horizontal alignment of the contained elements. Further values: flex-start, center, space-between (proportional distribution), space-around (proportional distribution, but with half the gap at the start and the end) */
+        }
+        .flexbox4 .item {
+            background: magenta;
+            width: 100px
+        }
+        .flexbox4 .item + .item {
+            margin-left: 10px
+        }
+        .flexbox5 {
+            -webkit-align-content: center;
+            /* Vertical alignment of the container. Same possible values as with -webkit-justify-content, but additionally also "stretch" (default value). As soon as this property is set, the elements are only as high as their content. Only works when -webkit-flex-wrap: wrap is set (see .flexbox6) */
+            -webkit-flex-wrap: wrap;
+            height: 150px;
+        }
+        .flexbox5 .item {
+            background: orange;
+            -webkit-flex: 1;
+            height: auto;
+            border: 1px solid;
+            height: 50px
+        }
+        .flexbox5 .item1 {
+            -webkit-order: 3
+        }
+        /* Order. When set to "-1" the element always comes first (important for JavaScript manipulation)*/
+        .flexbox5 .item2 {
+            -webkit-order: 1
+        }
+        .flexbox5 .item3 {
+            -webkit-order: 2
+        }
+        .flexbox6 {
+            -webkit-flex-wrap: wrap;
+            /* States how the elements wrap, if the remaining space doesn't suffice. Further values: nowrap (default value) und wrap-reverse (flips over the alignment) */
+            width: 300px;
+        }
+        .flexbox6 .item {
+            background: pink;
+            border: 1px solid;
+            -webkit-flex: 32% 1;
+            /* The optional declaration of the width states how wide the element should be preferably. Since 32% only allows to fit three elements in one line, the fourth is pushed to the next line. "1" states that all the elements should take up an even amount of space */
+        }
+        .flexbox7 .item {
+            background: crimson;
+            border: 1px solid;
+            -webkit-flex: 1;
+        }
+        .flexbox7 .item1 {
+            max-width: 50px;
+            /* Can be declared optionally and states the maximal width of the element. Overwrites -webkit-flex  */
+        }
+        .flexbox7 .item3 {
+            min-width: 500px;
+            /* Can be declared optionally and states how wide an element must be at least. Overwrites -webkit-flex */
+        }
+        .flexbox8 {
+            -webkit-align-items: flex-end;
+            /* Vertical alignment of the contained elements. Further values: flex-start, center, baseline (aligns all elements on the same baseline when different font sizes are set), stretch. Since the elements don't span the whole container anymore when -webkit-align-items (or -webkit-align-self) is set, this behavior can be reset with "stretch". */
+        }
+        .flexbox8 .item {
+            background: yellow;
+            border: 1px solid;
+        }
+        .flexbox8 .item1 {
+            -webkit-flex: 2;
+            /* -webkit-align-self: center; */
+            /* -webkit-align-items can be overwritten by -webkit-align-self at each element. The default value is "auto", which has the same effect as if you don't define it at all */
+        }
+        .flexbox8 .item2 {
+            -webkit-flex: 3;
+            -webkit-align-self: flex-start;
+        }
+        .flexbox8 .item3 {
+            -webkit-flex: 1;
+            -webkit-align-self: stretch;
+            /* If you want one element to fill the whole space, you can define "stretch" */
+        }
+    </style>
+</head>
+
+<body>
+    <h1>New syntax of Flexible box layout module (flexbox)</h1>
+    <p><b>Only works in Chrome so far!</b>
+    </p>
+
+    <h2>.flexbox1</h2>
+    <p>Horizontal orientation (
+        <code>-webkit-flex-direction: row</code>= default value, hasn't to be stated).
+        <br/>The first and the third element have a predefined width, the middle takes up the remaining space. If
+        <code>-webkit-flex</code>is stated at no element at all they are simply displayed in sequence. A height for the elements doesn't have to be stated, they always have the same height (height of the container).</p>
+    <div class="flexbox flexbox1">
+        <div class="item item1">DIV 1</div>
+        <div class="item item2">DIV 2</div>
+        <div class="item item3">DIV 3</div>
+    </div>
+
+    <hr>
+
+    <h2>.flexbox2</h2>
+    <p>The first and second element take up 1/4 of the available space (
+        <code>-webkit-flex: 1</code>), the third takes up 2/4 (
+        <code>-webkit-flex: 2</code>). 1 + 1 + 2 = 4/4</p>
+    <div class="flexbox flexbox2">
+        <div class="item item1">DIV 1</div>
+        <div class="item item2">DIV 2</div>
+        <div class="item item3">DIV 3</div>
+    </div>
+
+    <hr>
+
+    <h2>.flexbox3</h2>
+    <p>Vertical orientation (
+        <code>-webkit-flex-direction: column</code>).
+        <br/>Can also be reversed with a value of
+        <code>column-reverse</code>(the same goes for horizontal orientation and The first and the third element take up 1/10 of the available space, the second takes 8/10. 1 + 8 + 1 = 10/10.</p>
+    <div class="flexbox flexbox3">
+        <div class="item item1">DIV 1</div>
+        <div class="item item2">DIV 2</div>
+        <div class="item item3">DIV 3</div>
+    </div>
+
+    <hr>
+
+    <h2>.flexbox4</h2>
+    <p>The elements are aligned to the right (
+        <code>-webkit-justify-content: flex-end</code>). Can also be centred, justified etc.</p>
+    <div class="flexbox flexbox4">
+        <div class="item item1">DIV 1</div>
+        <div class="item item2">DIV 2</div>
+        <div class="item item3">DIV 3</div>
+    </div>
+
+    <hr>
+
+    <h2>.flexbox5</h2>
+    <p>The whole container is vertically centered (
+        <code>-webkit-align-content: center</code>). Furthermore the natural order of the elements is altered using
+        <code>-webkit-order</code>(the first is on the third place, the second on the first and the third on the second).)</p>
+    <div class="flexbox flexbox5">
+        <div class="item item1">DIV 1</div>
+        <div class="item item2">DIV 2</div>
+        <div class="item item3">DIV 3</div>
+    </div>
+
+    <hr>
+
+    <h2>.flexbox6</h2>
+    <p>The elements can also be wrapped. If the width of the container (
+        <code>width: 300px</code>) is smaller than the preferred width of the elements (
+        <code>-webkit-flex: 80px 1</code>. The
+        <code>1</code>states that the available space should be evenly distributed) than a wrap occurs.</p>
+    <div class="flexbox flexbox6">
+        <div class="item item1">DIV 1</div>
+        <div class="item item2">DIV 2</div>
+        <div class="item item3">DIV 3</div>
+        <div class="item item4">DIV 4</div>
+    </div>
+
+    <hr>
+
+    <h2>.flexbox7</h2>
+    <p>It's also possible to state
+        <code>min-width</code>and
+        <code>max-width</code>(respectivley
+        <code>min-height</code>and
+        <code>max-height</code>) for the elements. Although
+        <code>-webkit-flex</code>is set to
+        <code>1</code>(which means that the available space should be evenly distributed), the first is shrinked through
+        <code>max-width: 50px</code>and the third one is enlarged by
+        <code>min-width: 500px</code>.</p>
+    <div class="flexbox flexbox7">
+        <div class="item item1">DIV 1</div>
+        <div class="item item2">DIV 2</div>
+        <div class="item item3">DIV 3</div>
+    </div>
+
+    <hr>
+
+    <h2>.flexbox8</h2>
+    <p>The individual elements can also be aligned vertically (
+        <code>-webkit-align-self</code>) or the whole container altogether (with
+        <code>-webkit-align-items</code>). Since the elements don't span the container anymore then this behavior can be reset with
+        <code>-webkit-align-items: stretch</code>.</p>
+    <div class="flexbox flexbox8">
+        <div class="item item1">DIV 1</div>
+        <div class="item item2">DIV 2</div>
+        <div class="item item3">DIV 3</div>
+    </div>
+
+    <hr>
+
+    <h2>Flexibility</h2>
+    <p>Another strength of flexbox is the adaptability to its content, which is a pretty enormous and initially hard to grasp topic. Therefore I don't go into it at this point but strongly advice you to <a href="http://www.w3.org/TR/css3-flexbox/#flexibility">read about it</a>.</p>
+
+    <hr>
+
+    <p>Demo by Christian Krammer, <a href="https://twitter.com/Chris_Krammer">@Chris_Krammer</a>, <a href="http://www.css3files.com">http://www.css3files.com</a>
+    </p>
+</body>
+
+</html>

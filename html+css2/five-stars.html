@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>测试</title>
+    <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font: 12px/1.5 arail;
+            margin: 40px;
+        }
+        ul {
+            list-style: none;
+        }
+        .form {
+            position: absolute;
+            right: 100px;
+        }
+        .form textarea {
+            width: 400px;
+            height: 200px;
+        }
+        .five-star {
+            position: relative;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-color: red transparent transparent transparent;
+        }
+        .five-star:before {
+            border-color: transparent transparent red transparent;
+        }
+        .five-star:after {
+            border-color: transparent transparent #fff transparent;
+        }
+        .five-star:before, .five-star:after {
+            position: absolute;
+            left: 50%;
+            display: block;
+            content:'';
+            width: 0;
+            height: 0;
+            border-style: solid;
+            overflow: hidden;
+        }
+        .five-stars1 {
+            /*h1*/
+            top: 83px;
+            border-width: 83px 114px;
+        }
+        .five-stars1:before {
+            /*h2*2-h3*/
+            top: -383px;
+            margin: 0 0 0 -70px;
+            border-width: 217px 70px;
+        }
+        .five-stars1:after {
+            /*-(h2*2-h3)*/
+            top: -51px;
+            margin: 0 0 0 -70px;
+            border-width: 51px 70px;
+        }
+        .five-stars2 {
+            top: 11px;
+            border-width: 11px 15px;
+        }
+        .five-stars2:before {
+            top: -51px;
+            margin: 0 0 0 -9px;
+            border-width: 29px 9px;
+        }
+        .five-stars2:after {
+            top: -7px;
+            margin: 0 0 0 -9px;
+            border-width: 7px 9px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="form">
+        <label for="mod-name">模块名</label>:
+        <input id="mod-name" type="text" />
+        <label for="t">宽度：</label>
+        <input id="t" class="text" class="text" type="text" style="position:relative;z-index:2;" /><span>px</span>
+        <button id="make" type="button">make it</button>
+        <div style="margin-top:20px;">
+            <textarea id="code" style="width: 400px;height:400px;">
+                .five-star {position: relative;width: 0;height: 0;border-style: solid;border-color: red transparent transparent transparent;} .five-star:before {border-color: transparent transparent red transparent;} .five-star:after {border-color: transparent transparent #fff transparent;} .five-star:before,.five-star:after {position: absolute;left: 50%;display: block;content:'';width: 0;height: 0;border-style: solid;overflow: hidden;}
+            </textarea>
+        </div>
+    </div>
+    <div class="box">
+        <div class="five-star five-stars1"></div>
+        <div class="five-star five-stars2"></div>
+    </div>
+
+    <script type="text/javascript" src="../js/common/jquery-1.8.2.js"></script>
+    <script type="text/javascript">
+        var $t = $('#t');
+         // 计算正弦函数
+        var sinVal = function(x) {
+            return Math.sin(x * Math.PI / 180);
+        };
+         // 获取三个三角形盒子信息
+        var getParams = function(v) {
+            v = parseInt(v);
+            var h1 = v * 0.5 * sinVal(36) / sinVal(54),
+                h2 = v * sinVal(72),
+                ft = v * sinVal(18) * 2,
+                h3 = v * sinVal(18) * sinVal(36) / sinVal(54),
+                top = h2 - (h1 + h3);
+
+            // 
+            return {
+                0: {
+                    h: Math.round(h1),
+                    w: Math.round(v * 0.5),
+                    ml: 0,
+                    top: Math.round(h1)
+                },
+                1: {
+                    h: Math.round(h2),
+                    w: Math.round(ft * 0.5),
+                    ml: -Math.round(ft * 0.5),
+                    top: Math.round(h3) - Math.round(h2) * 2
+                },
+                2: {
+                    h: Math.round(h3),
+                    w: Math.round(ft * 0.5),
+                    ml: -Math.round(ft * 0.5),
+                    top: -Math.round(h3)
+                }
+            }
+        };
+
+        var initCodeStr = $('#code').text().split('}').join('}\n'); //预先缓存五角星模块代码
+
+        $('#make').on('click', function() {
+            var val = $t.val(),
+                getInfo = getParams(val);
+
+            var str = '',
+                arr = ['', ':before', ':after'],
+                cName = $.trim($('#mod-name').val()),
+                cacheObj;
+
+            for (var key in getInfo) {
+                cacheObj = getInfo[key];
+                str += '.' + cName + arr[key] + '{top:' + cacheObj.top + 'px;margin-left:' + cacheObj.ml + 'px;border-width:' + cacheObj.h + 'px ' + cacheObj.w + 'px;}' + '\n';
+            }
+            // console.table(getInfo);
+            $('#code').text(initCodeStr + '\n' + str);
+            $('body').append('<div style="width:' + getInfo[0].w * 2 + 'px;height:' + getInfo[1].h + 'px;overflow:hidden;"><div class="five-star ' + cName + '"></div></div>');
+            var style = $('head').find('style').get(0);
+            $(style).text(initCodeStr + '\n' + str);
+        });
+    </script>
+</body>
+
+</html>

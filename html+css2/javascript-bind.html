@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>测试</title>
+    <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font: 12px/1.5 arail;
+        }
+        ul {
+            list-style: none;
+        }
+    </style>
+</head>
+
+<body>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script type="text/javascript">
+            Function.prototype.mybind=function(obj){
+                var fn=this,args=[].slice.call(arguments,1);
+                if(obj===undefined){
+                    obj=window;
+                }
+                return function(){
+                    var arg1=[].slice.call(arguments);
+                    return fn.apply(obj,args.concat(arg1));
+                };
+            };
+            var f=function(){
+                alert(this.name)
+            };
+            var o={};
+            o.name='xiaoming';
+            var showName=f.mybind(o);
+            showName();
+
+            var add=function(a,b){
+                return a+b;
+            };
+
+            var add1=add.bind(window,2);
+            var add2=add1(5);
+            console.log(add2);//7
+    </script>
+</body>
+
+</html>

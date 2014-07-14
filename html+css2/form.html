@@ -1,44 +1,314 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-        <style>
-            * { margin: 0; padding: 0; }
-            body { font: 12px/1.5 arail; }
-            ul { list-style: none; }
-            .myform { width: 400px; margin: 40px auto 10px auto; font-size: 14px; }
-            .myform .form-item { margin-bottom: 10px; }
-            .myform .form-item label { display: inline-block; width: 120px; padding-right: 10px; text-align: right; font-size: 16px; }
-            .myform .form-item input.text { padding:6px 3px; line-height: 18px; color: #666; width: 200px; border-radius: 3px; border:1px solid #666;}
-            .myform .btn {  height: 24px; padding: 0 10px; margin-left: 130px; color: #333; border-radius: 3px; border: 1px solid #999; cursor: pointer; }
-        </style>
 
-    </head>
-    <body>
-        <form action="#" method="post" id="myform" class="myform">
-            <div class="form-item"><label for="pid">pid:</label><input type="text" id="pid" class="text"/></div>
-            <div class="form-item"><label for="data-content">content:</label><input type="text" id="data-content" class="text" /></div>
-            <input type="submit" value="提交" id="submit-btn" class="btn"/>
-        </form>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js "></script>
-        <script type="text/javascript">
-            $(function(){
-                var submitForm=function(){
-                    var pidVal=$('#pid').val(),
-                    dataContentVal=$('#data-content').val();
-                    $('#myform').attr('action',pidVal+dataContentVal);
-                    //$('#myform').get(0).submit();
-                };
-                $('#submit-btn').on('click',submitForm);
-                var test=window.frameElement;
-                var test2=window.top;
-                alert(test2);
-                if(test){
-                    test.src="http://www.baidu.com"
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font: 12px/1.5 arail;
+        }
+        ul {
+            list-style: none;
+        }
+        .myform {
+            width: 400px;
+            margin: 40px auto 10px auto;
+            font-size: 14px;
+            background: #eee;
+        }
+        .myform .form-item {
+            margin-bottom: 10px;
+            background: #fff;
+            border: 1px solid red;
+        }
+        .myform .form-item label {
+            display: inline-block;
+            width: 120px;
+            padding-right: 10px;
+            text-align: right;
+            font-size: 16px;
+        }
+        .myform .form-item input.text {
+            padding:6px 3px;
+            line-height: 18px;
+            color: #666;
+            width: 200px;
+            border-radius: 3px;
+            border:1px solid #666;
+        }
+        .myform .btn {
+            height: 24px;
+            padding: 0 10px;
+            margin-left: 130px;
+            color: #333;
+            border-radius: 3px;
+            border: 1px solid #999;
+            cursor: pointer;
+        }
+        .list1.list2.list3#list {
+            border: 2px solid orange;
+        }
+    </style>
+
+</head>
+
+<body>
+    <ul id="list" class="list1 list2 list3">
+        <li>item1</li>
+        <li>item2</li>
+    </ul>
+    <div class="box1 box2">12</div>
+    <div class="box2 box3">23</div>
+    <div class="box1 box2 box3">123</div>
+    <div class="box1 box3">1111</div>
+    <div class="box2">2</div>
+    <div class="box1">1</div>
+    <div id="test">just a test</div>
+    <form action="#" method="post" id="myform" class="myform">
+        <div class="form-item">
+            <label for="pid">pid:</label>
+            <input type="text" id="pid" class="text" />
+        </div>
+        <div class="form-item">
+            <label for="data-content">content:</label>
+            <input type="text" id="data-content" class="text" />
+        </div>
+        <input type="submit" value="提交" id="submit-btn" class="btn" />
+    </form>
+    <p>lalaal</p>
+    <div id="box" class="box">dudududud</div>
+<!--  
+    <script type="text/javascript" src="../js/common/jquery-1.8.2.js"></script>-->
+
+    <script id="s1" type="text/javascript">
+        // document.addEventListener('DOMContentLoaded',function(){
+        var form = document.forms[0];
+
+         // 获取第一个子元素
+        var getFirstChild = function(parentNode) {
+            var firstChild = parentNode.firstChild;
+            while (firstChild != null && firstChild.nodeType !== 1) {
+                firstChild = firstChild.nextSibling;
+            }
+            return firstChild;
+            // return parentNode.nextSibling;
+        };
+         // 获取最后一个子元素
+        var getLastChild = function(parentNode) {
+            var lastChild = parentNode.lastChild;
+            while (lastChild !== null && lastChild.nodeType !== 1) {
+                lastChild = lastChild.previousSibling;
+            }
+            return lastChild;
+        };
+         // 获取子节点标签
+         // 其实，ele.childreen就可以了
+        var getChilds = function(parentNode) {
+            var childNodes = parentNode.childNodes,
+                childArr = [];
+            for (var i = 0, j = childNodes.length; i < j; i++) {
+                if (childNodes[i].nodeType === 1) {
+                    childArr.push(childNodes[i]);
                 }
-            });
+            }
+            // alert(j);
+            return childArr;
+        };
 
-        </script>
-    </body>
+         // 获取下一个兄弟节点
+        var getNext = function(node) {
+            var next = node.nextSibling;
+            while (next !== null && next.nodeType !== 1) {
+                next = next.nextSibling;
+            }
+            //if(next.tagName.toLowerCase()!='script')
+            return next;
+        };
+
+         // 获取所有兄弟节点
+        var getNextAll = function(node) {
+            var next = getNext(node),
+                nextArr = [];
+            nextArr.push(next);
+            while (getNext(next) !== null) {
+                next = getNext(next);
+                nextArr.push(next);
+            }
+            return nextArr;
+        };
+
+         // 获取前一个兄弟节点
+        var getPrev = function(node) {
+            var prev = node.previousSibling;
+            while (prev !== null && prev.nodeType !== 1) {
+                prev = prev.previousSibling;
+            }
+            return prev;
+        };
+
+         // 获取所有兄弟节点
+        var getPrevAll = function(node) {
+            var prev = getPrev(node),
+                prevArr = [];
+            prevArr.push(prev);
+            while (getPrev(prev) !== null) {
+                prev = getPrev(prev);
+                prevArr.push(prev);
+            }
+            return prevArr;
+        };
+
+         // 创建节点
+        var createNode = function(node, type) {
+            var doc = document;
+            if (type === 1) {
+                return doc.createElement(node);
+            } else if (type === 2) {
+                return doc.createAttribute(node);
+            } else if (type === 3) {
+                return doc.createTextNode(node);
+            } else {
+                return null;
+            }
+        };
+
+
+         // 创建一个插入某个元素之后
+         // 判断当前元素后面是否存在元素
+         // 若不存在，使用appendChild方法
+         // 否则，对其后的元素调用insertBefore方法模拟
+        var insertAfter = function(parentNode, newNode, currentNode) {
+            // currentNode不存在时
+            if (arguments.length === 2) {
+                return parentNode.appendChild(newNode);
+            }
+            var next = getNext(currentNode);
+
+            if (next !== null) {
+                return parentNode.insertBefore(newNode, next);
+            }
+            // 下一个元素不存在时
+            return parentNode.appendChild(newNode);
+        };
+
+        var newNode = createNode('p', 1);
+        var pText = document.createTextNode('test oh just a test');
+        newNode.setAttribute('title', 'kankan ie 6 ruhe');
+        newNode.appendChild(pText);
+
+        document.body.replaceChild(newNode, document.getElementById('test'));
+         // insertAfter(document.body, newNode, document.getElementById('test'));
+         // insertAfter(document.body, newNode);
+         // document.body.insertBefore(newNode,document.getElementById('test'));
+         // document.body.insertBefore(newNode);
+
+         // $(newNode).insertBefore('#test');
+         // $(newNode).insertBefore('#s1')
+        var list = document.getElementsByTagName('ul')[0];
+        var cloneList = list.cloneNode(true); //ul和其内部所有内容
+        var cloneList2 = list.cloneNode(false); //ul
+
+         // document.body.appendChild(cloneList);
+         // document.body.appendChild(cloneList2);
+
+         // document.body.removeChild(document.getElementById('test'));
+         // if (document.getElementById('test').hasChildNodes()) {
+         //     alert(document.getElementById('test').childNodes.length);
+         //     document.getElementById('test').removeChild(document.getElementById('test').childNodes[0]);
+         // } else {
+         //     alert('does not exist childNodes');
+         // }
+
+        var msgArr = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth"];
+         //  创建一个消息dom，插入到body中
+        var creatMsgCont = function(msgArr) {
+            var frag = document.createDocumentFragment(),
+                p, pText;
+            for (var i = 0, j = msgArr.length; i < j; i++) {
+                p = document.createElement('p');
+                pText = document.createTextNode(msgArr[i]);
+                p.appendChild(pText);
+                frag.appendChild(p);
+            }
+            document.body.appendChild(frag);
+        };
+        /*
+         * nodeName,nodeValue解释
+         */
+         (function() {
+            var p = document.createElement('p');
+            var pText = document.createTextNode('nodeName test');
+            var pAttr = document.createAttribute('title');
+            pAttr.nodeValue = 'nodeName test';
+            // p.setAttribute('title', 'nodeName test');
+
+            console.log(p.nodeName); //'P',大写，同tagName类似
+            console.log(pText.nodeName); //#text，表明这是个文本节点
+            console.log(pAttr.nodeName); //title
+
+            console.log(p.nodeValue); //null
+            console.log(pText.nodeValue); //nodeName test
+            console.log(pAttr.nodeValue); //nodeName test
+        })();
+
+         // getClassName
+        var getClassName = function(className, parentNode) {
+            // 无非有两种选择器
+            // 标签和类别
+            // 纯类别
+            var doc = document;
+            parentNode = parentNode || doc;
+            var ele,
+                resultArr = [], //结果数组
+                selectArr = className.substring(1).split('.'), //选择器转化的数组
+                compareArr = [], //所有的待比较的dom类别数组
+                originCompareArrLen = 0,
+                a, b, c, d, m;
+
+            // 不为纯类别选择器时
+            // 仅仅只有标签选择器时
+            if (className[0] !== '.') {
+                ele = parentNode.getElementsByTagName(className[0]);
+            } else {
+                ele = parentNode.getElementsByTagName('*');
+            }
+
+            b = ele.length;
+            d = selectArr.length;
+
+            for (a = 0; a < b; a++) {
+                if (ele[a].className !== '') {
+                    compareArr = ele[a].className.split(' ');
+                    originCompareArrLen = compareArr.length;
+
+
+                    for (c = 0; c < d; c++) {
+                        for (m = 0; m < compareArr.length; m++) {
+                            if (selectArr[c] === compareArr[m]) {
+                                compareArr.splice(m, 1);
+                                break;
+                            }
+                        }
+                    }
+
+                    if (originCompareArrLen - compareArr.length === d) {
+                        resultArr.push(ele[a]);
+                    }
+                }
+
+            }
+            return resultArr;
+
+        };
+        
+        var txt = getClassName('.box1.box3')[0].innerText;
+        alert(txt);
+    </script>
+</body>
+
 </html>

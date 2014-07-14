@@ -3,14 +3,13 @@
 // 另外参考：https://github.com/addyosmani/jquery.parts/blob/master/jquery.documentReady.js
 (function() {
     var ready = function() {
-        console.log(ready.isReady);
-        var readyBound = false,// 不知为何物
+        var readyBound = false, // 不知为何物
             readyList = [],
             DOMContentLoaded;
 
         if (document.addEventListener) {
             DOMContentLoaded = function() {
-                document.removeEventListener('DOMContentLoaded', DOMContentLoaded, false);//立即解绑
+                document.removeEventListener('DOMContentLoaded', DOMContentLoaded, false); //立即解绑
                 ready();
             };
 
@@ -40,16 +39,13 @@
 
         function doScrollCheck() {
             try {
-                document.documentElement.doScroll("left");
+                document.documentElement.doScroll('left');
             } catch (e) {
                 setTimeout(doScrollCheck, 1);
                 return;
             }
             ready();
         }
-        /**
-         * @private
-         */
 
         function bindReady() {
             if (readyBound) {
@@ -64,13 +60,13 @@
                     document.addEventListener('DOMContentLoaded', DOMContentLoaded, false);
                     window.addEventListener('load', ready, false);
                 } else if (document.attachEvent) {
-                    document.attachEvent('onreadystatechange', DOMContentLoaded);//只执行一次回调
+                    document.attachEvent('onreadystatechange', DOMContentLoaded); //只执行一次回调
                     window.attachEvent('onload', ready);
 
                     var toplevel = false;
 
                     try {
-                        toplevel = window.frameElement == null;
+                        toplevel = window.frameElement === null;
                     } catch (e) {}
 
                     if (document.documentElement.doScroll && toplevel) {
@@ -86,7 +82,7 @@
         };
     }();
 
-    ready.isReady = false;//设置这个标志，和匿名函数内部的isReady无关啊
+    ready.isReady = false; //设置这个标志，和匿名函数内部的isReady无关啊
     window.ready = ready;
 })();
 /*
@@ -98,7 +94,7 @@ Utils.trim = function(str) {
     return str.replace(/(^\s*)|(\s*$)/g, '');
 };
 Utils.isWindow = function(obj) {
-    return obj != null && obj == obj.window;
+    return obj !== null && obj === obj.window;
 };
 Utils.getWindow = function(elem) {
     return this.isWindow(elem) ?
@@ -137,13 +133,13 @@ E.addEvent = (function() {
     if (document.addEventListener) {
         return function(ele, evType, handler) {
             ele.addEventListener(evType, handler, false);
-        }
+        };
     } else if (document.attachEvent) {
         return function(ele, evType, handler) {
             ele.attachEvent('on' + evType, function() {
                 handler.call(ele, window.event);
             });
-        }
+        };
     }
 })();
 // 移除事件
@@ -174,7 +170,7 @@ E.getRelatedTarget = function(event) {
 };
 // keyCode IE8 及opera support
 E.getKeyCode = function(e) {
-    var e = E.getEvent(e);
+    e = E.getEvent(e);
     if (typeof e.charCode === 'number') {
         return e.charCode;
     } else {
@@ -192,12 +188,12 @@ E.delegate = function(eventType, context, target, fn) {
         context = document.body;
     }
     self.addEvent(context, eventType, function(e) {
-        var e = self.getEvent(e),
-            eTarget = self.getTarget(e);
+        e = self.getEvent(e);
+        var eTarget = self.getTarget(e);
         // console.log(target, eTarget);
         if (eTarget === target) {
             fn(e);
-        };
+        }
     });
 };
 // 鼠标按键
@@ -294,7 +290,7 @@ E.offset = function(elem) {
 
     // If we don't have gBCR, just use 0,0 rather than error
     // BlackBerry 5, iOS 3 (original iPhone)
-    if (typeof elem.getBoundingClientRect !== "undefined") {
+    if (typeof elem.getBoundingClientRect !== 'undefined') {
         box = elem.getBoundingClientRect();
     }
     win = Utils.getWindow(doc);
@@ -321,7 +317,7 @@ E.clientY = function(event) {
 // 这个就是相对于页面的坐标了，如果不满一屏，则数值同clientX,clientY
 // 若是超过一屏，还要加上计算滚动坐标
 E.pageX = function(event) {
-    var event = E.getEvent(event);
+    event = E.getEvent(event);
     // lte IE8
     if (event.pageX === undefined) {
         //混杂及标准模式下
@@ -329,7 +325,7 @@ E.pageX = function(event) {
     }
 };
 E.pageY = function(event) {
-    var event = E.getEvent(event);
+    event = E.getEvent(event);
     // lte IE8
     if (event.pageY === undefined) {
         //混杂及标准模式下
@@ -361,58 +357,163 @@ E.focusout = function(ele, handler) {
  * DOM
  */
 var D = {};
-// id选择器,类别选择器，标签选择器
-// 仅仅D.$('#test')支持，但不支持D.$('div#test')，D.$('#div>p')
-// 类别选择器，这里只支持class和html tag
-// 比如：D.$('.test'),D.$('p.test'),D.$('p'),D.$('p',document.body)
-// 注意，传入context限制条件时，必须传入一个唯一的dom选择器
-D.$ = function(selectorString, context) {
-    var selectorTag = selectorString[0],
-        selectorStr = selectorString.slice(1);
-    // 
-    if (selectorTag === '#') {
-        // id选择器
-        return document.getElementById(selectorStr);
-    } else {
-        // 类别选择器，这里只支持class和html tag
-        // 比如：D.$$('.test'),D.$$('p.test'),D.$$('p'),D.$$('p',document.body)
-        // 注意，传入context限制条件时，必须传入一个唯一的dom选择器
-        if (document.querySelectorAll) {
-            return document.querySelectorAll(selectorString);
-        } else {
-            // console.log('here2 ,break');
-            var eleInfo = selectorStr.split('.'),
-                context = context || document,
-                ele = null;
-            // 循环遍历标签，判断dom节点类名是否匹配className
-            var tagArr = [],
-                tagReg;
-            // 若只有html tag , p
-            if (eleInfo.length === 1) {
-                return context.getElementsByTagName(selectorStr);
-            }
-            // 若只有类名参数 .test
-            if (eleInfo[0] === '') {
-                // 高级浏览器
-                if (context.getElementsByClassName) {
-                    return context.getElementsByClassName(eleInfo[1]);
-                } else {
-                    ele = context.getElementsByTagName('*');
-                }
-            }
-            ele = ele || context.getElementsByTagName(eleInfo[0]);
-            // alert('tag and class');
-            // 若为两者组合 p.test
-            tagReg = new RegExp('(^|\\s)' + eleInfo[1] + '(\\s|$)', 'g');
-            for (var i = 0, j = ele.length; i < j; i++) {
-                if (tagReg.test(ele[i].className)) {
-                    tagArr.push(ele[i]);
-                }
-            }
-            return tagArr;
+
+var makeArray = function(obj) {
+    if (!obj || obj.length === 0) {
+        return [];
+    }
+    // 非伪类对象，直接返回最好
+    if (!obj.length) {
+        return obj;
+    }
+    // 针对IE8以前 DOM的COM实现
+    try {
+        return [].slice.call(obj);
+    } catch (e) {
+        var i = 0,
+            j = obj.length,
+            res = [];
+        for (; i < j; i++) {
+            res.push(obj[i]);
         }
+        return res;
     }
 
+};
+// 去重
+var distinctArr = function(arr) {
+    // html去重和数组去重不同，单层循环搞不定啊
+    for (var i = 0; i < arr.length; i++) {
+        for (var j = 0; j < arr.length; j++) {
+            if (i !== j && arr[i] === arr[j]) {
+                arr.splice(j, 1);
+            }
+        }
+    }
+    return arr;
+};
+var getContext = function(selectorString, context) {
+
+    var sArr = selectorString.split(/[\.#]/), //选择器拆分
+        tagName;
+
+    var contextArr = [], //context筛选结果
+        make = []; //makeArra结果
+
+    var m,i,j,reg;
+    // 规避掉类似p#box.box1的脑残写法
+    if (/#/.test(selectorString)) {
+
+        selectorString = selectorString.match(/#[a-zA-z\d]+/)[0].substring(1);
+        return document.getElementById(selectorString);
+
+    } else if (/./g.test(selectorString)) {
+
+        // 获取 context数组
+        if (context.length === 0) {
+            return [];
+        } else if (!context.length) {
+            contextArr = makeArray(context.getElementsByClassName(sArr[1]));
+        } else {
+
+            for (i = 0, j = context.length; i < j; i++) {
+                make = makeArray(context[i].getElementsByClassName(sArr[1]));
+                contextArr = contextArr.concat(make);
+            }
+        }
+        context = contextArr;
+
+        if (selectorString[0] !== '.') {
+            // 标签配合类别选择器
+
+            tagName = sArr[0];
+
+
+
+            // 第一层为对比的类名
+            //获取符合第一个类名的环境
+
+            // 循环该环境对象，获取每个对象的className属性，并做比较
+            for (m = 0; m < context.length; m++) {
+                for (i = 1, j = sArr.length; i < j; i++) {
+                    reg = new RegExp('(^|\\s)' + sArr[i] + '(\\s|$)');
+                    if (context[m].tagName.toLowerCase() !== tagName || !reg.test(context[m].className)) {
+                        context.splice(m, 1);
+                        m--;
+                        break;
+                    }
+                }
+            }
+            return context;
+        } else {
+            // 纯类别选择器
+            // 可能为一个
+            // 可能为多个
+            if (selectorString.split('.').length === 2) {
+                // 一个类别的情形
+                // 遍历context
+                // 寻找
+                return context;
+
+            } else {
+                // 多个类别
+                for (m = 0; m < context.length; m++) {
+                    for (i = 1, j = sArr.length; i < j; i++) {
+                        reg = new RegExp('(^|\\s)' + sArr[i] + '(\\s|$)');
+                        if (!reg.test(context[m].className)) {
+                            context.splice(m, 1);
+                            m--;
+                            break;
+                        }
+                    }
+                }
+                return context;
+            }
+        }
+    }
+};
+
+D.$ = function(selectorString, context) {
+
+    var selectorArr = selectorString.split(/\s/),
+        selectorEnd = selectorArr[selectorArr.length - 1];
+
+    context = context || document;
+
+    // var selectorMap = function(selector) {
+    //     if (/^\./.test(selector)) {
+    //         return 'getElementsByClassName';
+    //     } else if (/^#/.test(selector)) {
+    //         return 'getElementById';
+    //     } else if (!/^[\.#]/.test(selector)) {
+    //         return 'getElementsByTagName';
+    //     }
+    // };
+
+    var i = 0,
+        j = selectorArr.length,
+        result = context;
+
+    if (selectorEnd.indexOf('#') !== -1) {
+        // id选择器
+        // 避免#box.test情况的出现
+        return document.getElementById(selectorEnd.match(/^#[a-zA-z0-9-_]+/)[0].substring(1));
+    } else {
+        // if (document.querySelectorAll) {
+        //     return document.querySelectorAll(selectorString);
+        // } else {
+
+        //     // 复合选择器判断
+
+
+        // }
+
+        for (; i < j; i++) {
+
+            result = getContext(selectorArr[i], makeArray(result));
+        }
+        return distinctArr(result);
+    }
 };
 // 添加类名
 // 应当支持空格分隔的多个类别添加，比如D.addClass(div,'box1 box2')
@@ -456,7 +557,7 @@ D.removeClass = function(ele, className) {
         cNameArr = cName.split(' '), //预添加类名数组
         classNameCacheStr = Utils.trim(ele.className),
         classArr = classNameCacheStr.split(' '), //已存在类名数组
-        classNameCopyArr = classNameCacheStr.split(' '),
+        // classNameCopyArr = classNameCacheStr.split(' '),
         iL = classArr.length,
         i = 0,
         jL = cNameArr.length,
@@ -481,9 +582,9 @@ D.removeClass = function(ele, className) {
 // 需要传入下标，默认基于兄弟元素顺序
 // 若传入标签名，则依照此来排序
 D.eq = function(ele, index, baseEle) {
-    if (Utils.trim(baseEle) !== '') {
+    // if (Utils.trim(baseEle) !== '') {
 
-    }
+    // }
 };
 // 获取下标
 // 默认是dom同级的下标，也可以提供约束条件context

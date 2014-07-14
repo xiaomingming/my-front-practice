@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>map测试</title>
+    <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font: 12px/1.5 arail;
+        }
+        ul {
+            list-style: none;
+        }
+        table {
+            table-layout: fixed;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        .table tbody th, .table tbody td {
+            height: 34px;
+            border: 1px solid #ddd;
+        }
+        .table tbody th {
+            background: #eee;
+        }
+        .table tbody td {
+            padding-left: 6px;
+        }
+        .table {
+            width: 800px;
+        }
+        .table table {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="table" class="table">
+        <!-- <table>
+            <tbody>
+                <tr>
+                    <th>年</th>
+                    <td>2014</td>
+                    <th>月</th>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <th>应发津贴</th>
+                    <td>2400</td>
+                    <th>实发津贴</th>
+                    <td>2400</td>
+                </tr>
+                <tr>
+                    <th>基础津贴标准</th>
+                    <td>2000</td>
+                    <th>70%标准</th>
+                    <td>1400</td>
+                </tr>
+                <tr>
+                    <th>补基础性津贴</th>
+                    <td>1000</td>
+                    <th>扣除个税</th>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <th>年终奖</th>
+                    <td>1000</td>
+                </tr>
+            </tbody>
+        </table> -->
+    </div>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script type="text/javascript">
+        var map = {
+            "bounsMap": {
+                "年": "2014",
+                "月": "6",
+                "应发津贴": "2400",
+                "实发津贴": "2400",
+                "基础性津贴标准": "2000",
+                "70%基础津贴": "1400",
+                "补基础性津贴": "1000",
+                "扣除个数": "0",
+                "2013年年终奖": "0"
+            }
+        };
+        // table外层容器，数据对象，分为几组
+        var renderTable = function(tableEle, map, groups) {
+            var tips = '',
+                i = 0,
+                k = 0,
+                innerStr = '';
+
+            if ($.isEmptyObject(map)) {
+                tips = '<p style="text-align:center;">数据不存在！</p>';
+            } else {
+                tips = '<table><tbody>';
+
+                for (var key in map) {
+                    i++;
+
+                    if (i !== groups) {
+                        innerStr += '<th>' + key + '</th><td>' + map[key] + '</td>';
+                    } else {
+                        tips += '<tr>' + innerStr + '<th>' + key + '</th><td>' + map[key] + '</td>' + '</tr>';
+                        innerStr = '';
+                        i = 0;
+                    }
+                }
+                if (i) {
+                    tips += '<tr>' + innerStr + '</tr>';
+                }
+                tips += '</tbody></table>';
+            }
+            // 获取内容，插入到容器中
+            tableEle.html(tips);
+        };
+         // 调用方法
+        renderTable($('#table'), map.bounsMap, 2);
+    </script>
+</body>
+
+</html>

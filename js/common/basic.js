@@ -384,9 +384,10 @@ var makeArray = function(obj) {
 var distinctArr = function(arr) {
     // html去重和数组去重不同，单层循环搞不定啊
     for (var i = 0; i < arr.length; i++) {
-        for (var j = 0; j < arr.length; j++) {
-            if (i !== j && arr[i] === arr[j]) {
+        for (var j = i + 1; j < arr.length; j++) {
+            if (arr[i] === arr[j]) {
                 arr.splice(j, 1);
+                j--;
             }
         }
     }
@@ -394,20 +395,20 @@ var distinctArr = function(arr) {
 };
 var getContext = function(selectorString, context) {
 
-    var sArr = selectorString.split(/[\.#]/), //选择器拆分
+    var sArr = selectorString.split('.'), //选择器拆分
         tagName;
 
     var contextArr = [], //context筛选结果
         make = []; //makeArra结果
 
-    var m,i,j,reg;
+    var m, i, j, reg;
     // 规避掉类似p#box.box1的脑残写法
     if (/#/.test(selectorString)) {
 
         selectorString = selectorString.match(/#[a-zA-z\d]+/)[0].substring(1);
         return document.getElementById(selectorString);
 
-    } else if (/./g.test(selectorString)) {
+    } else if (/\./g.test(selectorString)) {
 
         // 获取 context数组
         if (context.length === 0) {
@@ -423,12 +424,10 @@ var getContext = function(selectorString, context) {
         }
         context = contextArr;
 
-        if (selectorString[0] !== '.') {
+        if (selectorString.charAt(0) !== '.') {
             // 标签配合类别选择器
 
             tagName = sArr[0];
-
-
 
             // 第一层为对比的类名
             //获取符合第一个类名的环境
@@ -470,49 +469,57 @@ var getContext = function(selectorString, context) {
                 return context;
             }
         }
+    } else {
+        // 标签选择器咯
+        // 获取 context数组
+        if (context.length === 0) {
+            return [];
+        } else if (!context.length) {
+            contextArr = makeArray(context.getElementsByTagName(sArr[0]));
+        } else {
+
+            for (i = 0, j = context.length; i < j; i++) {
+                make = makeArray(context[i].getElementsByTagName(sArr[0]));
+                contextArr = contextArr.concat(make);
+            }
+        }
+        context = contextArr;
+        return context;
     }
 };
 
+// 目前只是支持 id class 标签选择器组合
+// 其它不支持
 D.$ = function(selectorString, context) {
 
-    var selectorArr = selectorString.split(/\s/),
+    var selectorArr = selectorString.split(' '),
         selectorEnd = selectorArr[selectorArr.length - 1];
 
     context = context || document;
-
-    // var selectorMap = function(selector) {
-    //     if (/^\./.test(selector)) {
-    //         return 'getElementsByClassName';
-    //     } else if (/^#/.test(selector)) {
-    //         return 'getElementById';
-    //     } else if (!/^[\.#]/.test(selector)) {
-    //         return 'getElementsByTagName';
-    //     }
-    // };
 
     var i = 0,
         j = selectorArr.length,
         result = context;
 
-    if (selectorEnd.indexOf('#') !== -1) {
+    if (/#/.test(selectorEnd)) {
         // id选择器
         // 避免#box.test情况的出现
         return document.getElementById(selectorEnd.match(/^#[a-zA-z0-9-_]+/)[0].substring(1));
     } else {
-        // if (document.querySelectorAll) {
-        //     return document.querySelectorAll(selectorString);
-        // } else {
+        if (document.querySelectorAll) {
+            return document.querySelectorAll(selectorString);
+        } else {
 
-        //     // 复合选择器判断
+            // 复合选择器判断
 
+            for (; i < j; i++) {
 
-        // }
-
-        for (; i < j; i++) {
-
-            result = getContext(selectorArr[i], makeArray(result));
+                result = getContext(selectorArr[i], makeArray(result));
+            }
+            return distinctArr(result);
         }
-        return distinctArr(result);
+
+
     }
 };
 // 添加类名

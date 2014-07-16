@@ -358,6 +358,7 @@ E.focusout = function(ele, handler) {
  */
 var D = {};
 
+// 伪数组转化成数组
 var makeArray = function(obj) {
     if (!obj || obj.length === 0) {
         return [];
@@ -380,6 +381,7 @@ var makeArray = function(obj) {
     }
 
 };
+
 // 去重
 var distinctArr = function(arr) {
     // html去重和数组去重不同，单层循环搞不定啊
@@ -393,36 +395,86 @@ var distinctArr = function(arr) {
     }
     return arr;
 };
+// 兼容性的getClassName方法
+// context只能是一个具体的环境对象
+// 不需要htmlCollection
+var getClassName = function(cName, context) {
+    context = context || document;
+    if (document.getElementsByClassName) {
+        return context.getElementsByClassName(cName);
+    } else {
+        // IE8以下的非主流
+        var domArr = context.getElementsByTagName('*'),
+            i = 0,
+            j = domArr.length,
+            reg = new RegExp('(^|\\s)' + cName + '(\\s|$)'),
+            resultArr = [];
+
+        for (; i < j; i++) {
+            if (reg.test(domArr[i].className)) {
+                resultArr.push(domArr[i]);
+            }
+        }
+        return resultArr;
+    }
+};
+
+var getTagName = function(tagName, context) {
+    return context.getElementsByTagName(tagName);
+};
+// 获取当前DOM上下文环境
+// 传入一个选择器，一个父类选择环境
 var getContext = function(selectorString, context) {
 
     var sArr = selectorString.split('.'), //选择器拆分
         tagName;
-
     var contextArr = [], //context筛选结果
         make = []; //makeArra结果
 
     var m, i, j, reg;
+
+    var regObj = {
+        'id': function(s) {
+            return (/#/.test(s));
+        },
+        'className': function(s) {
+            return (/\./.test(s));
+        },
+        'tagName': function(s) {
+            return (/[^\.#]/.test(s));
+        }
+    };
+
+    // 初始化dom方法
+    var getDom = function(context) {
+        if (regObj.className(selectorString)) {
+            return getClassName(sArr[1], context);
+        } else if (regObj.tagName(selectorString)) {
+            return getTagName(sArr[0], context);
+        }
+    };
+
+
+    // 获取 context数组
+    if (context.length === 0) {
+        return [];
+    } else if (!context.length) {
+        contextArr = makeArray(getDom(context));
+    } else {
+        for (i = 0, j = context.length; i < j; i++) {
+            make = makeArray(getDom(context[i]));
+            contextArr = contextArr.concat(make);
+        }
+    }
+    context = contextArr;
+
     // 规避掉类似p#box.box1的脑残写法
-    if (/#/.test(selectorString)) {
+    if (regObj.id(selectorString)) {
 
         selectorString = selectorString.match(/#[a-zA-z\d]+/)[0].substring(1);
         return document.getElementById(selectorString);
 
-    } else if (/\./g.test(selectorString)) {
-
-        // 获取 context数组
-        if (context.length === 0) {
-            return [];
-        } else if (!context.length) {
-            contextArr = makeArray(context.getElementsByClassName(sArr[1]));
-        } else {
-
-            for (i = 0, j = context.length; i < j; i++) {
-                make = makeArray(context[i].getElementsByClassName(sArr[1]));
-                contextArr = contextArr.concat(make);
-            }
-        }
-        context = contextArr;
+    } else if (regObj.className(selectorString)) {
 
         if (selectorString.charAt(0) !== '.') {
             // 标签配合类别选择器
@@ -461,7 +513,7 @@ var getContext = function(selectorString, context) {
                         reg = new RegExp('(^|\\s)' + sArr[i] + '(\\s|$)');
                         if (!reg.test(context[m].className)) {
                             context.splice(m, 1);
-                            m--;
+                            // m--;
                             break;
                         }
                     }
@@ -469,27 +521,12 @@ var getContext = function(selectorString, context) {
                 return context;
             }
         }
-    } else {
-        // 标签选择器咯
-        // 获取 context数组
-        if (context.length === 0) {
-            return [];
-        } else if (!context.length) {
-            contextArr = makeArray(context.getElementsByTagName(sArr[0]));
-        } else {
-
-            for (i = 0, j = context.length; i < j; i++) {
-                make = makeArray(context[i].getElementsByTagName(sArr[0]));
-                contextArr = contextArr.concat(make);
-            }
-        }
-        context = contextArr;
-        return context;
     }
+    return context; //纯标签情形
 };
-
-// 目前只是支持 id class 标签选择器组合
-// 其它不支持
+// 只支持简单的选择器组合
+// 包括id，类别，标签组合
+// 比如：$('.box.box2 p span'),$('#myMod .box span'),$('div span')
 D.$ = function(selectorString, context) {
 
     var selectorArr = selectorString.split(' '),
@@ -509,17 +546,14 @@ D.$ = function(selectorString, context) {
         if (document.querySelectorAll) {
             return document.querySelectorAll(selectorString);
         } else {
-
             // 复合选择器判断
-
+            // for <IE8
             for (; i < j; i++) {
 
                 result = getContext(selectorArr[i], makeArray(result));
             }
             return distinctArr(result);
         }
-
-
     }
 };
 // 添加类名
@@ -585,18 +619,133 @@ D.removeClass = function(ele, className) {
         ele.setAttribute('class', Utils.trim(classArr.join(' ')));
     }
 };
-// 获取某个下标的元素
-// 需要传入下标，默认基于兄弟元素顺序
-// 若传入标签名，则依照此来排序
-D.eq = function(ele, index, baseEle) {
-    // if (Utils.trim(baseEle) !== '') {
 
-    // }
+D.getFirstChild = function(parentNode) {
+    var firstChild = parentNode.firstChild;
+    while (firstChild !== null && firstChild.nodeType !== 1) {
+        firstChild = firstChild.nextSibling;
+    }
+    return firstChild;
+    // return parentNode.nextSibling;
 };
-// 获取下标
-// 默认是dom同级的下标，也可以提供约束条件context
-D.getIndex = function(ele, context) {
+// 获取最后一个子元素
+D.getLastChild = function(parentNode) {
+    var lastChild = parentNode.lastChild;
+    while (lastChild !== null && lastChild.nodeType !== 1) {
+        lastChild = lastChild.previousSibling;
+    }
+    return lastChild;
+};
+// 获取子节点标签
+// 其实，ele.childreen就可以了
+D.getChilds = function(parentNode) {
+    var childNodes = parentNode.childNodes,
+        childArr = [];
+    for (var i = 0, j = childNodes.length; i < j; i++) {
+        if (childNodes[i].nodeType === 1) {
+            childArr.push(childNodes[i]);
+        }
+    }
+    // alert(j);
+    return childArr;
+};
 
+// 获取下一个兄弟节点
+D.getNext = function(node) {
+    var next = node.nextSibling;
+    while (next !== null && next.nodeType !== 1) {
+        next = next.nextSibling;
+    }
+    //if(next.tagName.toLowerCase()!='script')
+    return next;
+};
+
+// 获取所有兄弟节点
+D.getNextAll = function(node) {
+    var next = D.getNext(node),
+        nextArr = [];
+    nextArr.push(next);
+    while (D.getNext(next) !== null) {
+        next = D.getNext(next);
+        nextArr.push(next);
+    }
+    return nextArr;
+};
+
+// 获取前一个兄弟节点
+D.getPrev = function(node) {
+    var prev = node.previousSibling;
+    while (prev !== null && prev.nodeType !== 1) {
+        prev = prev.previousSibling;
+    }
+    return prev;
+};
+
+// 获取所有兄弟节点
+D.getPrevAll = function(node) {
+    var prev = D.getPrev(node),
+        prevArr = [];
+    prevArr.push(prev);
+    // while (D.getPrev(prev) !== null) {
+    //     prev = D.getPrev(prev);
+    //     prevArr.push(prev);
+    // }
+    return prevArr;
+};
+// 创建一个插入某个元素之后
+// 判断当前元素后面是否存在元素
+// 若不存在，使用appendChild方法
+// 否则，对其后的元素调用insertBefore方法模拟
+D.insertAfter = function(parentNode, newNode, currentNode) {
+    // currentNode不存在时
+    if (arguments.length === 2) {
+        return parentNode.appendChild(newNode);
+    }
+    var next = D.getNext(currentNode);
+
+    if (next !== null) {
+        return parentNode.insertBefore(newNode, next);
+    }
+    // 下一个元素不存在时
+    return parentNode.appendChild(newNode);
+};
+
+// 获取某个下标的元素
+// 传入选择器，或者DOM对象
+// 第二个为下标
+D.eq = function(ele, index) {
+    if (typeof ele === 'string') {
+        ele = D.$(ele);
+    }
+    return ele[index];
+};
+// 获取元素的下标
+// 第二个参数为可选参数
+// 忽略第二个参数时，下标为该元素的在兄弟元素中的位置
+// 否则，为第二个参数提供的参考列表中的位置
+D.getIndex = function(ele, context) {
+    var ct = context || [],
+        i = 0,
+        j = ct.length;
+    if (typeof ele === 'string') {
+        ele = D.$(ele);
+    }
+    // 
+    if (arguments.length === 1) {
+        return D.getPrevAll(ele).length;
+    }
+    for (; i < j; i++) {
+        if (ele === ct[i]) {
+            break;
+        }
+    }
+    return i;
+};
+// 是否有指定className
+// 不可以传入一个选择集
+D.hasClass = function(ele, cName) {
+    var eleClass = ele.className;
+    return new RegExp('(^|\\s)' + cName + '(\\s|$)').test(eleClass);
 };
 /*
  * 创建dom

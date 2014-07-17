@@ -23,12 +23,16 @@
             box-shadow:1px 1px 1px #eee;
             border:1px solid #ddd;
         }
+        .it1,.it2 {
+            border: 2px solid orange;
+        }
     </style>
 </head>
 
 <body>
+    <div class="box-btn"></div>
     <h1>id</h1>
-    <div id="box">
+    <div id="box" class="tgClass">
         <ul>
             <li class="item">id item1</li>
             <li class="item">id item2</li>
@@ -37,11 +41,11 @@
         <ul>
             <li class="item">id item1</li>
             <li class="item item2">id item2</li>
-            <li class="item">id item3</li>
+            <li class="item item3">id item3</li>
         </ul>
     </div>
     <h1>单标签嵌套</h1>
-    <div>
+    <div class="tgClass">
         <div>
             <div><span>1111</span>
             </div>
@@ -68,24 +72,38 @@
 </body>
 <script type="text/javascript" src="../js/common/basic.js"></script>
 <script type="text/javascript">
+    ready(function(){
+        // D.addClass(D.$('.item'),'a b c');
+        // D.addClass(D.$('div'),'it1 it2');
+        // D.addClass(D.$('#box'),'it1 it2');
+        // D.toggleClass(D.$('div'),'tgClass');
+        E.delegate('click','.box-btn','button',function(){
+            alert('hahahha');
+        });
+        D.$('.box-btn');
+    });
+</script>
+<!-- <script type="text/javascript" src="../js/common/jquery-1.8.2.js"></script> -->
+<script type="text/javascript">
     // document.addEventListener('DOMContentLoaded', function() {
 
     // }, false);
-    window.onload = function() {
-        /*var txt = $('.box1.box2 .box1');
-        // alert(txt.innerHTML);
-        alert(txt[0].innerText);*/
-        var txt2 =D.$('span');
-        var txt3=D.$('#box ul li.item');
-        alert(D.eq('#box ul li.item',1).innerText);
-        alert(txt2[0].innerText);
-        alert(txt3[0].innerText);
-        // getIndex test
-        alert(D.getIndex(D.$('.item2')[0],D.$('#box li')));
-        // hasClass test
-        alert(D.hasClass(D.$('.item2')[0],'item'));
+    // window.onload = function() {
+    //     /*var txt = $('.box1.box2 .box1');
+    //     // alert(txt.innerHTML);
+    //     alert(txt[0].innerText);*/
+    //     console.log(D.getPrevAll(D.$('.item3')[0]));
+    //     var txt2 =D.$('span');
+    //     var txt3=D.$('#box ul li.item');
+    //     alert(D.eq('#box ul li.item',1).innerText);
+    //     alert(txt2[0].innerText);
+    //     alert(txt3[0].innerText);
+    //     // getIndex test
+    //     alert(D.getIndex(D.$('.item2')[0],D.$('#box li')));
+    //     // hasClass test
+    //     alert(D.hasClass(D.$('.item2')[0],'item'));
 
-    };
+    // };
 </script>
 
 </html>

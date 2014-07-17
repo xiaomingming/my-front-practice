@@ -132,16 +132,35 @@ var E = {};
 E.addEvent = (function() {
     if (document.addEventListener) {
         return function(ele, evType, handler) {
-            ele.addEventListener(evType, handler, false);
+            if (!ele.length) {
+                ele.addEventListener(evType, handler, false);
+            } else {
+                for (var i = 0, j = ele.length; i < j; i++) {
+                    ele[i].addEventListener(evType, handler, false);
+                }
+            }
+
         };
     } else if (document.attachEvent) {
         return function(ele, evType, handler) {
-            ele.attachEvent('on' + evType, function() {
-                handler.call(ele, window.event);
-            });
+            if (!ele.length) {
+                ele.attachEvent('on' + evType, function() {
+                    handler.call(ele, window.event);
+                });
+            } else {
+                for (var i = 0, j = ele.length; i < j; i++) {
+                    (function(ele) {
+                        ele.attachEvent('on' + evType, function() {
+                            handler.call(ele, window.event);
+                        });
+                    })(ele[i]);
+                }
+            }
+
         };
     }
 })();
+
 // 移除事件
 E.removeEvent = (function() {
     if (document.removeEventListener) {
@@ -180,19 +199,51 @@ E.getKeyCode = function(e) {
 // 事件委托
 // 事件类型，委托的父元素，事件目标字符串，回调
 // 事件目标字符串只支持html tag，class，id
-E.delegate = function(eventType, context, target, fn) {
-    var self = this;
-    // 若父元素不存在
-    // 介个。。。。
-    if (Utils.trim(context) === '') {
-        context = document.body;
-    }
-    self.addEvent(context, eventType, function(e) {
+E.delegate = function(eType, context, target, fn) {
+    var self = this,
+        tag = '',
+        className = '',
+        sArr = target.split('.');
+
+    // 此处针对target做一个处理
+    // 只允许传入标签和类
+    // li.item .item1.item2 li div
+
+    context = D.$(context);
+
+    self.addEvent(context, eType, function(e) {
         e = self.getEvent(e);
         var eTarget = self.getTarget(e);
-        // console.log(target, eTarget);
-        if (eTarget === target) {
-            fn(e);
+        console.log(eTarget);
+
+        var eTag = eTarget.tagName.toLowerCase(),
+            eCNameArr = eTarget.className.split(' ');
+
+        var i = 0,
+            j = 0;
+        if (/\./.test(target)) {
+            className = sArr.slice(1);
+
+            for (i = 0; i < eCNameArr.length; i++) {
+                for (j = 0; j < className.length; j++) {
+                    if (eCNameArr[i] !== className[j]) {
+                        return false;
+                    }
+                }
+            }
+            if (target.charAt(0) !== '.') {
+                // 标签混合
+
+                tag = sArr[0];
+                if (eTag === tag) {
+                    fn();
+                }
+            }
+        } else {
+            tag = target;
+            if (eTag === tag) {
+                fn();
+            }
         }
     });
 };
@@ -556,70 +607,71 @@ D.$ = function(selectorString, context) {
         }
     }
 };
-// 添加类名
-// 应当支持空格分隔的多个类别添加，比如D.addClass(div,'box1 box2')
-// div class="box1 box2"
+// set get attribute
+D.attr = function(ele, atr, val) {
+    if (arguments.length === 2) {
+        return ele.getAttribute(atr);
+    } else if (arguments.length === 3) {
+        ele.setAttribute(atr, val);
+    }
+};
+// 
 D.addClass = function(ele, className) {
-    // 若该className已经存在，则不执行附加操作
-    // 否则执行
-    // class属性名遍历
-    var cName = Utils.trim(className),
-        cNameArr = cName.split(' '), //预添加类名数组
-        classNameCacheStr = Utils.trim(ele.className),
-        classArr = classNameCacheStr.split(' '), //已存在类名数组
-        iL = classArr.length,
+    // 若为单独的DOM对象
+    // 直接给该对象添加 className
+    // 否则，遍历添加
+    var reg = new RegExp('(^|\\s)' + className + '(\\s|$)'),
         i = 0,
-        jL = cNameArr.length,
-        j = 0,
-        resClass;
-    // 若类名不为空
-    // 有相同的类名，则进行置空
-    // 循环结束后，进行拼接
-    if (classNameCacheStr !== '') {
-        for (j = 0; j < jL; j++) {
-            for (i = 0; i < iL; i++) {
-                if (classArr[i] === cNameArr[j]) {
-                    // cNameCopyArr.splice(j, 1);
-                    cNameArr[j] = '';
-                    break;
-                }
-            }
+        j;
+    var addOne = function(oneEle) {
+        var originClass = oneEle.className;
+        if (!reg.test(ele.className)) {
+            oneEle.className = originClass + (originClass === '' ? '' : ' ') + className;
+        }
+    };
+    if (!ele.length) {
+        addOne(ele);
+    } else {
+        for (j = ele.length; i < j; i++) {
+            addOne(ele[i]);
         }
     }
-    resClass = Utils.trim(cNameArr.concat(classArr).join(' '));
-    ele.setAttribute('class', resClass);
 };
-// 移除类名
-// className为空，则全部移除
 D.removeClass = function(ele, className) {
-    // 若该className不存在，则不执行附加操作
-    // class属性名遍历
-    var cName = Utils.trim(className),
-        cNameArr = cName.split(' '), //预添加类名数组
-        classNameCacheStr = Utils.trim(ele.className),
-        classArr = classNameCacheStr.split(' '), //已存在类名数组
-        // classNameCopyArr = classNameCacheStr.split(' '),
-        iL = classArr.length,
+    // 若为单独的DOM对象
+    // 直接给该对象删除 className
+    // 否则，遍历删除
+    var reg = new RegExp('(^|\\s)' + className + '(\\s|$)'),
         i = 0,
-        jL = cNameArr.length,
-        j = 0;
-
-    if (cName === '') {
-        ele.setAttribute('class', ''); // 移除全部
-    } else if (classNameCacheStr !== '') {
-        // 若类名不为空
-        for (j = 0; j < jL; j++) {
-            for (i = 0; i < iL; i++) {
-                if (classArr[i] === cNameArr[j]) {
-                    // 若相同，则将数组对应的位置补空
-                    classArr[i] = '';
-                }
-            }
+        j;
+    var delOne = function(oneEle) {
+        var originClass = oneEle.className;
+        oneEle.className = originClass.replace(reg, function() {
+            return '';
+        });
+    };
+    if (!ele.length) {
+        delOne(ele);
+    } else {
+        for (j = ele.length; i < j; i++) {
+            delOne(ele[i]);
         }
-        ele.setAttribute('class', Utils.trim(classArr.join(' ')));
     }
 };
-
+D.toggleClass = function(ele, className) {
+    var i = 0,
+        j;
+    var toggleOne = function(oneEle) {
+        D.hasClass(oneEle, className) ? D.removeClass(oneEle, className) : D.addClass(oneEle, className);
+    };
+    if (!ele.length) {
+        toggleOne(ele);
+    } else {
+        for (j = ele.length; i < j; i++) {
+            toggleOne(ele[i]);
+        }
+    }
+};
 D.getFirstChild = function(parentNode) {
     var firstChild = parentNode.firstChild;
     while (firstChild !== null && firstChild.nodeType !== 1) {
@@ -686,10 +738,10 @@ D.getPrevAll = function(node) {
     var prev = D.getPrev(node),
         prevArr = [];
     prevArr.push(prev);
-    // while (D.getPrev(prev) !== null) {
-    //     prev = D.getPrev(prev);
-    //     prevArr.push(prev);
-    // }
+    while (D.getPrev(prev) !== null) {
+        prev = D.getPrev(prev);
+        prevArr.push(prev);
+    }
     return prevArr;
 };
 // 创建一个插入某个元素之后

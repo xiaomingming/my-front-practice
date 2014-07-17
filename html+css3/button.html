@@ -77,10 +77,10 @@
         // D.addClass(D.$('div'),'it1 it2');
         // D.addClass(D.$('#box'),'it1 it2');
         // D.toggleClass(D.$('div'),'tgClass');
-        E.delegate('click','.box-btn','button',function(){
+        E.delegate('click','#box ul','.item2',function(){
             alert('hahahha');
         });
-        D.$('.box-btn');
+        // D.$('.box-btn')[0];
     });
 </script>
 <!-- <script type="text/javascript" src="../js/common/jquery-1.8.2.js"></script> -->

@@ -224,20 +224,26 @@ E.delegate = function(eType, context, target, fn) {
         if (/\./.test(target)) {
             className = sArr.slice(1);
 
-            for (i = 0; i < eCNameArr.length; i++) {
-                for (j = 0; j < className.length; j++) {
-                    if (eCNameArr[i] !== className[j]) {
-                        return false;
+            for (i = 0; i < className.length; i++) {
+                for (j = 0; j < eCNameArr.length; j++) {
+                    if (eCNameArr[j] === className[i]) {
+                        className.splice(i,1);
+                        i--;
+                        break;
                     }
                 }
             }
+            if(className.length){
+                return false;
+            }
             if (target.charAt(0) !== '.') {
                 // 标签混合
-
                 tag = sArr[0];
                 if (eTag === tag) {
                     fn();
                 }
+            } else {
+                fn();
             }
         } else {
             tag = target;

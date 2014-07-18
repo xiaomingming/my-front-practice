@@ -17,12 +17,12 @@
         a {
             text-decoration:none;
         }
-        div:hover, input:hover, button:hover, a:hover {
+        /*div:hover, input:hover, button:hover, a:hover {
             background:#fefefe;
             cursor:pointer;
             box-shadow:1px 1px 1px #eee;
             border:1px solid #ddd;
-        }
+        }*/
         .it1,.it2 {
             border: 2px solid orange;
         }
@@ -73,13 +73,21 @@
 <script type="text/javascript" src="../js/common/basic.js"></script>
 <script type="text/javascript">
     ready(function(){
-        // D.addClass(D.$('.item'),'a b c');
+        D.removeClass(D.$('.item'));
         // D.addClass(D.$('div'),'it1 it2');
         // D.addClass(D.$('#box'),'it1 it2');
         // D.toggleClass(D.$('div'),'tgClass');
-        E.delegate('click','#box ul','.item2',function(){
-            alert('hahahha');
+        E.delegate('click','#box ul','.item2',function(e){
+
+            // console.log(e.target);
         });
+        
+        E.delegate('click','.box-btn','button',function(e){
+            console.log(e.target);
+            // alert('you click me!');
+        });
+        D.html(D.$('.box-btn')[0],'<button>click me</button>');
+        // D.text(D.$('.box-btn')[0],'<p>dulalalalalllalal</p>');
         // D.$('.box-btn')[0];
     });
 </script>

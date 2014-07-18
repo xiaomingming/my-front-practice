@@ -82,17 +82,90 @@
         };
     }();
 
-    ready.isReady = false; //设置这个标志，和匿名函数内部的isReady无关啊
+    ready.isReady = false;
     window.ready = ready;
 })();
+var docElem = document.documentElement;
+/*
+ * DOM编写
+ */
+var D = {};
+/*
+ * 事件编写
+ */
+var E = {};
 /*
  * 工具函数
  */
-var docElem = document.documentElement;
 var Utils = {};
+
 Utils.trim = function(str) {
     return str.replace(/(^\s*)|(\s*$)/g, '');
 };
+// 伪数组转化成数组
+Utils.makeArray = function(obj) {
+    if (!obj || obj.length === 0) {
+        return [];
+    }
+    // 非伪类对象，直接返回最好
+    if (!obj.length) {
+        return obj;
+    }
+    // 针对IE8以前 DOM的COM实现
+    try {
+        return [].slice.call(obj);
+    } catch (e) {
+        var i = 0,
+            j = obj.length,
+            res = [];
+        for (; i < j; i++) {
+            res.push(obj[i]);
+        }
+        return res;
+    }
+
+};
+
+// 去重
+Utils.distinctArr = function(arr) {
+    // html去重和数组去重不同，单层循环搞不定啊
+    for (var i = 0; i < arr.length; i++) {
+        for (var j = i + 1; j < arr.length; j++) {
+            if (arr[i] === arr[j]) {
+                arr.splice(j, 1);
+                j--;
+            }
+        }
+    }
+    return arr;
+};
+// 判断是否为一个DOM集合
+Utils.isDomArr = function(ele) {
+    return !ele.length ? false : true;
+};
+// 是否为你期待的数据类型
+Utils.isType = function(data, type) {
+    return Object.prototype.toString.call(data).slice(8, -1).toLowerCase() === type;
+};
+// 遍历数组和对象
+Utils.each = function(obj, callback) {
+    if (this.isType(obj, 'object')) {
+        // 对象
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                callback.call(null, key, obj[key]);
+            }
+        }
+    } else if (this.isType(obj, 'array') || this.isType(obj, 'nodeList')) {
+        // 数组
+        // 你想不到的是，nodelist类型
+        for (var i = 0, j = obj.length; i < j; i++) {
+            callback.call(null, i, obj[i]);
+        }
+    }
+};
+// 以下三个函数不可以为工具函数
+// 有待整理
 Utils.isWindow = function(obj) {
     return obj !== null && obj === obj.window;
 };
@@ -124,39 +197,36 @@ Utils.contains = docElem.contains ?
         }
         return false;
 };
-/*
- * 事件编写
- */
-var E = {};
+
 // 添加事件
 E.addEvent = (function() {
     if (document.addEventListener) {
         return function(ele, evType, handler) {
-            if (!ele.length) {
-                ele.addEventListener(evType, handler, false);
+            if (Utils.isDomArr(ele)) {
+                Utils.each(ele, function(i, v) {
+                    v.addEventListener(evType, function(e) {
+                        handler(e);
+                    }, false);
+                });
             } else {
-                for (var i = 0, j = ele.length; i < j; i++) {
-                    ele[i].addEventListener(evType, handler, false);
-                }
+                ele.addEventListener(evType, function(e) {
+                    handler(e);
+                }, false);
             }
-
         };
     } else if (document.attachEvent) {
         return function(ele, evType, handler) {
-            if (!ele.length) {
+            if (Utils.isDomArr(ele)) {
+                Utils.each(ele, function(i, v) {
+                    v.attachEvent('on' + evType, function() {
+                        handler.call(v, window.event);
+                    });
+                });
+            } else {
                 ele.attachEvent('on' + evType, function() {
                     handler.call(ele, window.event);
                 });
-            } else {
-                for (var i = 0, j = ele.length; i < j; i++) {
-                    (function(ele) {
-                        ele.attachEvent('on' + evType, function() {
-                            handler.call(ele, window.event);
-                        });
-                    })(ele[i]);
-                }
             }
-
         };
     }
 })();
@@ -165,11 +235,24 @@ E.addEvent = (function() {
 E.removeEvent = (function() {
     if (document.removeEventListener) {
         return function(ele, evType, handler) {
-            ele.removeEventListener(evType, handler, false);
+            if (Utils.isDomArr(ele)) {
+                Utils.each(ele, function(i, v) {
+                    v.removeEventListener(evType, handler, false);
+                });
+            } else {
+                ele.removeEventListener(evType, handler, false);
+            }
+
         };
     } else if (document.detachEvent) {
         return function(ele, evType, handler) {
-            ele.detachEvent('on' + evType, handler);
+            if (Utils.isDomArr(ele)) {
+                Utils.each(ele, function(i, v) {
+                    v.detachEvent('on' + evType, handler);
+                });
+            } else {
+                ele.detachEvent('on' + evType, handler);
+            }
         };
     }
 })();
@@ -214,7 +297,6 @@ E.delegate = function(eType, context, target, fn) {
     self.addEvent(context, eType, function(e) {
         e = self.getEvent(e);
         var eTarget = self.getTarget(e);
-        console.log(eTarget);
 
         var eTag = eTarget.tagName.toLowerCase(),
             eCNameArr = eTarget.className.split(' ');
@@ -227,28 +309,27 @@ E.delegate = function(eType, context, target, fn) {
             for (i = 0; i < className.length; i++) {
                 for (j = 0; j < eCNameArr.length; j++) {
                     if (eCNameArr[j] === className[i]) {
-                        className.splice(i,1);
+                        className.splice(i, 1);
                         i--;
                         break;
                     }
                 }
             }
-            if(className.length){
+            if (className.length) {
                 return false;
             }
             if (target.charAt(0) !== '.') {
                 // 标签混合
                 tag = sArr[0];
                 if (eTag === tag) {
-                    fn();
+                    fn(e);
                 }
             } else {
-                fn();
+                fn(e);
             }
         } else {
-            tag = target;
-            if (eTag === tag) {
-                fn();
+            if (eTag === target) {
+                fn(e);
             }
         }
     });
@@ -413,49 +494,10 @@ E.focusout = function(ele, handler) {
 /*
  * DOM
  */
-var D = {};
-
-// 伪数组转化成数组
-var makeArray = function(obj) {
-    if (!obj || obj.length === 0) {
-        return [];
-    }
-    // 非伪类对象，直接返回最好
-    if (!obj.length) {
-        return obj;
-    }
-    // 针对IE8以前 DOM的COM实现
-    try {
-        return [].slice.call(obj);
-    } catch (e) {
-        var i = 0,
-            j = obj.length,
-            res = [];
-        for (; i < j; i++) {
-            res.push(obj[i]);
-        }
-        return res;
-    }
-
-};
-
-// 去重
-var distinctArr = function(arr) {
-    // html去重和数组去重不同，单层循环搞不定啊
-    for (var i = 0; i < arr.length; i++) {
-        for (var j = i + 1; j < arr.length; j++) {
-            if (arr[i] === arr[j]) {
-                arr.splice(j, 1);
-                j--;
-            }
-        }
-    }
-    return arr;
-};
 // 兼容性的getClassName方法
 // context只能是一个具体的环境对象
 // 不需要htmlCollection
-var getClassName = function(cName, context) {
+D.getClassName = function(cName, context) {
     context = context || document;
     if (document.getElementsByClassName) {
         return context.getElementsByClassName(cName);
@@ -476,13 +518,14 @@ var getClassName = function(cName, context) {
     }
 };
 
-var getTagName = function(tagName, context) {
+D.getTagName = function(tagName, context) {
     return context.getElementsByTagName(tagName);
 };
 // 获取当前DOM上下文环境
 // 传入一个选择器，一个父类选择环境
-var getContext = function(selectorString, context) {
+D.getContext = function(selectorString, context) {
 
+    var _this = this;
     var sArr = selectorString.split('.'), //选择器拆分
         tagName;
     var contextArr = [], //context筛选结果
@@ -505,9 +548,9 @@ var getContext = function(selectorString, context) {
     // 初始化dom方法
     var getDom = function(context) {
         if (regObj.className(selectorString)) {
-            return getClassName(sArr[1], context);
+            return _this.getClassName(sArr[1], context);
         } else if (regObj.tagName(selectorString)) {
-            return getTagName(sArr[0], context);
+            return _this.getTagName(sArr[0], context);
         }
     };
 
@@ -516,10 +559,10 @@ var getContext = function(selectorString, context) {
     if (context.length === 0) {
         return [];
     } else if (!context.length) {
-        contextArr = makeArray(getDom(context));
+        contextArr = Utils.makeArray(getDom(context));
     } else {
         for (i = 0, j = context.length; i < j; i++) {
-            make = makeArray(getDom(context[i]));
+            make = Utils.makeArray(getDom(context[i]));
             contextArr = contextArr.concat(make);
         }
     }
@@ -585,6 +628,7 @@ var getContext = function(selectorString, context) {
 // 包括id，类别，标签组合
 // 比如：$('.box.box2 p span'),$('#myMod .box span'),$('div span')
 D.$ = function(selectorString, context) {
+    var _this = this;
 
     var selectorArr = selectorString.split(' '),
         selectorEnd = selectorArr[selectorArr.length - 1];
@@ -601,15 +645,15 @@ D.$ = function(selectorString, context) {
         return document.getElementById(selectorEnd.match(/^#[a-zA-z0-9-_]+/)[0].substring(1));
     } else {
         if (document.querySelectorAll) {
-            return document.querySelectorAll(selectorString);
+            return Utils.makeArray(document.querySelectorAll(selectorString));
         } else {
             // 复合选择器判断
             // for <IE8
             for (; i < j; i++) {
 
-                result = getContext(selectorArr[i], makeArray(result));
+                result = _this.getContext(selectorArr[i], Utils.makeArray(result));
             }
-            return distinctArr(result);
+            return Utils.distinctArr(result);
         }
     }
 };
@@ -643,25 +687,29 @@ D.addClass = function(ele, className) {
         }
     }
 };
+// 不设置第二个参数时，默认移除所有类名
 D.removeClass = function(ele, className) {
     // 若为单独的DOM对象
     // 直接给该对象删除 className
     // 否则，遍历删除
     var reg = new RegExp('(^|\\s)' + className + '(\\s|$)'),
         i = 0,
-        j;
+        j,
+        argsLen = arguments.length;
     var delOne = function(oneEle) {
         var originClass = oneEle.className;
-        oneEle.className = originClass.replace(reg, function() {
+        oneEle.className = (argsLen === 1) ? '' : originClass.replace(reg, function() {
             return '';
         });
     };
     if (!ele.length) {
         delOne(ele);
     } else {
+
         for (j = ele.length; i < j; i++) {
             delOne(ele[i]);
         }
+
     }
 };
 D.toggleClass = function(ele, className) {
@@ -684,7 +732,6 @@ D.getFirstChild = function(parentNode) {
         firstChild = firstChild.nextSibling;
     }
     return firstChild;
-    // return parentNode.nextSibling;
 };
 // 获取最后一个子元素
 D.getLastChild = function(parentNode) {
@@ -704,7 +751,6 @@ D.getChilds = function(parentNode) {
             childArr.push(childNodes[i]);
         }
     }
-    // alert(j);
     return childArr;
 };
 
@@ -714,17 +760,16 @@ D.getNext = function(node) {
     while (next !== null && next.nodeType !== 1) {
         next = next.nextSibling;
     }
-    //if(next.tagName.toLowerCase()!='script')
     return next;
 };
 
 // 获取所有兄弟节点
 D.getNextAll = function(node) {
-    var next = D.getNext(node),
+    var next = this.getNext(node),
         nextArr = [];
     nextArr.push(next);
-    while (D.getNext(next) !== null) {
-        next = D.getNext(next);
+    while (this.getNext(next) !== null) {
+        next = this.getNext(next);
         nextArr.push(next);
     }
     return nextArr;
@@ -741,11 +786,11 @@ D.getPrev = function(node) {
 
 // 获取所有兄弟节点
 D.getPrevAll = function(node) {
-    var prev = D.getPrev(node),
+    var prev = this.getPrev(node),
         prevArr = [];
     prevArr.push(prev);
-    while (D.getPrev(prev) !== null) {
-        prev = D.getPrev(prev);
+    while (this.getPrev(prev) !== null) {
+        prev = this.getPrev(prev);
         prevArr.push(prev);
     }
     return prevArr;
@@ -759,7 +804,7 @@ D.insertAfter = function(parentNode, newNode, currentNode) {
     if (arguments.length === 2) {
         return parentNode.appendChild(newNode);
     }
-    var next = D.getNext(currentNode);
+    var next = this.getNext(currentNode);
 
     if (next !== null) {
         return parentNode.insertBefore(newNode, next);
@@ -773,7 +818,7 @@ D.insertAfter = function(parentNode, newNode, currentNode) {
 // 第二个为下标
 D.eq = function(ele, index) {
     if (typeof ele === 'string') {
-        ele = D.$(ele);
+        ele = this.$(ele);
     }
     return ele[index];
 };
@@ -786,11 +831,11 @@ D.getIndex = function(ele, context) {
         i = 0,
         j = ct.length;
     if (typeof ele === 'string') {
-        ele = D.$(ele);
+        ele = this.$(ele);
     }
     // 
     if (arguments.length === 1) {
-        return D.getPrevAll(ele).length;
+        return this.getPrevAll(ele).length;
     }
     for (; i < j; i++) {
         if (ele === ct[i]) {
@@ -799,11 +844,47 @@ D.getIndex = function(ele, context) {
     }
     return i;
 };
-// 是否有指定className
-// 不可以传入一个选择集
+// 某个DOM对象是否有指定className
+// 类名只能指定一个，或者多个，但是，多个必须使用'|'分隔
+// class1|class2|class3
 D.hasClass = function(ele, cName) {
-    var eleClass = ele.className;
-    return new RegExp('(^|\\s)' + cName + '(\\s|$)').test(eleClass);
+    // 单独的类别
+    if (!/\|/.test(cName)) {
+        return new RegExp('(^|\\s)' + cName + '(\\s|$)').test(ele.className);
+    }
+    // 多个类别
+    var classArr = cName.split('|'),
+        targetClass = ele.className;
+
+    for (var i = 0, j = classArr.length; i < j; i++) {
+        var reg = new RegExp('(^|\\s)' + classArr[i] + '(\\s|$)');
+        if (!reg.test(targetClass)) {
+            return false;
+        }
+    }
+    return true;
+};
+// 文本操作
+// 不支持DOM数组
+// 只支持单个DOM对象的html插入
+D.html = function(ele, str) {
+    if (arguments.length === 1) {
+        return ele.innerHTML;
+    }
+    ele.innerHTML = str;
+};
+// 文本获取和设置
+D.text = function(ele, str) {
+    if (arguments.length === 1) {
+        return ele.innerText;
+    }
+    var txt = document.createTextNode(str);
+    this.html(ele, '');
+    ele.appendChild(txt);
+};
+// style获取
+D.css = function(ele, style) {
+
 };
 /*
  * 创建dom

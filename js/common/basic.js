@@ -299,24 +299,20 @@ E.delegate = function(eType, context, target, fn) {
         var eTarget = self.getTarget(e);
 
         var eTag = eTarget.tagName.toLowerCase(),
-            eCNameArr = eTarget.className.split(' ');
+            eCName = eTarget.className;
 
         var i = 0,
-            j = 0;
+            j = 0,
+            reg;
         if (/\./.test(target)) {
             className = sArr.slice(1);
 
-            for (i = 0; i < className.length; i++) {
-                for (j = 0; j < eCNameArr.length; j++) {
-                    if (eCNameArr[j] === className[i]) {
-                        className.splice(i, 1);
-                        i--;
-                        break;
-                    }
+            for (i = 0, j = className.length; i < j; i++) {
+                reg = new RegExp('(^|\\s)' + className[i] + '(\\s|$)');
+                if (!reg.test(eCName)) {
+                    return false;
                 }
-            }
-            if (className.length) {
-                return false;
+
             }
             if (target.charAt(0) !== '.') {
                 // 标签混合

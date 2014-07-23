@@ -99,6 +99,11 @@ var E = {};
  */
 var Utils = {};
 
+// 扩展函数
+Utils.extend=function(defaults,settings,isDeepCopy){
+
+};
+
 Utils.trim = function(str) {
     return str.replace(/(^\s*)|(\s*$)/g, '');
 };
@@ -163,6 +168,30 @@ Utils.each = function(obj, callback) {
             callback.call(null, i, obj[i]);
         }
     }
+};
+// 函数柯里化
+Utils.curry=function(fn){
+    var args=[].slice.call(arguments,1);
+    return function(){
+        args=args.concat([].slice.call(arguments));
+        return fn.call(null,args);
+    };
+};
+// 执行一次回调函数
+// 但是，并不销毁该函数
+Utils.once = function(fn) {
+    var flag = false,
+        args = [].slice.call(arguments, 1);
+
+    return function() {
+        if (!flag) {
+            args = args.concat([].slice.call(arguments));
+            flag = true;
+            return fn.apply(null, args);
+            // /fn = null;
+        }
+        return undefined;
+    };
 };
 // 以下三个函数不可以为工具函数
 // 有待整理
@@ -878,10 +907,54 @@ D.text = function(ele, str) {
     this.html(ele, '');
     ele.appendChild(txt);
 };
-// style获取
-D.css = function(ele, style) {
+// style获取，设置
+// 盒模型宽高此方法无法获取哦
+D.css = function(ele, sty) {
+    // style若是一个对象，则表明为设置样式
+    // 若为字符串，则表明是获取样式
+    // {'font-size':'12px','height':'200px','width':'100px'}
+    var prop;
+    var setOneStyle = function(ele) {
+        for (var key in sty) {
+            if (sty.hasOwnProperty(key)) {
+                prop = key.replace(/(-[a-z])/gi, function(m, group, i, t) {
+                    return group.charAt(1).toUpperCase();
+                });
+                ele.style[prop] = sty[key];
+            }
+        }
+    };
+    // get style 只可以针对单个DOM对象
+    var getStyle = function(ele) {
+        if (Utils.isType(sty, 'string')) {
 
+            prop = sty.replace(/(-[a-z])/gi, function(m, group, i, t) {
+                return group.charAt(1).toUpperCase();
+            });
+            var getS = ele.style[prop];
+            console.log(getS);
+            return ele.style[prop];
+        }
+        return '';
+    };
+
+    if (Utils.isType(sty, 'object')) {
+        if (Utils.isDomArr(ele)) {
+            for (var i = 0, j = ele.length; i < j; i++) {
+                setOneStyle(ele[i]);
+            }
+        } else {
+            setOneStyle(ele);
+        }
+
+    } else {
+        if (Utils.isDomArr(ele)) {
+            ele = ele[0];
+        }
+        return getStyle(ele);
+    }
 };
+
 /*
  * 创建dom
  */

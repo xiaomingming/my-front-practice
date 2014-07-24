@@ -98,7 +98,9 @@ var E = {};
  * 工具函数
  */
 var Utils = {};
-
+Utils.error = function(msg) {
+    throw new Error(msg);
+};
 // 扩展函数
 // 对象拷贝
 // 不支持深拷贝
@@ -168,8 +170,10 @@ Utils.isDomArr = function(ele) {
     return !ele.length ? false : true;
 };
 // 是否为你期待的数据类型
+// IE对于function判断的bug，暂时不做修复
+// 参考详见：http://www.planabc.net/2010/01/23/repair_the_bug_of_isfunction_method_in_jquery/
 Utils.isType = function(data, type) {
-    return Object.prototype.toString.call(data).slice(8, -1).toLowerCase() === type;
+    return (type === 'null' && type === null) || (type === 'undefined' && type === undefined) || Object.prototype.toString.call(data).slice(8, -1).toLowerCase() === type;
 };
 // 遍历数组和对象
 Utils.each = function(obj, callback) {
@@ -927,11 +931,8 @@ D.text = function(ele, str) {
     ele.appendChild(txt);
 };
 // style获取，设置
-// 盒模型宽高此方法无法获取哦
+// 盒模型宽高此方法无法获取
 D.css = function(ele, sty) {
-    // style若是一个对象，则表明为设置样式
-    // 若为字符串，则表明是获取样式
-    // {'font-size':'12px','height':'200px','width':'100px'}
     var prop;
     var setOneStyle = function(ele) {
         for (var key in sty) {
@@ -950,8 +951,6 @@ D.css = function(ele, sty) {
             prop = sty.replace(/(-[a-z])/gi, function(m, group, i, t) {
                 return group.charAt(1).toUpperCase();
             });
-            var getS = ele.style[prop];
-            console.log(getS);
             return ele.style[prop];
         }
         return '';
@@ -973,16 +972,43 @@ D.css = function(ele, sty) {
         return getStyle(ele);
     }
 };
+// 控制样式显示与隐藏
+D.show = function(ele) {
+    var i = 0,
+        j,
+        showOne = function(ele) {
+            ele.style.display = 'block';
+        };
+    if (Utils.isDomArr(ele)) {
+        for (j = ele.length; i < j; i++) {
+            showOne(ele[i]);
+        }
+    } else {
+        showOne(ele);
+    }
 
-/*
- * 创建dom
- */
-
-var UI = {};
-UI.show = function(ele) {
-
-    ele.style.display = 'block';
 };
-UI.hide = function(ele) {
-    ele.style.display = 'none';
+D.hide = function(ele) {
+    var i = 0,
+        j,
+        hideOne = function(ele) {
+            ele.style.display = 'none';
+        };
+    if (Utils.isDomArr(ele)) {
+        for (j = ele.length; i < j; i++) {
+            hideOne(ele[i]);
+        }
+    } else {
+        hideOne(ele);
+    }
+
 };
+//
+D.data = function(ele, obj) {
+    if (Utils.isType(ele, 'array')) {
+        // 此时是一个DOM对象
+
+    }
+};
+// worklist 
+// data缓存和移除，promise简单实现，animate实现，ajax实现

@@ -100,8 +100,26 @@ var E = {};
 var Utils = {};
 
 // 扩展函数
-Utils.extend=function(defaults,settings,isDeepCopy){
+// 对象拷贝
+// 不支持深拷贝
+Utils.extend = function(defaults) {
+    var result = {}, key, key1, source, i = 0,
+        j = arguments.length;
+    for (key in defaults) {
+        if (defaults.hasOwnProperty(key)) {
+            result[key] = defaults[key];
+        }
+    }
+    for (; i < j; i++) {
+        source = arguments[i];
+        for (key1 in source) {
+            if (source.hasOwnProperty(key1)) {
+                result[key1] = source[key1];
+            }
+        }
+    }
 
+    return result;
 };
 
 Utils.trim = function(str) {
@@ -109,7 +127,8 @@ Utils.trim = function(str) {
 };
 // 伪数组转化成数组
 Utils.makeArray = function(obj) {
-    if (!obj || obj.length === 0) {
+    // 对于函数或者对象，应当返回[]
+    if (!obj || obj.length === 0 || this.isType(obj, 'object') || this.isType(obj, 'function')) {
         return [];
     }
     // 非伪类对象，直接返回最好
@@ -170,11 +189,11 @@ Utils.each = function(obj, callback) {
     }
 };
 // 函数柯里化
-Utils.curry=function(fn){
-    var args=[].slice.call(arguments,1);
-    return function(){
-        args=args.concat([].slice.call(arguments));
-        return fn.call(null,args);
+Utils.curry = function(fn) {
+    var args = [].slice.call(arguments, 1);
+    return function() {
+        args = args.concat([].slice.call(arguments));
+        return fn.call(null, args);
     };
 };
 // 执行一次回调函数
@@ -961,6 +980,7 @@ D.css = function(ele, sty) {
 
 var UI = {};
 UI.show = function(ele) {
+
     ele.style.display = 'block';
 };
 UI.hide = function(ele) {

@@ -25,7 +25,7 @@
             box-shadow:1px 1px 1px #eee;
             border:1px solid #ddd;
         }*/
-        .it1,.it2 {
+        .it1, .it2 {
             border: 2px solid orange;
         }
     </style>
@@ -74,38 +74,61 @@
 </body>
 <script type="text/javascript" src="../js/common/basic.js"></script>
 <script type="text/javascript">
-    ready(function(){
+    ready(function() {
         D.removeClass(D.$('.item'));
         // D.addClass(D.$('div'),'it1 it2');
         // D.addClass(D.$('#box'),'it1 it2');
         // D.toggleClass(D.$('div'),'tgClass');
-        E.delegate('click','#box ul','.item2',function(e){
+        E.delegate('click', '#box ul', '.item2', function(e) {
 
             // console.log(e.target);
         });
-        
-        E.delegate('click','.box-btn','button',function(e){
+
+        E.delegate('click', '.box-btn', 'button', function(e) {
             console.log(e.target);
             // alert('you click me!');
         });
-        D.html(D.$('.box-btn')[0],'<button>click me</button>');
+        D.html(D.$('.box-btn')[0], '<button>click me</button>');
         // D.text(D.$('.box-btn')[0],'<p>dulalalalalllalal</p>');
         // D.$('.box-btn')[0];
-        D.css(D.$('body'),{'background':'#000','font-size':'24px','color':'#fff'});
+        // D.css(D.$('body'), {
+        //     'background': '#000',
+        //     'font-size': '24px',
+        //     'color': '#fff'
+        // });
         // var c=D.css(D.$('#box'),'background-color');
         // alert(c);
-        console.log(D.css(D.$('body'),'width'));
+        console.log(D.css(D.$('body'), 'width'));
 
-        var f=function(a,b){
-            return a+b;
+        var f = function(a, b) {
+            return a + b;
         };
 
-        var on=Utils.once(f);
-        var b=on(2,3);
-        console.log(on(3,4));
+        var on = Utils.once(f);
+        var b = on(2, 3);
+        console.log(on(3, 4));
 
         D.hide(D.$('div'));
         D.show(D.$('div'));
+
+
+        var a = {
+            name: 'xiaoqiang',
+            age: 23
+        };
+        var b = {
+            name: 'zhu',
+            age: 22,
+            obj: [1, 2, 3],
+            obj2: [{
+                exp: '4'
+            }]
+        };
+
+        var c = Utils.extend(a, b);
+        console.log(c);
+
+        console.log(a,b);
     });
 </script>
 <!-- <script type="text/javascript" src="../js/common/jquery-1.8.2.js"></script> -->

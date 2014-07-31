@@ -101,29 +101,6 @@ var Utils = {};
 Utils.error = function(msg) {
     throw new Error(msg);
 };
-// 扩展函数
-// 对象拷贝
-// 不支持深拷贝
-Utils.extend = function(defaults) {
-    var result = {}, key, key1, source, i = 0,
-        j = arguments.length;
-    for (key in defaults) {
-        if (defaults.hasOwnProperty(key)) {
-            result[key] = defaults[key];
-        }
-    }
-    for (; i < j; i++) {
-        source = arguments[i];
-        for (key1 in source) {
-            if (source.hasOwnProperty(key1)) {
-                result[key1] = source[key1];
-            }
-        }
-    }
-
-    return result;
-};
-
 Utils.trim = function(str) {
     return str.replace(/(^\s*)|(\s*$)/g, '');
 };
@@ -175,6 +152,28 @@ Utils.isDomArr = function(ele) {
 Utils.isType = function(data, type) {
     return (type === 'null' && type === null) || (type === 'undefined' && type === undefined) || Object.prototype.toString.call(data).slice(8, -1).toLowerCase() === type;
 };
+// 扩展函数
+// 对象拷贝
+// 不支持深拷贝
+Utils.extend = function(defaults) {
+    var result = {}, key, key1, source, i = 0,
+        j = arguments.length;
+    for (key in defaults) {
+        if (defaults.hasOwnProperty(key)) {
+            result[key] = defaults[key];
+        }
+    }
+    for (; i < j; i++) {
+        source = arguments[i];
+        for (key1 in source) {
+            if (source.hasOwnProperty(key1)) {
+                result[key1] = source[key1];
+            }
+        }
+    }
+
+    return result;
+};
 // 遍历数组和对象
 Utils.each = function(obj, callback) {
     if (this.isType(obj, 'object')) {
@@ -215,6 +214,13 @@ Utils.once = function(fn) {
         }
         return undefined;
     };
+};
+// 判断一个对象是否为空
+Utils.isEmputyObj = function(obj) {
+    for (var i in obj) {
+        return false;
+    }
+    return true;
 };
 // 以下三个函数不可以为工具函数
 // 有待整理
@@ -1003,7 +1009,7 @@ D.hide = function(ele) {
     }
 
 };
-//
+// 这里也要支持nodeList对象
 D.data = function(ele, obj) {
     if (Utils.isType(ele, 'array')) {
         // 此时是一个DOM对象

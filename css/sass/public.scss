@@ -1,48 +1,55 @@
 @charset "UTF-8";
+
 /* 定义transform */
 
 // rotate
-@mixin tf-rotate ($deg){
-    transform:rotate($deg);
-    -webkit-transform:rotate($deg);
-    -moz-transform:rotate($deg);
+@mixin tf-rotate($deg) {
+    transform: rotate($deg);
+    -webkit-transform: rotate($deg);
+    -moz-transform: rotate($deg);
 }
+
 // skew
-@mixin tf-skew ($deg){
-    transform:skew($deg);
-    -webkit-transform:skew($deg);
-    -moz-transform:skew($deg);
+@mixin tf-skew($deg) {
+    transform: skew($deg);
+    -webkit-transform: skew($deg);
+    -moz-transform: skew($deg);
 }
+
 // scale
-@mixin tf-scale ($x,$y){
-    transform:scale($x,$y);
-    -webkit-transform:scale($x,$y);
-    -moz-transform:scale($x,$y);
+@mixin tf-scale($x, $y) {
+    transform: scale($x, $y);
+    -webkit-transform: scale($x, $y);
+    -moz-transform: scale($x, $y);
 }
+
 // translate
-@mixin tf-translate ($x,$y){
+@mixin tf-translate($x, $y) {
     // if($x)
-    transform:translate($x,$y);
-    -webkit-transform:translate($x,$y);
-    -moz-transform:translate($x,$y);
+    transform: translate($x, $y);
+    -webkit-transform: translate($x, $y);
+    -moz-transform: translate($x, $y);
 }
+
 // box-shadow
-@mixin box-shadow($top, $left, $blur, $color, $inset:"") {
-  -webkit-box-shadow:$top $left $blur #{$color} #{$inset};
-  -moz-box-shadow:$top $left $blur $color #{$inset};
-  box-shadow:$top $left $blur $color #{$inset};
+@mixin box-shadow($top, $left, $blur, $color, $inset: "") {
+    -webkit-box-shadow: $top $left $blur #{$color} #{$inset};
+    -moz-box-shadow: $top $left $blur $color #{$inset};
+    box-shadow: $top $left $blur $color #{$inset};
 }
+
 // transition
-@mixin transition($property,$duration,$timing,$delay:0) {
-  -webkit-transition:$property $duration $timing #{$delay};
-  -moz-transition:$property $duration $timing #{$delay};
-  transition:$property $duration $timing #{$delay};
+@mixin transition($property, $duration, $timing, $delay: 0) {
+    -webkit-transition: $property $duration $timing #{$delay};
+    -moz-transition: $property $duration $timing #{$delay};
+    transition: $property $duration $timing #{$delay};
 }
+
 // transform origin
-@mixin tf-origin($x,$y){
-  -moz-transform-origin: $x $y;
-  -webkit-transform-origin: $x $y;
-  -o-transform-origin: $x $y ;
-  -ms-transform-origin: $x $y;
-  transform-origin: $x $y ;
+@mixin tf-origin($x, $y) {
+    -moz-transform-origin: $x $y;
+    -webkit-transform-origin: $x $y;
+    -o-transform-origin: $x $y;
+    -ms-transform-origin: $x $y;
+    transform-origin: $x $y;
 }

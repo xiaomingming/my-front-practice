@@ -53,7 +53,7 @@
             }
             return value = decodeURIComponent(value);
         }
-        return false
+        return null;
 
     };
     // 获取设置
